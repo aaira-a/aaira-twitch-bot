@@ -1,0 +1,19 @@
+{
+  "name": "aaira-twitch-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aaira-a/aaira-twitch-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aaira-a/aaira-twitch-bot/issues"
+  },
+  "homepage": "https://github.com/aaira-a/aaira-twitch-bot#readme"
+}
