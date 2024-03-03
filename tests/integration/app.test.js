@@ -53,8 +53,7 @@ describe('GET /bot/toggle', () => {
       })
   });
 
-  it('should return bot enabled status if data file contains toggle:enabled true property', () => {
-
+  it('should return bot enabled status if data file contains bot_enabled: true property', () => {
     fs.writeFileSync(fileToCleanup, JSON.stringify({"bot_enabled": true}));
 
     return request(app)
@@ -65,7 +64,7 @@ describe('GET /bot/toggle', () => {
       })
   });
 
-  it('should return bot disabled status if data file contains toggle:enabled false property', () => {
+  it('should return bot disabled status if data file contains bot_enabled: false property', () => {
 
     fs.writeFileSync(fileToCleanup, JSON.stringify({"bot_enabled": false}));
 
