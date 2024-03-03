@@ -31,27 +31,18 @@ describe('GET /bot/hello', () => {
 describe('GET /bot/toggle', () => {
 
   const basePath = path.join(__dirname, '..', '..', 'app', 'data');
-  const fileToCleanup1 = path.join(basePath, 'toggle_enabled');
-  const fileToCleanup2 = path.join(basePath, 'toggle_disabled');
+  const fileToCleanup = path.join(basePath, 'data.json');
   
   beforeEach(() => {
-    if (fs.existsSync(fileToCleanup1)) {
-      fs.unlinkSync(fileToCleanup1);
+    if (fs.existsSync(fileToCleanup)) {
+      fs.unlinkSync(fileToCleanup);
     }
-
-    if (fs.existsSync(fileToCleanup2)) {
-      fs.unlinkSync(fileToCleanup2);
-    }    
   });
 
   afterEach(() => {
-    if (fs.existsSync(fileToCleanup1)) {
-      fs.unlinkSync(fileToCleanup1);
+    if (fs.existsSync(fileToCleanup)) {
+      fs.unlinkSync(fileToCleanup);
     }
-
-    if (fs.existsSync(fileToCleanup2)) {
-      fs.unlinkSync(fileToCleanup2);
-    }    
   });
 
   it('should return 200 status', () => {
@@ -62,9 +53,9 @@ describe('GET /bot/toggle', () => {
       })
   });
 
-  it('should return bot enabled status if there is toggle_enabled file', () => {
+  it('should return bot enabled status if data file contains toggle:enabled true property', () => {
 
-    fs.writeFileSync(fileToCleanup1, "this is file content");
+    fs.writeFileSync(fileToCleanup, JSON.stringify({"bot_enabled": true}));
 
     return request(app)
       .get('/bot/toggle')
@@ -74,9 +65,9 @@ describe('GET /bot/toggle', () => {
       })
   });
 
-  it('should return bot disabled status if there is toggle_disabled file', () => {
+  it('should return bot disabled status if data file contains toggle:enabled false property', () => {
 
-    fs.writeFileSync(fileToCleanup2, "this is file content");
+    fs.writeFileSync(fileToCleanup, JSON.stringify({"bot_enabled": false}));
 
     return request(app)
       .get('/bot/toggle')

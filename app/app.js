@@ -17,12 +17,23 @@ app.get("/bot/hello", (req, res) => {
 });
 
 app.get("/bot/toggle", (req, res) => {
-  const toggleFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'toggle_enabled');
+  const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'data.json');
 
   let response = {"status": "undefined"};
 
-  if (fs.existsSync(toggleFilePath)) {
-    response["status"] = "enabled";
+  if (fs.existsSync(dataFilePath)) {
+    let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+    if (fileContent.hasOwnProperty("bot_enabled")) {
+      if (fileContent["bot_enabled"] == true) {
+        response["status"] = "enabled";
+      }
+      else if (fileContent["bot_enabled"] == false ) {
+        response["status"] = "disabled";
+      }
+    }
+    else {
+      response["status"] = "disabled";
+    }
   }
   else {
     response["status"] = "disabled";
