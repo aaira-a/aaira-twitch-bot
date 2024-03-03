@@ -43,4 +43,39 @@ app.get("/bot/toggle", (req, res) => {
 
 });
 
+app.get("/bot/set/toggle/:state?", (req, res) => {
+  const validStates = ["enable", "disable"];
+  const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'data.json');
+
+  let response = {"bot_enabled": undefined};
+
+  if (req.params.state == "enable") {
+    if (fs.existsSync(dataFilePath)) {
+      let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+      fileContent["bot_enabled"] = true;
+      fs.writeFileSync(dataFilePath, JSON.stringify(fileContent));
+    }
+    else {
+      fs.writeFileSync(dataFilePath, JSON.stringify({"bot_enabled": true}));
+    }
+    response["bot_enabled"] = true;
+    res.status(200).json(response);
+  }
+
+  if (req.params.state == "disable") {
+    if (fs.existsSync(dataFilePath)) {
+      let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+      fileContent["bot_enabled"] = false;
+      fs.writeFileSync(dataFilePath, JSON.stringify(fileContent));
+    }
+    else {
+      fs.writeFileSync(dataFilePath, JSON.stringify({"bot_enabled": false}));
+    }
+    response["bot_enabled"] = false;
+    res.status(200).json(response);
+  }
+
+  res.status(400).send();
+});
+
 module.exports = app;
