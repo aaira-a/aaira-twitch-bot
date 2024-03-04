@@ -8,7 +8,9 @@ const fs = require("fs");
 const path = require("path");
 
 
-axios.defaults.adapter = "http";
+// axios.defaults.adapter = "http";
+// this is commented out after downgrading
+// axios from 1.6.7 to 0.27.2
 
 const app = require("../../app/app");
 
