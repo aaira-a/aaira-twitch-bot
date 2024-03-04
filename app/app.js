@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 
 const fs = require("fs");
 const path = require("path");
@@ -76,6 +77,41 @@ app.get("/bot/set/toggle/:state?", (req, res) => {
   }
 
   res.status(400).send();
+});
+
+
+app.get("/bot/now-playing", (req, res) => {
+  const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'data.json');
+
+  let response = {};
+
+  if (fs.existsSync(dataFilePath)) {
+    let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+
+
+    response["artistName"] = fileContent["artistName"];
+    response["itemName"] = fileContent["itemName"];
+    res.status(200).json(response);
+  }
+
+  else {
+    axios({
+      method: 'get',
+      url: 'https://api.spotify.com/v1/me/player/currently-playing',
+      headers: {'Authorization': 'PLACEHOLDER'}
+    })
+      .then(function (response) {
+        let dataToSave = {
+          "artistName": response.data.item.album.artists[0].name,
+          "itemName": response.data.item.name
+        };
+        fs.writeFile(dataFilePath, JSON.stringify(dataToSave), (err) => {
+          console.log(err);
+        });
+        res.status(200).json(dataToSave);
+      });
+  }
+
 });
 
 module.exports = app;

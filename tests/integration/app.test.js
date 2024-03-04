@@ -2,8 +2,13 @@
 const expect = require("chai").expect;
 const request = require("supertest");
 const sinon = require("sinon");
+const nock = require("nock");
+const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+
+
+axios.defaults.adapter = "http";
 
 const app = require("../../app/app");
 
@@ -181,6 +186,81 @@ describe('GET /bot/set/toggle/:state', () => {
         let fileContent = JSON.parse(fs.readFileSync(fileToCleanup, 'utf8'));
         expect(fileContent["bot_enabled"]).to.eql(false)
       })    
+  });
+
+});
+
+describe('GET /bot/now-playing', () => {
+
+  const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+  const fileToCleanup = path.join(basePath, 'data.json');
+
+  beforeEach(() => {
+    if (fs.existsSync(fileToCleanup)) {
+      fs.unlinkSync(fileToCleanup);
+    }
+  });
+
+  afterEach(() => {
+    if (fs.existsSync(fileToCleanup)) {
+      fs.unlinkSync(fileToCleanup);
+    }
+  });
+
+  it('should return now playing track from stored data file', () => {
+
+    let dataFileContent = {
+      "artistName": "singer 1",
+      "itemName": "track 1"
+    }
+
+    let expectedResponse = {
+      "artistName": "singer 1",
+      "itemName": "track 1"
+    }
+
+    fs.writeFileSync(fileToCleanup, JSON.stringify(dataFileContent));
+
+    return request(app)
+      .get('/bot/now-playing')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })
+  });
+
+  it('should return now playing track if there is no stored data file', () => {
+
+    let mockSpotifyResponse = {
+      "item": {
+        "name": "track 1",
+        "album": {
+          "artists": [
+            {
+              "name": "singer 1"
+            }
+          ]
+        }
+      }
+    };
+
+    let expectedResponse = {
+      "artistName": "singer 1",
+      "itemName": "track 1"
+    }
+
+    const scope = nock("https://api.spotify.com")
+        .get('/v1/me/player/currently-playing')
+        .reply(200, mockSpotifyResponse)
+
+    return request(app)
+      .get('/bot/now-playing')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })
   });
 
 });
