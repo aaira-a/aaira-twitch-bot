@@ -196,16 +196,23 @@ describe('GET /bot/now-playing', () => {
 
   const basePath = path.join(__dirname, '..', '..', 'app', 'data');
   const fileToCleanup = path.join(basePath, 'data.json');
+  const mockCredFile = path.join(basePath, 'credentials.json');
 
   beforeEach(() => {
     if (fs.existsSync(fileToCleanup)) {
       fs.unlinkSync(fileToCleanup);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
     }
   });
 
   afterEach(() => {
     if (fs.existsSync(fileToCleanup)) {
       fs.unlinkSync(fileToCleanup);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
     }
   });
 
@@ -234,21 +241,6 @@ describe('GET /bot/now-playing', () => {
 
   it('should call Spotify API using access token from credentials file', () => {
 
-    const basePath = path.join(__dirname, '..', '..', 'app', 'data');
-    const mockCredFile = path.join(basePath, 'credentials.json');
-    
-    beforeEach(() => {
-      if (fs.existsSync(mockCredFile)) {
-        fs.unlinkSync(mockCredFile);
-      }
-    });
-
-    afterEach(() => {
-      if (fs.existsSync(mockCredFile)) {
-        fs.unlinkSync(mockCredFile);
-      }
-    });
-
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
 
     const scope = nock("https://api.spotify.com")
@@ -265,22 +257,6 @@ describe('GET /bot/now-playing', () => {
   });
 
   it('should return now playing track from stored data file', () => {
-
-    const basePath = path.join(__dirname, '..', '..', 'app', 'data');
-    const mockCredFile = path.join(basePath, 'credentials.json');
-    
-    beforeEach(() => {
-      if (fs.existsSync(mockCredFile)) {
-        fs.unlinkSync(mockCredFile);
-      }
-    });
-
-    afterEach(() => {
-      if (fs.existsSync(mockCredFile)) {
-        fs.unlinkSync(mockCredFile);
-      }
-    });
-
 
     let dataFileContent = {
       "artistName": "singer 1",
@@ -305,22 +281,6 @@ describe('GET /bot/now-playing', () => {
   });
 
   it('should return now playing track if there is no stored data file', () => {
-
-    const basePath = path.join(__dirname, '..', '..', 'app', 'data');
-    const mockCredFile = path.join(basePath, 'credentials.json');
-    
-    beforeEach(() => {
-      if (fs.existsSync(mockCredFile)) {
-        fs.unlinkSync(mockCredFile);
-      }
-    });
-
-    afterEach(() => {
-      if (fs.existsSync(mockCredFile)) {
-        fs.unlinkSync(mockCredFile);
-      }
-    });
-
 
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
 
