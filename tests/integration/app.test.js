@@ -222,15 +222,34 @@ describe('GET /bot/now-playing', () => {
     }
   };
 
-  it('should call Spotify API using access token in environment file', () => {
+  it('should return 501 if credentials file does not exist', () => {
+    return request(app)
+      .get('/bot/now-playing')
+      .then((response) => {
+        expect(response.status).to.eql(501)
+        expect(response.headers['content-type']).to.include('application/json')
+        expect(response.body).to.eql({"error": "credentials file does not exist"});
+    })
+  });
 
-    const env = Object.assign({}, process.env);
+  it('should call Spotify API using access token from credentials file', () => {
 
-    after(() => {
-      process.env = env;
+    const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+    const mockCredFile = path.join(basePath, 'credentials.json');
+    
+    beforeEach(() => {
+      if (fs.existsSync(mockCredFile)) {
+        fs.unlinkSync(mockCredFile);
+      }
     });
 
-    process.env.SPOTIFY_ACCESS_TOKEN = 'DUMMYTOKEN1';
+    afterEach(() => {
+      if (fs.existsSync(mockCredFile)) {
+        fs.unlinkSync(mockCredFile);
+      }
+    });
+
+    fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
 
     const scope = nock("https://api.spotify.com")
       .matchHeader('Authorization', 'Bearer DUMMYTOKEN1')
@@ -247,6 +266,22 @@ describe('GET /bot/now-playing', () => {
 
   it('should return now playing track from stored data file', () => {
 
+    const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+    const mockCredFile = path.join(basePath, 'credentials.json');
+    
+    beforeEach(() => {
+      if (fs.existsSync(mockCredFile)) {
+        fs.unlinkSync(mockCredFile);
+      }
+    });
+
+    afterEach(() => {
+      if (fs.existsSync(mockCredFile)) {
+        fs.unlinkSync(mockCredFile);
+      }
+    });
+
+
     let dataFileContent = {
       "artistName": "singer 1",
       "itemName": "track 1"
@@ -257,6 +292,7 @@ describe('GET /bot/now-playing', () => {
       "itemName": "track 1"
     }
 
+    fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
     fs.writeFileSync(fileToCleanup, JSON.stringify(dataFileContent));
 
     return request(app)
@@ -269,6 +305,24 @@ describe('GET /bot/now-playing', () => {
   });
 
   it('should return now playing track if there is no stored data file', () => {
+
+    const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+    const mockCredFile = path.join(basePath, 'credentials.json');
+    
+    beforeEach(() => {
+      if (fs.existsSync(mockCredFile)) {
+        fs.unlinkSync(mockCredFile);
+      }
+    });
+
+    afterEach(() => {
+      if (fs.existsSync(mockCredFile)) {
+        fs.unlinkSync(mockCredFile);
+      }
+    });
+
+
+    fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
 
     let expectedResponse = {
       "artistName": "singer 1",

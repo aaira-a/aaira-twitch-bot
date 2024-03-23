@@ -1,7 +1,6 @@
 const express = require("express");
 const axios = require("axios");
 
-const dotenv = require('dotenv').config();
 const fs = require("fs");
 const path = require("path");
 
@@ -83,8 +82,13 @@ app.get("/bot/set/toggle/:state?", (req, res) => {
 
 app.get("/bot/now-playing", (req, res) => {
   const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'data.json');
-
+  const credFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'credentials.json');
+  
   let response = {};
+
+  if (!fs.existsSync(credFilePath)) {
+    res.status(501).json({"error": "credentials file does not exist"});
+  }
 
   if (fs.existsSync(dataFilePath)) {
     let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
@@ -96,10 +100,11 @@ app.get("/bot/now-playing", (req, res) => {
   }
 
   else {
+    credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
     axios({
       method: 'get',
       url: 'https://api.spotify.com/v1/me/player/currently-playing',
-      headers: {'Authorization': `Bearer ${process.env.SPOTIFY_ACCESS_TOKEN}`}
+      headers: {'Authorization': `Bearer ${credFileContent["SPOTIFY_ACCESS_TOKEN"]}`}
     })
       .then(function (response) {
         let dataToSave = {
