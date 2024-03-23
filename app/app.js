@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 
+const dotenv = require('dotenv').config();
 const fs = require("fs");
 const path = require("path");
 
@@ -98,7 +99,7 @@ app.get("/bot/now-playing", (req, res) => {
     axios({
       method: 'get',
       url: 'https://api.spotify.com/v1/me/player/currently-playing',
-      headers: {'Authorization': 'PLACEHOLDER'}
+      headers: {'Authorization': `Bearer ${process.env.SPOTIFY_ACCESS_TOKEN}`}
     })
       .then(function (response) {
         let dataToSave = {

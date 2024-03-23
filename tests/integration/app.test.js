@@ -209,6 +209,42 @@ describe('GET /bot/now-playing', () => {
     }
   });
 
+  let mockValidSpotifyResponse = {
+    "item": {
+      "name": "track 1",
+      "album": {
+        "artists": [
+          {
+            "name": "singer 1"
+          }
+        ]
+      }
+    }
+  };
+
+  it('should call Spotify API using access token in environment file', () => {
+
+    const env = Object.assign({}, process.env);
+
+    after(() => {
+      process.env = env;
+    });
+
+    process.env.SPOTIFY_ACCESS_TOKEN = 'DUMMYTOKEN1';
+
+    const scope = nock("https://api.spotify.com")
+      .matchHeader('Authorization', 'Bearer DUMMYTOKEN1')
+      .get('/v1/me/player/currently-playing')
+      .reply(200, mockValidSpotifyResponse)
+
+    return request(app)
+      .get('/bot/now-playing')
+      .then((response) => {
+        expect(response.headers['content-type']).to.include('application/json');
+    })
+
+  });
+
   it('should return now playing track from stored data file', () => {
 
     let dataFileContent = {
@@ -234,19 +270,6 @@ describe('GET /bot/now-playing', () => {
 
   it('should return now playing track if there is no stored data file', () => {
 
-    let mockSpotifyResponse = {
-      "item": {
-        "name": "track 1",
-        "album": {
-          "artists": [
-            {
-              "name": "singer 1"
-            }
-          ]
-        }
-      }
-    };
-
     let expectedResponse = {
       "artistName": "singer 1",
       "itemName": "track 1"
@@ -254,7 +277,7 @@ describe('GET /bot/now-playing', () => {
 
     const scope = nock("https://api.spotify.com")
         .get('/v1/me/player/currently-playing')
-        .reply(200, mockSpotifyResponse)
+        .reply(200, mockValidSpotifyResponse)
 
     return request(app)
       .get('/bot/now-playing')
