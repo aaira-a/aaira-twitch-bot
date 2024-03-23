@@ -9,7 +9,8 @@ const app = express();
 
 
 const DATA_FOLDER_NAME = 'data';
-
+const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'data.json');
+const credFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'credentials.json');
 
 app.get("/bot/hello", (req, res) => {
   res.json({
@@ -18,8 +19,6 @@ app.get("/bot/hello", (req, res) => {
 });
 
 app.get("/bot/toggle", (req, res) => {
-  const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'data.json');
-
   let response = {"status": "undefined"};
 
   if (fs.existsSync(dataFilePath)) {
@@ -46,7 +45,6 @@ app.get("/bot/toggle", (req, res) => {
 
 app.get("/bot/set/toggle/:state?", (req, res) => {
   const validStates = ["enable", "disable"];
-  const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'data.json');
 
   let response = {"bot_enabled": undefined};
 
@@ -81,9 +79,6 @@ app.get("/bot/set/toggle/:state?", (req, res) => {
 
 
 app.get("/bot/now-playing", (req, res) => {
-  const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'data.json');
-  const credFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'credentials.json');
-  
   let response = {};
 
   if (!fs.existsSync(credFilePath)) {
@@ -93,31 +88,47 @@ app.get("/bot/now-playing", (req, res) => {
   if (fs.existsSync(dataFilePath)) {
     let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
 
-
     response["artistName"] = fileContent["artistName"];
     response["itemName"] = fileContent["itemName"];
     res.status(200).json(response);
   }
 
   else {
-    credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
-    axios({
-      method: 'get',
-      url: 'https://api.spotify.com/v1/me/player/currently-playing',
-      headers: {'Authorization': `Bearer ${credFileContent["SPOTIFY_ACCESS_TOKEN"]}`}
+    const callSpotifyResult = callSpotifyCurrentlyPlaying();
+    callSpotifyResult.then((result) => {
+    res.status(200).json(result.data);
     })
-      .then(function (response) {
-        let dataToSave = {
-          "artistName": response.data.item.album.artists[0].name,
-          "itemName": response.data.item.name
-        };
-        fs.writeFile(dataFilePath, JSON.stringify(dataToSave), (err) => {
-          console.log(err);
-        });
-        res.status(200).json(dataToSave);
-      });
   }
 
 });
+
+function callSpotifyCurrentlyPlaying() {
+  const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
+
+  let response = {};
+
+  return axios({
+    method: 'get',
+    url: 'https://api.spotify.com/v1/me/player/currently-playing',
+    headers: {'Authorization': `Bearer ${credFileContent["SPOTIFY_ACCESS_TOKEN"]}`}
+  })
+    .then(function (response) {
+      if (response.hasOwnProperty('response')) {
+        if (response.response.status == 401) {
+          response = {"status": "Unauthorized"}
+        }
+      } else {
+          let dataToSave = {
+            "artistName": response.data.item.album.artists[0].name,
+            "itemName": response.data.item.name
+          };
+          fs.writeFile(dataFilePath, JSON.stringify(dataToSave), (err) => {
+            if (err) { console.log(err) }
+          });
+          response = {"status": "Succesful", "data": dataToSave}
+      }
+      return response;
+    })
+}
 
 module.exports = app;
