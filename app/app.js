@@ -78,11 +78,11 @@ app.get("/bot/set/toggle/:state?", (req, res) => {
 });
 
 
-app.get("/bot/now-playing", (req, res) => {
+app.get("/bot/now-playing", async (req, res) => {
   let response = {};
 
   if (!fs.existsSync(credFilePath)) {
-    res.status(501).json({"error": "credentials file does not exist"});
+    return res.status(501).json({"error": "Credentials file does not exist"});
   }
 
   if (fs.existsSync(dataFilePath)) {
@@ -90,22 +90,54 @@ app.get("/bot/now-playing", (req, res) => {
 
     response["artistName"] = fileContent["artistName"];
     response["itemName"] = fileContent["itemName"];
-    res.status(200).json(response);
+    return res.status(200).json(response);
   }
 
   else {
-    const callSpotifyResult = callSpotifyCurrentlyPlaying();
-    callSpotifyResult.then((result) => {
-    res.status(200).json(result.data);
-    })
+    const callSpotifyResult = await callSpotifyCurrentlyPlaying();
+    if (callSpotifyResult.status == "Unauthorized") {
+
+      const tokenRefreshResult = await callSpotifyTokenRefresh();
+      if (tokenRefreshResult.status == "Failed") {
+        return res.status(400).json({"error": "Unable to refresh token"});
+      }
+
+      const callSpotifyResult3 = await callSpotifyCurrentlyPlaying();
+        if (callSpotifyResult3.status != "Succesful") {
+
+          return res.status(503).json(
+            {"error": "Unable to request currently playing song after second attempt"});
+        }
+        else {
+         res.status(200).json(callSpotifyResult3.data);
+        }
+
+    }
+    else {
+      return res.status(200).json(callSpotifyResult.data);
+    }
+
   }
 
 });
 
-function callSpotifyCurrentlyPlaying() {
+async function callSpotifyCurrentlyPlaying() {
   const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
+  
+  axios.interceptors.response.use((response) => {
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      return response;
+    }, (error) => {
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      if (error.response.status == 401) {
+        return Promise.resolve(error);
+      }
+      return Promise.reject(error);
+    });
 
-  let response = {};
+  let functionResponse = {"status": "Unresolved"};
 
   return axios({
     method: 'get',
@@ -115,7 +147,7 @@ function callSpotifyCurrentlyPlaying() {
     .then(function (response) {
       if (response.hasOwnProperty('response')) {
         if (response.response.status == 401) {
-          response = {"status": "Unauthorized"}
+          functionResponse = {"status": "Unauthorized"}
         }
       } else {
           let dataToSave = {
@@ -125,10 +157,48 @@ function callSpotifyCurrentlyPlaying() {
           fs.writeFile(dataFilePath, JSON.stringify(dataToSave), (err) => {
             if (err) { console.log(err) }
           });
-          response = {"status": "Succesful", "data": dataToSave}
+          functionResponse = {"status": "Succesful", "data": dataToSave}
       }
-      return response;
+      return functionResponse;
     })
 }
+
+async function callSpotifyTokenRefresh() {
+  const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
+
+  const tokenRefreshParams = new URLSearchParams({
+    grant_type: 'refresh_token',
+    access_token: credFileContent["SPOTIFY_ACCESS_TOKEN"],
+    refresh_token: credFileContent["SPOTIFY_REFRESH_TOKEN"]
+  });
+
+  const base64Header = Buffer.from(
+    `${credFileContent["SPOTIFY_CLIENT_ID"]}:${credFileContent["SPOTIFY_CLIENT_SECRET"]}`
+    ).toString('base64');
+
+  let functionResponse = {"status": "Unresolved"};
+
+  return axios({
+    method: 'post',
+    url: 'https://accounts.spotify.com/api/token',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Basic ${base64Header}`
+    },
+    params: tokenRefreshParams
+  })
+  .then(function (response) {
+    credFileContent["SPOTIFY_ACCESS_TOKEN"] = response.data.access_token;
+    fs.writeFileSync(credFilePath, JSON.stringify(credFileContent));
+    functionResponse = {"status": "Succesful"}
+    return functionResponse;
+  })
+  .catch((error) => {
+    if (error) { console.log(error) }
+    functionResponse = {"status": "Failed", "error": error}
+    return functionResponse;
+  })
+}
+
 
 module.exports = app;
