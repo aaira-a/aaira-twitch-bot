@@ -294,7 +294,8 @@ describe('GET /bot/now-playing', () => {
     }
 
     const tokenRefreshCall = nock("https://accounts.spotify.com")
-      .post('/api/token', new URLSearchParams(tokenRefreshReqPayload))
+      .post('/api/token')
+      .query(new URLSearchParams(tokenRefreshReqPayload))
       .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
       .matchHeader('Authorization', `Basic ${base64_client_id_and_secret}`)
       .reply(200, tokenRefreshResPayload)
@@ -308,7 +309,7 @@ describe('GET /bot/now-playing', () => {
       "itemName": "track 1"
     }
 
-    // test flow:
+    // Test flow:
     // 1. Call /bot/now-playing endpoint using access token from credentials file
     // 2. Spotify returns 401 because access token is expired
     // 3. Call Spotify refresh token endpoint
@@ -319,15 +320,15 @@ describe('GET /bot/now-playing', () => {
     // 9. /bot/now-playing endpoint returns song data to caller
 
     return request(app)
-          .get('/bot/now-playing')
-          .then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.headers['content-type']).to.include('application/json');
-            expect(response.body).to.eql(expectedResponse);
+      .get('/bot/now-playing')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
 
-            let credFileContent = JSON.parse(fs.readFileSync(mockCredFile, 'utf8'));
-            expect(credFileContent["access_token"]).to.eql("NEW_VALID_TOKEN1")
-        })
+        let credFileContent = JSON.parse(fs.readFileSync(mockCredFile, 'utf8'));
+        expect(credFileContent["SPOTIFY_ACCESS_TOKEN"]).to.eql("NEW_VALID_TOKEN1")
+    })
   });
 
   it('should return now playing track from stored data file', () => {
