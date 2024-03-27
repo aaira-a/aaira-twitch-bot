@@ -88,6 +88,10 @@ app.get("/bot/now-playing", async (req, res) => {
   if (fs.existsSync(dataFilePath)) {
     let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
 
+    if (fileContent["bot_enabled"] == false) {
+      return res.status(428).json({"error": "bot_enabled is false"});
+    }
+
     response["artistName"] = fileContent["artistName"];
     response["itemName"] = fileContent["itemName"];
     return res.status(200).json(response);

@@ -236,6 +236,32 @@ describe('GET /bot/now-playing', () => {
     }
   }
 
+  it('should return 428 if the bot is disabled', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockDataFile, JSON.stringify({"bot_enabled": false}));
+
+    let expectedResponse = {
+      "error": "bot_enabled is false"
+    }
+
+    return request(app)
+      .get('/bot/now-playing')
+      .then((response) => {
+        expect(response.status).to.eql(428)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })
+  });
+
   it('should return 501 if credentials file does not exist', () => {
     return request(app)
       .get('/bot/now-playing')
@@ -494,22 +520,5 @@ describe('GET /bot/now-playing', () => {
       })
   });
 
-
-  // it('should return 503 if the bot is disabled', () => {
-
-  //   fs.writeFileSync(fileToCleanup, JSON.stringify({"bot_enabled": false}));
-
-  //   let expectedResponse = {
-  //     "error": "bot_enabled is false"
-  //   }
-
-  //   return request(app)
-  //     .get('/bot/now-playing')
-  //     .then((response) => {
-  //       expect(response.status).to.eql(200)
-  //       expect(response.headers['content-type']).to.include('application/json');
-  //       expect(response.body).to.eql(expectedResponse);
-  //     })
-  // });
 
 });
