@@ -94,6 +94,7 @@ app.get("/bot/now-playing", async (req, res) => {
 
     response["artistName"] = fileContent["artistName"];
     response["itemName"] = fileContent["itemName"];
+    response["timestamp"] = fileContent["timestamp"];
     return res.status(200).json(response);
   }
 
@@ -156,7 +157,8 @@ async function callSpotifyCurrentlyPlaying() {
       } else {
           let dataToSave = {
             "artistName": response.data.item.album.artists[0].name,
-            "itemName": response.data.item.name
+            "itemName": response.data.item.name,
+            "timestamp": response.data.timestamp
           };
           fs.writeFile(dataFilePath, JSON.stringify(dataToSave), (err) => {
             if (err) { console.log(err) }

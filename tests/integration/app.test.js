@@ -217,6 +217,7 @@ describe('GET /bot/now-playing', () => {
   });
 
   let mockValidSpotifyResponse = {
+    "timestamp": 1711934625000,
     "item": {
       "name": "track 1",
       "album": {
@@ -398,10 +399,20 @@ describe('GET /bot/now-playing', () => {
       .get('/v1/me/player/currently-playing')
       .reply(200, mockValidSpotifyResponse)
 
+    let expectedDataFileContent = {
+      "artistName": "singer 1",
+      "itemName": "track 1",
+      "timestamp": 1711934625000
+    }
+
     return request(app)
       .get('/bot/now-playing')
       .then((response) => {
         expect(response.headers['content-type']).to.include('application/json');
+        
+        // check track data is saved in data file
+        let dataFileContent = JSON.parse(fs.readFileSync(mockDataFile, 'utf8'));
+        expect(dataFileContent).to.eql(expectedDataFileContent)
     })
 
   });
@@ -448,6 +459,7 @@ describe('GET /bot/now-playing', () => {
         .reply(200, mockValidSpotifyResponse)
 
     let expectedResponse = {
+      "timestamp": 1711934625000,
       "artistName": "singer 1",
       "itemName": "track 1"
     }
@@ -477,11 +489,13 @@ describe('GET /bot/now-playing', () => {
   it('should return now playing track from stored data file', () => {
 
     let dataFileContent = {
+      "timestamp": 1711934625000,
       "artistName": "singer 1",
       "itemName": "track 1"
     }
 
     let expectedResponse = {
+      "timestamp": 1711934625000,
       "artistName": "singer 1",
       "itemName": "track 1"
     }
@@ -503,6 +517,7 @@ describe('GET /bot/now-playing', () => {
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
 
     let expectedResponse = {
+      "timestamp": 1711934625000,
       "artistName": "singer 1",
       "itemName": "track 1"
     }
