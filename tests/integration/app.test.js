@@ -293,7 +293,7 @@ describe('GET /bot/now-playing', () => {
     })
   });
 
-  it('should return 503 if unable to retrieve track data after refreshing token', () => {
+  it('should return 400 if unable to refresh token', () => {
 
     fs.writeFileSync(mockCredFile, JSON.stringify(
       {
@@ -345,7 +345,7 @@ describe('GET /bot/now-playing', () => {
 
   });
 
-  it('should return 400 if unable to refresh token', () => {
+  it('should return 503 if unable to retrieve track data after refreshing token', () => {
 
     fs.writeFileSync(mockCredFile, JSON.stringify(
       {
