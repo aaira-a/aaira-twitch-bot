@@ -198,6 +198,8 @@ describe('GET /bot/now-playing', () => {
   const mockDataFile = path.join(basePath, 'data.json');
   const mockCredFile = path.join(basePath, 'credentials.json');
 
+  let clock = null;
+
   beforeEach(() => {
     if (fs.existsSync(mockDataFile)) {
       fs.unlinkSync(mockDataFile);
@@ -205,6 +207,9 @@ describe('GET /bot/now-playing', () => {
     if (fs.existsSync(mockCredFile)) {
       fs.unlinkSync(mockCredFile);
     }
+    clock = sinon.useFakeTimers({
+      now: 1711934625000
+    });
   });
 
   afterEach(() => {
@@ -214,6 +219,7 @@ describe('GET /bot/now-playing', () => {
     if (fs.existsSync(mockCredFile)) {
       fs.unlinkSync(mockCredFile);
     }
+    clock.restore();
   });
 
   let mockValidSpotifyResponse = {
@@ -224,6 +230,20 @@ describe('GET /bot/now-playing', () => {
         "artists": [
           {
             "name": "singer 1"
+          }
+        ]
+      }
+    }
+  };
+
+  let mockValidSpotifyResponse2 = {
+    "timestamp": 1711934640000,
+    "item": {
+      "name": "track 2",
+      "album": {
+        "artists": [
+          {
+            "name": "singer 2"
           }
         ]
       }
@@ -486,7 +506,7 @@ describe('GET /bot/now-playing', () => {
     })
   });
 
-  it('should return now playing track from stored data file', () => {
+  it('should return now playing track from stored data file if the data age is < 15 sec', () => {
 
     let dataFileContent = {
       "timestamp": 1711934625000,
@@ -503,6 +523,8 @@ describe('GET /bot/now-playing', () => {
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
     fs.writeFileSync(mockDataFile, JSON.stringify(dataFileContent));
 
+    clock.tick(14999);
+
     return request(app)
       .get('/bot/now-playing')
       .then((response) => {
@@ -512,7 +534,39 @@ describe('GET /bot/now-playing', () => {
       })
   });
 
-  it('should return now playing track if there is no stored data file', () => {
+  it('should return now playing track from Spotify if the data age is > 15 sec', () => {
+
+    let dataFileContent = {
+      "timestamp": 1711934625000,
+      "artistName": "singer 1",
+      "itemName": "track 1"
+    }
+    let expectedResponse = {
+      "timestamp": 1711934640000,
+      "artistName": "singer 2",
+      "itemName": "track 2"
+    }
+
+    fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
+    fs.writeFileSync(mockDataFile, JSON.stringify(dataFileContent));
+
+    const scope = nock("https://api.spotify.com")
+      .matchHeader('Authorization', 'Bearer DUMMYTOKEN1')
+      .get('/v1/me/player/currently-playing')
+      .reply(200, mockValidSpotifyResponse2)
+
+    clock.tick(15000);
+
+    return request(app)
+      .get('/bot/now-playing')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })
+  });
+
+  it('should return now playing track from Spotify if there is no stored data file', () => {
 
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
 

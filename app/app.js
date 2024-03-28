@@ -92,10 +92,44 @@ app.get("/bot/now-playing", async (req, res) => {
       return res.status(428).json({"error": "bot_enabled is false"});
     }
 
-    response["artistName"] = fileContent["artistName"];
-    response["itemName"] = fileContent["itemName"];
-    response["timestamp"] = fileContent["timestamp"];
-    return res.status(200).json(response);
+    const currentTimestamp = Date.now();
+
+    // checks if stored data age is less than 15 seconds
+    // and serves the value from the data file
+    if (currentTimestamp - fileContent["timestamp"] < 15000) {
+      response["artistName"] = fileContent["artistName"];
+      response["itemName"] = fileContent["itemName"];
+      response["timestamp"] = fileContent["timestamp"];
+      return res.status(200).json(response);      
+    }
+
+    // retrieves data from Spotify API because the data file is stale
+    else {
+      //this else is duplicated from outer else block below
+      const callSpotifyResult = await callSpotifyCurrentlyPlaying();
+      if (callSpotifyResult.status == "Unauthorized") {
+
+        const tokenRefreshResult = await callSpotifyTokenRefresh();
+        if (tokenRefreshResult.status == "Failed") {
+          return res.status(400).json({"error": "Unable to refresh token"});
+        }
+
+        const callSpotifyResult3 = await callSpotifyCurrentlyPlaying();
+          if (callSpotifyResult3.status != "Succesful") {
+
+            return res.status(503).json(
+              {"error": "Unable to request currently playing song after second attempt"});
+          }
+          else {
+           res.status(200).json(callSpotifyResult3.data);
+          }
+
+      }
+      else {
+        return res.status(200).json(callSpotifyResult.data);
+      }
+    }
+
   }
 
   else {
