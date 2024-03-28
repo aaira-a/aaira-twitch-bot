@@ -590,4 +590,24 @@ describe('GET /bot/now-playing', () => {
   });
 
 
+  it('should return now playing track in plain text format if plain text is requested', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
+
+    let expectedResponse = "Now playing: [singer 1] - [track 1]"
+
+    const scope = nock("https://api.spotify.com")
+        .get('/v1/me/player/currently-playing')
+        .reply(200, mockValidSpotifyResponse)
+
+    return request(app)
+      .get('/bot/now-playing')
+      .query({"format": "text"})
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('text/plain');
+        expect(response.text).to.eql(expectedResponse);
+      })
+  });
+
 });

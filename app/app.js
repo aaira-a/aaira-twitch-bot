@@ -100,7 +100,7 @@ app.get("/bot/now-playing", async (req, res) => {
       response["artistName"] = fileContent["artistName"];
       response["itemName"] = fileContent["itemName"];
       response["timestamp"] = fileContent["timestamp"];
-      return res.status(200).json(response);      
+      return formatOutput(res, 200, response, req.query.format);
     }
 
     // retrieves data from Spotify API because the data file is stale
@@ -121,12 +121,12 @@ app.get("/bot/now-playing", async (req, res) => {
               {"error": "Unable to request currently playing song after second attempt"});
           }
           else {
-           res.status(200).json(callSpotifyResult3.data);
+           return formatOutput(res, 200, callSpotifyResult3.data, req.query.format);
           }
 
       }
       else {
-        return res.status(200).json(callSpotifyResult.data);
+        return formatOutput(res, 200, callSpotifyResult.data, req.query.format);
       }
     }
 
@@ -148,17 +148,29 @@ app.get("/bot/now-playing", async (req, res) => {
             {"error": "Unable to request currently playing song after second attempt"});
         }
         else {
-         res.status(200).json(callSpotifyResult3.data);
+         return formatOutput(res, 200, callSpotifyResult3.data, req.query.format);
         }
 
     }
     else {
-      return res.status(200).json(callSpotifyResult.data);
+      return formatOutput(res, 200, callSpotifyResult.data, req.query.format);
     }
 
   }
 
 });
+
+
+function formatOutput(res, code, data, format) {
+  if (format == "text") {
+    const formattedText = `Now playing: [${data.artistName}] - [${data.itemName}]`;
+    res.set("Content-Type", "text/plain");
+    return res.status(code).send(formattedText);
+  }
+  else {
+    return res.status(code).json(data);
+  }
+}
 
 async function callSpotifyCurrentlyPlaying() {
   const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
