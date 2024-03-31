@@ -4,6 +4,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const util = require("util");
+const humanizeDuration = require("humanize-duration");
 
 const app = express();
 
@@ -101,6 +102,7 @@ app.get("/bot/now-playing", async (req, res) => {
       response["itemName"] = fileContent["itemName"];
       response["timestamp"] = fileContent["timestamp"];
       response["songLink"] = fileContent["songLink"];
+      response["duration_ms"] = fileContent["duration_ms"];
       return formatOutput(res, 200, response, req.query.format);
     }
 
@@ -168,8 +170,27 @@ async function nowPlayingMainLogic (req, res) {
 };
 
 function formatOutput(res, code, data, format) {
+
+  const shortEnglishHumanizer = humanizeDuration.humanizer({
+    language: "shortEn",
+    delimiter: "",
+    spacer: "",
+    round: true,
+    languages: {
+      shortEn: {
+        h: () => "h",
+        m: () => "m",
+        s: () => "s",
+        ms: () => "ms",
+      },
+    },
+  });
+
   if (format == "text") {
-    const formattedText = `Now playing: [${data.artistName}] - [${data.itemName}]`;
+
+    const formattedDuration =  shortEnglishHumanizer(data.duration_ms);
+    const formattedText = `Now playing: [${data.artistName}] - [${data.itemName}] - [${formattedDuration}]`;
+    
     res.set("Content-Type", "text/plain");
     return res.status(code).send(formattedText);
   }
@@ -211,7 +232,8 @@ async function callSpotifyCurrentlyPlaying() {
             "artistName": response.data.item.album.artists[0].name,
             "itemName": response.data.item.name,
             "timestamp": response.data.timestamp,
-            "songLink": response.data.item.external_urls.spotify
+            "songLink": response.data.item.external_urls.spotify,
+            "duration_ms": response.data.item.duration_ms
           };
           fs.writeFile(dataFilePath, JSON.stringify(dataToSave), (err) => {
             if (err) { console.log(err) }

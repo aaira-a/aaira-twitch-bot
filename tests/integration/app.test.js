@@ -235,7 +235,8 @@ describe('GET /bot/now-playing', () => {
       },
       "external_urls": {
         "spotify": "https://open.spotify.com/track/xxx"
-      }
+      },
+      "duration_ms": 200000
     }
   };
 
@@ -252,7 +253,8 @@ describe('GET /bot/now-playing', () => {
       },
       "external_urls": {
         "spotify": "https://open.spotify.com/track/yyy"
-      }
+      },
+      "duration_ms": 300000
     }
   };
 
@@ -429,7 +431,8 @@ describe('GET /bot/now-playing', () => {
       "artistName": "singer 1",
       "itemName": "track 1",
       "timestamp": 1711934625000,
-      "songLink": "https://open.spotify.com/track/xxx"
+      "songLink": "https://open.spotify.com/track/xxx",
+      "duration_ms": 200000
     }
 
     return request(app)
@@ -489,7 +492,8 @@ describe('GET /bot/now-playing', () => {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
       "itemName": "track 1",
-      "songLink": "https://open.spotify.com/track/xxx"
+      "songLink": "https://open.spotify.com/track/xxx",
+      "duration_ms": 200000
     }
 
     // Test flow:
@@ -520,14 +524,16 @@ describe('GET /bot/now-playing', () => {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
       "itemName": "track 1",
-      "songLink": "https://open.spotify.com/track/xxx"
+      "songLink": "https://open.spotify.com/track/xxx",
+      "duration_ms": 200000
     }
 
     let expectedResponse = {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
       "itemName": "track 1",
-      "songLink": "https://open.spotify.com/track/xxx"
+      "songLink": "https://open.spotify.com/track/xxx",
+      "duration_ms": 200000
     }
 
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
@@ -550,13 +556,15 @@ describe('GET /bot/now-playing', () => {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
       "itemName": "track 1",
-      "songLink": "https://open.spotify.com/track/xxx"
+      "songLink": "https://open.spotify.com/track/xxx",
+      "duration_ms": 200000
     }
     let expectedResponse = {
       "timestamp": 1711934640000,
       "artistName": "singer 2",
       "itemName": "track 2",
-      "songLink": "https://open.spotify.com/track/yyy"
+      "songLink": "https://open.spotify.com/track/yyy",
+      "duration_ms": 300000
     }
 
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
@@ -586,7 +594,8 @@ describe('GET /bot/now-playing', () => {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
       "itemName": "track 1",
-      "songLink": "https://open.spotify.com/track/xxx"
+      "songLink": "https://open.spotify.com/track/xxx",
+      "duration_ms": 200000
     }
 
     const scope = nock("https://api.spotify.com")
@@ -607,7 +616,7 @@ describe('GET /bot/now-playing', () => {
 
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
 
-    let expectedResponse = "Now playing: [singer 1] - [track 1]"
+    let expectedResponse = "Now playing: [singer 1] - [track 1] - [3m20s]"
 
     const scope = nock("https://api.spotify.com")
         .get('/v1/me/player/currently-playing')
@@ -661,7 +670,8 @@ describe('GET /bot/now-playing-link', () => {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
       "itemName": "track 1",
-      "songLink": "https://open.spotify.com/track/xxx"
+      "songLink": "https://open.spotify.com/track/xxx",
+      "duration_ms": 200000
     }
 
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
