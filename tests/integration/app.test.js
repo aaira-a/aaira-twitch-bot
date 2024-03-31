@@ -232,6 +232,9 @@ describe('GET /bot/now-playing', () => {
             "name": "singer 1"
           }
         ]
+      },
+      "external_urls": {
+        "spotify": "https://open.spotify.com/track/xxx"
       }
     }
   };
@@ -246,6 +249,9 @@ describe('GET /bot/now-playing', () => {
             "name": "singer 2"
           }
         ]
+      },
+      "external_urls": {
+        "spotify": "https://open.spotify.com/track/yyy"
       }
     }
   };
@@ -422,7 +428,8 @@ describe('GET /bot/now-playing', () => {
     let expectedDataFileContent = {
       "artistName": "singer 1",
       "itemName": "track 1",
-      "timestamp": 1711934625000
+      "timestamp": 1711934625000,
+      "songLink": "https://open.spotify.com/track/xxx"
     }
 
     return request(app)
@@ -481,7 +488,8 @@ describe('GET /bot/now-playing', () => {
     let expectedResponse = {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
-      "itemName": "track 1"
+      "itemName": "track 1",
+      "songLink": "https://open.spotify.com/track/xxx"
     }
 
     // Test flow:
@@ -511,13 +519,15 @@ describe('GET /bot/now-playing', () => {
     let dataFileContent = {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
-      "itemName": "track 1"
+      "itemName": "track 1",
+      "songLink": "https://open.spotify.com/track/xxx"
     }
 
     let expectedResponse = {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
-      "itemName": "track 1"
+      "itemName": "track 1",
+      "songLink": "https://open.spotify.com/track/xxx"
     }
 
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
@@ -539,12 +549,14 @@ describe('GET /bot/now-playing', () => {
     let dataFileContent = {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
-      "itemName": "track 1"
+      "itemName": "track 1",
+      "songLink": "https://open.spotify.com/track/xxx"
     }
     let expectedResponse = {
       "timestamp": 1711934640000,
       "artistName": "singer 2",
-      "itemName": "track 2"
+      "itemName": "track 2",
+      "songLink": "https://open.spotify.com/track/yyy"
     }
 
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
@@ -573,7 +585,8 @@ describe('GET /bot/now-playing', () => {
     let expectedResponse = {
       "timestamp": 1711934625000,
       "artistName": "singer 1",
-      "itemName": "track 1"
+      "itemName": "track 1",
+      "songLink": "https://open.spotify.com/track/xxx"
     }
 
     const scope = nock("https://api.spotify.com")
@@ -611,3 +624,82 @@ describe('GET /bot/now-playing', () => {
   });
 
 });
+
+describe('GET /bot/now-playing-link', () => {
+
+  const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+  const mockDataFile = path.join(basePath, 'data.json');
+  const mockCredFile = path.join(basePath, 'credentials.json');
+
+  let clock = null;
+
+  beforeEach(() => {
+    if (fs.existsSync(mockDataFile)) {
+      fs.unlinkSync(mockDataFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+    clock = sinon.useFakeTimers({
+      now: 1711934625000
+    });
+  });
+
+  afterEach(() => {
+    if (fs.existsSync(mockDataFile)) {
+      fs.unlinkSync(mockDataFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+    clock.restore();
+  });
+
+  it('should return song link from data file if it exists', () => {
+
+    let dataFileContent = {
+      "timestamp": 1711934625000,
+      "artistName": "singer 1",
+      "itemName": "track 1",
+      "songLink": "https://open.spotify.com/track/xxx"
+    }
+
+    fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
+    fs.writeFileSync(mockDataFile, JSON.stringify(dataFileContent));
+
+    let expectedResponse = "Song link: https://open.spotify.com/track/xxx"
+
+    return request(app)
+      .get('/bot/now-playing-link')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('text/plain');
+        expect(response.text).to.eql(expectedResponse);
+      })
+
+  });
+
+  it('should return 404 if no song link exists in data file', () => {
+
+    let dataFileContent = {
+      "timestamp": 1711934625000,
+      "artistName": "singer 1",
+      "itemName": "track 1",
+    }
+
+    fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
+    fs.writeFileSync(mockDataFile, JSON.stringify(dataFileContent));
+
+    let expectedResponse = "No song link exists in data file"
+
+    return request(app)
+      .get('/bot/now-playing-link')
+      .then((response) => {
+        expect(response.status).to.eql(404)
+        expect(response.text).to.eql(expectedResponse);
+      })
+
+  });
+
+});
+

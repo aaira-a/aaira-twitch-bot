@@ -100,6 +100,7 @@ app.get("/bot/now-playing", async (req, res) => {
       response["artistName"] = fileContent["artistName"];
       response["itemName"] = fileContent["itemName"];
       response["timestamp"] = fileContent["timestamp"];
+      response["songLink"] = fileContent["songLink"];
       return formatOutput(res, 200, response, req.query.format);
     }
 
@@ -160,6 +161,29 @@ app.get("/bot/now-playing", async (req, res) => {
 
 });
 
+app.get("/bot/now-playing-link", (req, res) => {
+
+  if (fs.existsSync(dataFilePath)) {
+    let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+
+    if (fileContent.hasOwnProperty("songLink")) {
+      songLink = fileContent["songLink"];
+
+      let formattedText = `Song link: ${songLink}`;
+
+      res.set("Content-Type", "text/plain");
+      return res.status(200).send(formattedText);
+    }
+
+    else {
+      res.set("Content-Type", "text/plain");
+      return res.status(404).send("No song link exists in data file");
+    }
+
+  }
+
+});
+
 
 function formatOutput(res, code, data, format) {
   if (format == "text") {
@@ -204,7 +228,8 @@ async function callSpotifyCurrentlyPlaying() {
           let dataToSave = {
             "artistName": response.data.item.album.artists[0].name,
             "itemName": response.data.item.name,
-            "timestamp": response.data.timestamp
+            "timestamp": response.data.timestamp,
+            "songLink": response.data.item.external_urls.spotify
           };
           fs.writeFile(dataFilePath, JSON.stringify(dataToSave), (err) => {
             if (err) { console.log(err) }
