@@ -3,7 +3,7 @@ const axios = require("axios");
 
 const fs = require("fs");
 const path = require("path");
-
+const util = require("util");
 
 const app = express();
 
@@ -106,56 +106,13 @@ app.get("/bot/now-playing", async (req, res) => {
 
     // retrieves data from Spotify API because the data file is stale
     else {
-      //this else is duplicated from outer else block below
-      const callSpotifyResult = await callSpotifyCurrentlyPlaying();
-      if (callSpotifyResult.status == "Unauthorized") {
-
-        const tokenRefreshResult = await callSpotifyTokenRefresh();
-        if (tokenRefreshResult.status == "Failed") {
-          return res.status(400).json({"error": "Unable to refresh token"});
-        }
-
-        const callSpotifyResult3 = await callSpotifyCurrentlyPlaying();
-          if (callSpotifyResult3.status != "Succesful") {
-
-            return res.status(503).json(
-              {"error": "Unable to request currently playing song after second attempt"});
-          }
-          else {
-           return formatOutput(res, 200, callSpotifyResult3.data, req.query.format);
-          }
-
-      }
-      else {
-        return formatOutput(res, 200, callSpotifyResult.data, req.query.format);
-      }
+      await nowPlayingMainLogic(req, res);
     }
 
   }
 
   else {
-    const callSpotifyResult = await callSpotifyCurrentlyPlaying();
-    if (callSpotifyResult.status == "Unauthorized") {
-
-      const tokenRefreshResult = await callSpotifyTokenRefresh();
-      if (tokenRefreshResult.status == "Failed") {
-        return res.status(400).json({"error": "Unable to refresh token"});
-      }
-
-      const callSpotifyResult3 = await callSpotifyCurrentlyPlaying();
-        if (callSpotifyResult3.status != "Succesful") {
-
-          return res.status(503).json(
-            {"error": "Unable to request currently playing song after second attempt"});
-        }
-        else {
-         return formatOutput(res, 200, callSpotifyResult3.data, req.query.format);
-        }
-
-    }
-    else {
-      return formatOutput(res, 200, callSpotifyResult.data, req.query.format);
-    }
+    await nowPlayingMainLogic(req, res);
 
   }
 
@@ -184,6 +141,31 @@ app.get("/bot/now-playing-link", (req, res) => {
 
 });
 
+
+async function nowPlayingMainLogic (req, res) {
+  const callSpotifyResult = await callSpotifyCurrentlyPlaying();
+  if (callSpotifyResult.status == "Unauthorized") {
+
+    const tokenRefreshResult = await callSpotifyTokenRefresh();
+    if (tokenRefreshResult.status == "Failed") {
+      return res.status(400).json({"error": "Unable to refresh token"});
+    }
+
+    const callSpotifyResult3 = await callSpotifyCurrentlyPlaying();
+      if (callSpotifyResult3.status != "Succesful") {
+
+        return res.status(503).json(
+          {"error": "Unable to request currently playing song after second attempt"});
+      }
+      else {
+       return formatOutput(res, 200, callSpotifyResult3.data, req.query.format);
+      }
+
+  }
+  else {
+    return formatOutput(res, 200, callSpotifyResult.data, req.query.format);
+  }
+};
 
 function formatOutput(res, code, data, format) {
   if (format == "text") {
