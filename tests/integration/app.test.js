@@ -38,7 +38,7 @@ describe('GET /bot/hello', () => {
 describe('GET /bot/toggle', () => {
 
   const basePath = path.join(__dirname, '..', '..', 'app', 'data');
-  const mockDataFile = path.join(basePath, 'data.json');
+  const mockDataFile = path.join(basePath, 'spotify_data.json');
   
   beforeEach(() => {
     if (fs.existsSync(mockDataFile)) {
@@ -89,7 +89,7 @@ describe('GET /bot/toggle', () => {
 describe('GET /bot/set/toggle/:state', () => {
 
   const basePath = path.join(__dirname, '..', '..', 'app', 'data');
-  const mockDataFile = path.join(basePath, 'data.json');
+  const mockDataFile = path.join(basePath, 'spotify_data.json');
   
   beforeEach(() => {
     if (fs.existsSync(mockDataFile)) {
@@ -195,8 +195,8 @@ describe('GET /bot/set/toggle/:state', () => {
 describe('GET /bot/now-playing', () => {
 
   const basePath = path.join(__dirname, '..', '..', 'app', 'data');
-  const mockDataFile = path.join(basePath, 'data.json');
-  const mockCredFile = path.join(basePath, 'credentials.json');
+  const mockDataFile = path.join(basePath, 'spotify_data.json');
+  const mockCredFile = path.join(basePath, 'spotify_credentials.json');
 
   let clock = null;
 
@@ -637,8 +637,8 @@ describe('GET /bot/now-playing', () => {
 describe('GET /bot/now-playing-link', () => {
 
   const basePath = path.join(__dirname, '..', '..', 'app', 'data');
-  const mockDataFile = path.join(basePath, 'data.json');
-  const mockCredFile = path.join(basePath, 'credentials.json');
+  const mockDataFile = path.join(basePath, 'spotify_data.json');
+  const mockCredFile = path.join(basePath, 'spotify_credentials.json');
 
   let clock = null;
 

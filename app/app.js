@@ -10,8 +10,8 @@ const app = express();
 
 
 const DATA_FOLDER_NAME = 'data';
-const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'data.json');
-const credFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'credentials.json');
+const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'spotify_data.json');
+const credFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'spotify_credentials.json');
 
 app.get("/bot/hello", (req, res) => {
   res.json({
