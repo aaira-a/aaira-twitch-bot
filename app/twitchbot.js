@@ -12,8 +12,8 @@ const clientData = JSON.parse(await fs.readFile(credFilePath, 'utf-8'));
 const clientId = clientData["TWITCH_CLIENT_ID"];
 const clientSecret = clientData["TWITCH_CLIENT_SECRET"];
 
-const tokenDataFile = path.join(__dirname, DATA_FOLDER_NAME, 'tokens.926502276.json');
-const tokenData = JSON.parse(await fs.readFile(tokenDataFile, 'utf-8'));
+const tokenDataPath = path.join(__dirname, DATA_FOLDER_NAME, 'tokens.926502276.json');
+const tokenData = JSON.parse(await fs.readFile(tokenDataPath, 'utf-8'));
 
 const authProvider = new RefreshingAuthProvider(
   {
@@ -22,7 +22,7 @@ const authProvider = new RefreshingAuthProvider(
   }
 );
 
-authProvider.onRefresh(async (userId, newTokenData) => await fs.writeFile(`./tokens.${userId}.json`, JSON.stringify(newTokenData, null, 4), 'utf-8'));
+authProvider.onRefresh(async (userId, newTokenData) => await fs.writeFile(tokenDataPath, JSON.stringify(newTokenData, null, 4), 'utf-8'));
 
 await authProvider.addUserForToken(tokenData, ['chat']);
 
