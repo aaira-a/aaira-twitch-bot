@@ -47,6 +47,19 @@ client.on('message', (channel, tags, message, self) => {
       client.say(channel, `@${tags.username}, heya!`);
   }
 
+  if(message.toLowerCase().includes('!baby')) {
+      client.say(channel, `aaira0Love Hi baby @${tags.username}! aaira0Love`);
+  }
+
+  if(message.toLowerCase().includes('!lurk')) {
+      client.say(channel, `Thanks for lurking @${tags.username} aaira0Pat`);
+  }
+
+  if(message.toLowerCase().includes('!tags')) {
+      console.log(tags);
+  }
+
+
   if(message.toLowerCase().includes('!best')) {
 
     const re = /!best @(\S+)/;
