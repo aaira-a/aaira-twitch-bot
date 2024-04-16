@@ -1,4 +1,6 @@
 import { RefreshingAuthProvider } from '@twurple/auth';
+import axios from 'axios';
+import humanizeDuration from "humanize-duration";
 
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -7,10 +9,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const DATA_FOLDER_NAME = 'data';
+
+const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_data.json');
+
 const credFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_credentials.json');
 const clientData = JSON.parse(await fs.readFile(credFilePath, 'utf-8'));
 const clientId = clientData["TWITCH_CLIENT_ID"];
 const clientSecret = clientData["TWITCH_CLIENT_SECRET"];
+
 
 const tokenDataPath = path.join(__dirname, DATA_FOLDER_NAME, 'tokens.926502276.json');
 const tokenData = JSON.parse(await fs.readFile(tokenDataPath, 'utf-8'));
@@ -39,7 +45,7 @@ const client = new tmi.Client({
 });
 client.connect().catch(console.error);
 
-client.on('message', (channel, tags, message, self) => {
+client.on('message', async (channel, tags, message, self) => {
   // Ignore echoed messages.
   if(self) return;
 
@@ -59,6 +65,26 @@ client.on('message', (channel, tags, message, self) => {
       console.log(tags);
   }
 
+  // to extract into a function / scheduled loop
+  if(message.toLowerCase().includes('!comp')) {
+
+    const fileContent = JSON.parse(await fs.readFile(dataFilePath, 'utf-8'));
+
+    const previousTrackId = fileContent["trackId"];
+    console.log(`previous track id: ${previousTrackId}`);
+
+    const response = await getSpotifyData();
+    const currentTrackId = response["data"]["trackId"];
+    console.log(`current track id: ${currentTrackId}`);
+
+    const formattedDuration =  shortEnglishHumanizer(response.data.duration_ms);
+
+    if (currentTrackId != previousTrackId) {
+      const formattedText = `Now playing: [${response.data.artistName}] - [${response.data.itemName}] - [${formattedDuration}]`;
+      client.say(channel, formattedText);
+    }
+
+  }
 
   if(message.toLowerCase().includes('!best')) {
 
@@ -73,3 +99,45 @@ client.on('message', (channel, tags, message, self) => {
     }
   }
 });
+
+const shortEnglishHumanizer = humanizeDuration.humanizer({
+  language: "shortEn",
+  delimiter: "",
+  spacer: "",
+  round: true,
+  languages: {
+    shortEn: {
+      h: () => "h",
+      m: () => "m",
+      s: () => "s",
+      ms: () => "ms",
+    },
+  },
+});
+
+
+async function getSpotifyData() {
+
+  return axios({
+    method: 'get',
+    url: 'http://127.0.0.1:3007/bot/now-playing',
+  })
+    .then(function (response) {
+      let dataToSave = {
+        "artistName": response.data.artistName,
+        "itemName": response.data.itemName,
+        "upstreamTimestamp": response.data.timestamp,
+        "currentTimestamp": Date.now(),
+        "songLink": response.data.songLink,
+        "trackId": response.data.trackId,
+        "duration_ms": response.data.duration_ms
+      };
+      fs.writeFile(dataFilePath, JSON.stringify(dataToSave), (err) => {
+        if (err) { console.log(err) }
+      });
+      const functionResponse = {"status": "Succesful", "data": dataToSave}
+      
+      return functionResponse;
+    })
+
+}
