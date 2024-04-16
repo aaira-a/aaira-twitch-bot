@@ -233,6 +233,7 @@ describe('GET /bot/now-playing', () => {
           }
         ]
       },
+      "id": "dummy-track-id-1",
       "external_urls": {
         "spotify": "https://open.spotify.com/track/xxx"
       },
@@ -251,6 +252,7 @@ describe('GET /bot/now-playing', () => {
           }
         ]
       },
+      "id": "dummy-track-id-2",
       "external_urls": {
         "spotify": "https://open.spotify.com/track/yyy"
       },
@@ -432,6 +434,7 @@ describe('GET /bot/now-playing', () => {
       "itemName": "track 1",
       "timestamp": 1711934625000,
       "songLink": "https://open.spotify.com/track/xxx",
+      "trackId": "dummy-track-id-1",
       "duration_ms": 200000
     }
 
@@ -493,6 +496,7 @@ describe('GET /bot/now-playing', () => {
       "artistName": "singer 1",
       "itemName": "track 1",
       "songLink": "https://open.spotify.com/track/xxx",
+      "trackId": "dummy-track-id-1",
       "duration_ms": 200000
     }
 
@@ -525,6 +529,7 @@ describe('GET /bot/now-playing', () => {
       "artistName": "singer 1",
       "itemName": "track 1",
       "songLink": "https://open.spotify.com/track/xxx",
+      "trackId": "dummy-track-id-1",
       "duration_ms": 200000
     }
 
@@ -533,6 +538,7 @@ describe('GET /bot/now-playing', () => {
       "artistName": "singer 1",
       "itemName": "track 1",
       "songLink": "https://open.spotify.com/track/xxx",
+      "trackId": "dummy-track-id-1",
       "duration_ms": 200000
     }
 
@@ -557,6 +563,7 @@ describe('GET /bot/now-playing', () => {
       "artistName": "singer 1",
       "itemName": "track 1",
       "songLink": "https://open.spotify.com/track/xxx",
+      "trackId": "dummy-track-id-1",
       "duration_ms": 200000
     }
     let expectedResponse = {
@@ -564,6 +571,7 @@ describe('GET /bot/now-playing', () => {
       "artistName": "singer 2",
       "itemName": "track 2",
       "songLink": "https://open.spotify.com/track/yyy",
+      "trackId": "dummy-track-id-2",
       "duration_ms": 300000
     }
 
@@ -595,6 +603,7 @@ describe('GET /bot/now-playing', () => {
       "artistName": "singer 1",
       "itemName": "track 1",
       "songLink": "https://open.spotify.com/track/xxx",
+      "trackId": "dummy-track-id-1",
       "duration_ms": 200000
     }
 
@@ -671,6 +680,7 @@ describe('GET /bot/now-playing-link', () => {
       "artistName": "singer 1",
       "itemName": "track 1",
       "songLink": "https://open.spotify.com/track/xxx",
+      "trackId": "dummy-track-id-1",
       "duration_ms": 200000
     }
 

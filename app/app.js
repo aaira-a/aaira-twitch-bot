@@ -102,6 +102,7 @@ app.get("/bot/now-playing", async (req, res) => {
       response["itemName"] = fileContent["itemName"];
       response["timestamp"] = fileContent["timestamp"];
       response["songLink"] = fileContent["songLink"];
+      response["trackId"] = fileContent["trackId"];
       response["duration_ms"] = fileContent["duration_ms"];
       return formatOutput(res, 200, response, req.query.format);
     }
@@ -233,6 +234,7 @@ async function callSpotifyCurrentlyPlaying() {
             "itemName": response.data.item.name,
             "timestamp": response.data.timestamp,
             "songLink": response.data.item.external_urls.spotify,
+            "trackId": response.data.item.id,
             "duration_ms": response.data.item.duration_ms
           };
           fs.writeFile(dataFilePath, JSON.stringify(dataToSave), (err) => {
