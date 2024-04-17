@@ -66,9 +66,10 @@ client.on('message', async (channel, tags, message, self) => {
   }
 
 
-  if(message.toLowerCase().includes('!comp')) {
-    await emitNowPlayingTrack(client, channel);
-  }
+  // if(message.toLowerCase().includes('!comp')) {
+  //   console.log(channel);
+  //   await emitNowPlayingTrack(client, channel);
+  // }
 
   if(message.toLowerCase().includes('!best')) {
 
@@ -145,3 +146,10 @@ async function getSpotifyData() {
     })
 
 }
+
+setInterval(()=> {
+  console.log('Every 15 seconds');
+  emitNowPlayingTrack(client, '#aaira0');
+},15000)
+
+console.log('Initialization');
