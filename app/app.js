@@ -12,6 +12,7 @@ const app = express();
 const DATA_FOLDER_NAME = 'data';
 const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'spotify_data.json');
 const credFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'spotify_credentials.json');
+const toggleFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'toggle_data.json');
 
 app.get("/bot/hello", (req, res) => {
   res.json({
@@ -22,8 +23,8 @@ app.get("/bot/hello", (req, res) => {
 app.get("/bot/toggle", (req, res) => {
   let response = {"status": "undefined"};
 
-  if (fs.existsSync(dataFilePath)) {
-    let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+  if (fs.existsSync(toggleFilePath)) {
+    let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
     if (fileContent.hasOwnProperty("bot_enabled")) {
       if (fileContent["bot_enabled"] == true) {
         response["status"] = "enabled";
@@ -50,26 +51,26 @@ app.get("/bot/set/toggle/:state?", (req, res) => {
   let response = {"bot_enabled": undefined};
 
   if (req.params.state == "enable") {
-    if (fs.existsSync(dataFilePath)) {
-      let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+    if (fs.existsSync(toggleFilePath)) {
+      let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
       fileContent["bot_enabled"] = true;
-      fs.writeFileSync(dataFilePath, JSON.stringify(fileContent));
+      fs.writeFileSync(toggleFilePath, JSON.stringify(fileContent));
     }
     else {
-      fs.writeFileSync(dataFilePath, JSON.stringify({"bot_enabled": true}));
+      fs.writeFileSync(toggleFilePath, JSON.stringify({"bot_enabled": true}));
     }
     response["bot_enabled"] = true;
     res.status(200).json(response);
   }
 
   if (req.params.state == "disable") {
-    if (fs.existsSync(dataFilePath)) {
-      let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+    if (fs.existsSync(toggleFilePath)) {
+      let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
       fileContent["bot_enabled"] = false;
-      fs.writeFileSync(dataFilePath, JSON.stringify(fileContent));
+      fs.writeFileSync(toggleFilePath, JSON.stringify(fileContent));
     }
     else {
-      fs.writeFileSync(dataFilePath, JSON.stringify({"bot_enabled": false}));
+      fs.writeFileSync(toggleFilePath, JSON.stringify({"bot_enabled": false}));
     }
     response["bot_enabled"] = false;
     res.status(200).json(response);
