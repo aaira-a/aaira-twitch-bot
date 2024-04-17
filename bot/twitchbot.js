@@ -65,25 +65,9 @@ client.on('message', async (channel, tags, message, self) => {
       console.log(tags);
   }
 
-  // to extract into a function / scheduled loop
+
   if(message.toLowerCase().includes('!comp')) {
-
-    const fileContent = JSON.parse(await fs.readFile(dataFilePath, 'utf-8'));
-
-    const previousTrackId = fileContent["trackId"];
-    console.log(`previous track id: ${previousTrackId}`);
-
-    const response = await getSpotifyData();
-    const currentTrackId = response["data"]["trackId"];
-    console.log(`current track id: ${currentTrackId}`);
-
-    const formattedDuration =  shortEnglishHumanizer(response.data.duration_ms);
-
-    if (currentTrackId != previousTrackId) {
-      const formattedText = `Now playing: [${response.data.artistName}] - [${response.data.itemName}] - [${formattedDuration}]`;
-      client.say(channel, formattedText);
-    }
-
+    await emitNowPlayingTrack(client, channel);
   }
 
   if(message.toLowerCase().includes('!best')) {
@@ -99,6 +83,26 @@ client.on('message', async (channel, tags, message, self) => {
     }
   }
 });
+
+
+async function emitNowPlayingTrack(_client, _channel) {
+  const fileContent = JSON.parse(await fs.readFile(dataFilePath, 'utf-8'));
+
+  const previousTrackId = fileContent["trackId"];
+  console.log(`previous track id: ${previousTrackId}`);
+
+  const response = await getSpotifyData();
+  const currentTrackId = response["data"]["trackId"];
+  console.log(`current track id: ${currentTrackId}`);
+
+  const formattedDuration =  shortEnglishHumanizer(response.data.duration_ms);
+
+  if (currentTrackId != previousTrackId) {
+    const formattedText = `Now playing: [${response.data.artistName}] - [${response.data.itemName}] - [${formattedDuration}]`;
+    _client.say(_channel, formattedText);
+  }
+}
+
 
 const shortEnglishHumanizer = humanizeDuration.humanizer({
   language: "shortEn",
