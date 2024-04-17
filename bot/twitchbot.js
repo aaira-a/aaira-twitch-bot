@@ -65,12 +65,6 @@ client.on('message', async (channel, tags, message, self) => {
       console.log(tags);
   }
 
-
-  // if(message.toLowerCase().includes('!comp')) {
-  //   console.log(channel);
-  //   await emitNowPlayingTrack(client, channel);
-  // }
-
   if(message.toLowerCase().includes('!best')) {
 
     const re = /!best @(\S+)/;
@@ -147,9 +141,29 @@ async function getSpotifyData() {
 
 }
 
-setInterval(()=> {
+async function getToggleData() {
+
+  return axios({
+    method: 'get',
+    url: 'http://127.0.0.1:3007/bot/toggle',
+  })
+    .then(function (response) {
+      const functionResponse = {"status": "Succesful", "data": response.data.status}
+      
+      return functionResponse;
+    })
+
+}
+
+setInterval(async ()=> {
   console.log('Every 15 seconds');
-  emitNowPlayingTrack(client, '#aaira0');
+
+  const botToggleStatus = await getToggleData();
+
+  if(botToggleStatus["data"] == "enabled") {
+    emitNowPlayingTrack(client, '#aaira0');
+  }
+
 },15000)
 
 console.log('Initialization');
