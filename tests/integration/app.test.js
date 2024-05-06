@@ -723,3 +723,163 @@ describe('GET /bot/now-playing-link', () => {
 
 });
 
+
+describe('GET /bot/get-player-queue', () => {
+
+  const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+  const mockToggleFile = path.join(basePath, 'toggle_data.json');
+  const mockCredFile = path.join(basePath, 'spotify_credentials.json');
+
+  let clock = null;
+
+  beforeEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+  });
+
+  afterEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+  });
+
+  let mockValidSpotifyResponse = {
+    "currently_playing": {
+      "artists": [
+        {
+          "name": "artist 1 name",
+        }
+      ],
+      "duration_ms": 60000,
+      "name": "currently playing track name",
+      "id": "currently playing track ID",
+      "extra": "this should not be returned in response"
+    },
+    "queue": [
+      {
+        "artists": [
+          {
+            "name": "queue item 1 artist name"
+          }
+        ],
+        "duration_ms": 120000,
+        "name": "queue item 1 track name",
+        "id": "queue item 1 track ID",
+        "extra": "this should not be returned in response 2"
+      },
+      {
+        "artists": [
+          {
+            "name": "queue item 2 artist name"
+          }
+        ],
+        "duration_ms": 180000,
+        "name": "queue item 2 track name",
+        "id": "queue item 2 track ID",
+        "extra": "this should not be returned in response 3"
+      }
+    ]
+  };
+
+
+  let mockTokenExpiredSpotifyResponse = {
+    "error": {
+      "status": 401,
+      "message": "The access token expired"
+    }
+  }
+
+  it('should return 501 if credentials file does not exist', () => {
+    return request(app)
+      .get('/bot/get-player-queue')
+      .then((response) => {
+        expect(response.status).to.eql(501)
+        expect(response.headers['content-type']).to.include('application/json')
+        expect(response.body).to.eql({"error": "Credentials file does not exist"});
+    })
+  });
+
+  it('should return 428 if the bot is disabled', () => {
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": false}));
+
+    let expectedResponse = {
+      "error": "bot_enabled is false"
+    }
+
+    return request(app)
+      .get('/bot/get-player-queue')
+      .then((response) => {
+        expect(response.status).to.eql(428)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })
+  }); 
+
+
+
+  it('should return player queue from Spotify', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
+
+  let expectedResponse = {
+    "currently_playing": {
+      "artist": "artist 1 name",
+      "duration_ms": 60000,
+      "name": "currently playing track name",
+      "id": "currently playing track ID"
+    },
+    "queue": [
+      {
+        "artist": "queue item 1 artist name",
+        "duration_ms": 120000,
+        "name": "queue item 1 track name",
+        "id": "queue item 1 track ID"
+      },
+      {
+        "artist": "queue item 2 artist name",
+        "duration_ms": 180000,
+        "name": "queue item 2 track name",
+        "id": "queue item 2 track ID"
+      }
+    ]
+  };
+
+    const scope = nock("https://api.spotify.com")
+        .get('/v1/me/player/queue')
+        .reply(200, mockValidSpotifyResponse)
+
+    return request(app)
+      .get('/bot/get-player-queue')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })    
+  });
+
+});
