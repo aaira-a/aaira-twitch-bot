@@ -27,5 +27,16 @@ module.exports = {
     result.queue = queue;
 
     return result;
+  },
+
+  extractTrackId: function(input) {
+    const re = /https:\/\/open.spotify.com\/track\/(\w*)\/?/;
+    const r = input.match(re);
+
+    return r[1];
+  },
+
+  constructAddSongUri: function(input) {
+    return "spotify:track:" + input;
   }
 }

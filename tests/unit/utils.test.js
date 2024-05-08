@@ -74,3 +74,40 @@ describe('extractQueueData', () => {
   });
 
 });
+
+
+describe('extractTrackId', () => {
+
+  it('should return track ID from Spotify external URL format', () => {
+
+    let input = "https://open.spotify.com/track/7BD50ATrF3Vab5FQy7vtK8";
+    let output = "7BD50ATrF3Vab5FQy7vtK8";
+
+    const result = utils.extractTrackId(input);
+    expect(result).to.eql(output);
+  });
+
+  it('should return track ID from Spotify external URL format with extra slash', () => {
+
+    let input = "https://open.spotify.com/track/7BD50ATrF3Vab5FQy7vtK8/";
+    let output = "7BD50ATrF3Vab5FQy7vtK8";
+
+    const result = utils.extractTrackId(input);
+    expect(result).to.eql(output);
+  });
+
+});
+
+
+describe('constructAddSongUri', () => {
+
+  it('should construct Spotify track URI from track ID', () => {
+
+    let input = "7BD50ATrF3Vab5FQy7vtK8";
+    let output = "spotify:track:7BD50ATrF3Vab5FQy7vtK8";
+
+    const result = utils.constructAddSongUri(input);
+    expect(result).to.eql(output);
+  });
+
+});

@@ -147,6 +147,58 @@ app.get("/bot/now-playing-link", (req, res) => {
 
 });
 
+
+app.post("/bot/add-song", async (req, res) => {
+  let response = {};
+
+  if (!fs.existsSync(credFilePath)) {
+    return res.status(501).json({"error": "Credentials file does not exist"});
+  }
+
+  if (fs.existsSync(toggleFilePath)) {
+    let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
+
+    if (fileContent["bot_enabled"] == false) {
+      return res.status(428).json({"error": "bot_enabled is false"});
+    }
+
+    else {
+      await addSongMainLogic(req, res);
+    }
+  }
+
+});
+
+
+async function addSongMainLogic (req, res) {
+  const input = req.query.song;
+
+  const callSpotifyResult = await callSpotifyAddSong(input);
+  if (callSpotifyResult.status == "Unauthorized") {
+    const tokenRefreshResult = await callSpotifyTokenRefresh();
+    if (tokenRefreshResult.status == "Failed") {
+      return res.status(400).json({"error": "Unable to refresh token"});
+    }
+
+    const callSpotifyResult3 = await callSpotifyAddSong(input);
+      if (callSpotifyResult3.status != "Succesful") {
+
+        return res.status(503).json(
+          {"error": "Unable to add song to queue after second attempt"});
+      }
+      else {
+       // return res.status(200).json(callSpotifyResult3.data)
+       return res.status(200).json({"result": "song added"})
+      }
+
+  }
+  else {
+    // return res.status(200).json(callSpotifyResult.data)
+    return res.status(200).json({"result": "song added"})
+  }
+};
+
+
 app.get("/bot/get-player-queue", async (req, res) => {
   let response = {};
 
@@ -248,6 +300,50 @@ function formatOutput(res, code, data, format) {
     return res.status(code).json(data);
   }
 }
+
+
+async function callSpotifyAddSong(input) {
+  const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
+
+  let requestParameter = utilFunctions.extractTrackId(input);
+  requestParameter = utilFunctions.constructAddSongUri(requestParameter);
+  
+  axios.interceptors.response.use((response) => {
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      return response;
+    }, (error) => {
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      if (error.response.status == 401) {
+        return Promise.resolve(error);
+      }    
+      return Promise.reject(error);
+    });
+
+  let functionResponse = {"status": "Unresolved"};
+
+  return axios({
+    method: 'post',
+    url: 'https://api.spotify.com/v1/me/player/queue',
+    headers: {'Authorization': `Bearer ${credFileContent["SPOTIFY_ACCESS_TOKEN"]}`},
+    params: {
+      "uri": requestParameter
+    }
+  })
+    .then(function (response) {
+      if (response.hasOwnProperty('response')) {
+        if (response.response.status == 401) {
+          functionResponse = {"status": "Unauthorized"}
+        }
+      } else {
+          // let dataToReturn = utilFunctions.extractQueueData(response.data);
+          functionResponse = {"status": "Succesful", "data": {"no": "data"}}
+      }
+      return functionResponse;
+    })
+}
+
 
 async function callSpotifyGetQueue() {
   const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));

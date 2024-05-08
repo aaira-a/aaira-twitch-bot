@@ -883,3 +883,107 @@ describe('GET /bot/get-player-queue', () => {
   });
 
 });
+
+
+describe('POST /bot/add-song', () => {
+
+  const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+  const mockToggleFile = path.join(basePath, 'toggle_data.json');
+  const mockCredFile = path.join(basePath, 'spotify_credentials.json');
+
+  let clock = null;
+
+  beforeEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+  });
+
+  afterEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+  });
+
+
+  let mockTokenExpiredSpotifyResponse = {
+    "error": {
+      "status": 401,
+      "message": "The access token expired"
+    }
+  }
+
+  it('should return 501 if credentials file does not exist', () => {
+    return request(app)
+      .post('/bot/add-song')
+      .then((response) => {
+        expect(response.status).to.eql(501)
+        expect(response.headers['content-type']).to.include('application/json')
+        expect(response.body).to.eql({"error": "Credentials file does not exist"});
+    })
+  });
+
+  it('should return 428 if the bot is disabled', () => {
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": false}));
+
+    let expectedResponse = {
+      "error": "bot_enabled is false"
+    }
+
+    return request(app)
+      .post('/bot/add-song')
+      .then((response) => {
+        expect(response.status).to.eql(428)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })
+  }); 
+
+
+  it('should add the track to Spotify queue', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
+
+    let expectedResponse = {
+      "result": "song added"
+    };
+
+    const scope = nock("https://api.spotify.com")
+        .post('/v1/me/player/queue?uri=spotify:track:1OOtq8tRnDM8kG2gqUPjAj')
+        .reply(204)
+
+    return request(app)
+      .post('/bot/add-song?song=https://open.spotify.com/track/1OOtq8tRnDM8kG2gqUPjAj')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })    
+  });
+
+});
+
