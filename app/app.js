@@ -89,12 +89,16 @@ app.get("/bot/now-playing", async (req, res) => {
     return res.status(501).json({"error": "Credentials file does not exist"});
   }
 
-  if (fs.existsSync(dataFilePath)) {
-    let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+  if (fs.existsSync(toggleFilePath)) {
+    let toggleFileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
 
-    if (fileContent["bot_enabled"] == false) {
+    if (toggleFileContent["bot_enabled"] == false) {
       return res.status(428).json({"error": "bot_enabled is false"});
     }
+  }
+
+  if (fs.existsSync(dataFilePath)) {
+    let fileContent = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
 
     const currentTimestamp = Date.now();
 

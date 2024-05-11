@@ -38,17 +38,17 @@ describe('GET /bot/hello', () => {
 describe('GET /bot/toggle', () => {
 
   const basePath = path.join(__dirname, '..', '..', 'app', 'data');
-  const mockDataFile = path.join(basePath, 'toggle_data.json');
+  const mockToggleFile = path.join(basePath, 'toggle_data.json');
   
   beforeEach(() => {
-    if (fs.existsSync(mockDataFile)) {
-      fs.unlinkSync(mockDataFile);
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
     }
   });
 
   afterEach(() => {
-    if (fs.existsSync(mockDataFile)) {
-      fs.unlinkSync(mockDataFile);
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
     }
   });
 
@@ -61,7 +61,7 @@ describe('GET /bot/toggle', () => {
   });
 
   it('should return bot enabled status if data file contains bot_enabled: true property', () => {
-    fs.writeFileSync(mockDataFile, JSON.stringify({"bot_enabled": true}));
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
 
     return request(app)
       .get('/bot/toggle')
@@ -73,7 +73,7 @@ describe('GET /bot/toggle', () => {
 
   it('should return bot disabled status if data file contains bot_enabled: false property', () => {
 
-    fs.writeFileSync(mockDataFile, JSON.stringify({"bot_enabled": false}));
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": false}));
 
     return request(app)
       .get('/bot/toggle')
@@ -89,17 +89,17 @@ describe('GET /bot/toggle', () => {
 describe('GET /bot/set/toggle/:state', () => {
 
   const basePath = path.join(__dirname, '..', '..', 'app', 'data');
-  const mockDataFile = path.join(basePath, 'toggle_data.json');
+  const mockToggleFile = path.join(basePath, 'toggle_data.json');
   
   beforeEach(() => {
-    if (fs.existsSync(mockDataFile)) {
-      fs.unlinkSync(mockDataFile);
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
     }
   });
 
   afterEach(() => {
-    if (fs.existsSync(mockDataFile)) {
-      fs.unlinkSync(mockDataFile);
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
     }
   });
 
@@ -130,7 +130,7 @@ describe('GET /bot/set/toggle/:state', () => {
 
   it('should write bot_enabled true to data file for enable state if file exists', () =>{
 
-    fs.writeFileSync(mockDataFile, JSON.stringify({"bot_enabled": false}));
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": false}));
 
     return request(app)
       .get('/bot/set/toggle/enable')
@@ -138,7 +138,7 @@ describe('GET /bot/set/toggle/:state', () => {
         expect(response.status).to.eql(200);
         expect(response.headers['content-type']).to.include('application/json');
         expect(response.body).to.eql({"bot_enabled": true});
-        let fileContent = JSON.parse(fs.readFileSync(mockDataFile, 'utf8'));
+        let fileContent = JSON.parse(fs.readFileSync(mockToggleFile, 'utf8'));
         expect(fileContent["bot_enabled"]).to.eql(true)
       })    
   });
@@ -150,7 +150,7 @@ describe('GET /bot/set/toggle/:state', () => {
         expect(response.status).to.eql(200);
         expect(response.headers['content-type']).to.include('application/json');
         expect(response.body).to.eql({"bot_enabled": true});
-        let fileContent = JSON.parse(fs.readFileSync(mockDataFile, 'utf8'));
+        let fileContent = JSON.parse(fs.readFileSync(mockToggleFile, 'utf8'));
         expect(fileContent["bot_enabled"]).to.eql(true)
       })    
   });
@@ -165,7 +165,7 @@ describe('GET /bot/set/toggle/:state', () => {
 
   it('should write bot_enabled false to data file for disable state if file exists', () =>{
 
-    fs.writeFileSync(mockDataFile, JSON.stringify({"bot_enabled": true}));
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
 
     return request(app)
       .get('/bot/set/toggle/disable')
@@ -173,7 +173,7 @@ describe('GET /bot/set/toggle/:state', () => {
         expect(response.status).to.eql(200);
         expect(response.headers['content-type']).to.include('application/json');
         expect(response.body).to.eql({"bot_enabled": false});
-        let fileContent = JSON.parse(fs.readFileSync(mockDataFile, 'utf8'));
+        let fileContent = JSON.parse(fs.readFileSync(mockToggleFile, 'utf8'));
         expect(fileContent["bot_enabled"]).to.eql(false)
       })    
   });
@@ -185,7 +185,7 @@ describe('GET /bot/set/toggle/:state', () => {
         expect(response.status).to.eql(200);
         expect(response.headers['content-type']).to.include('application/json');
         expect(response.body).to.eql({"bot_enabled": false});
-        let fileContent = JSON.parse(fs.readFileSync(mockDataFile, 'utf8'));
+        let fileContent = JSON.parse(fs.readFileSync(mockToggleFile, 'utf8'));
         expect(fileContent["bot_enabled"]).to.eql(false)
       })    
   });
@@ -197,6 +197,7 @@ describe('GET /bot/now-playing', () => {
   const basePath = path.join(__dirname, '..', '..', 'app', 'data');
   const mockDataFile = path.join(basePath, 'spotify_data.json');
   const mockCredFile = path.join(basePath, 'spotify_credentials.json');
+  const mockToggleFile = path.join(basePath, 'toggle_data.json');
 
   let clock = null;
 
@@ -206,6 +207,9 @@ describe('GET /bot/now-playing', () => {
     }
     if (fs.existsSync(mockCredFile)) {
       fs.unlinkSync(mockCredFile);
+    }
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
     }
     clock = sinon.useFakeTimers({
       now: 1711934625000
@@ -218,6 +222,9 @@ describe('GET /bot/now-playing', () => {
     }
     if (fs.existsSync(mockCredFile)) {
       fs.unlinkSync(mockCredFile);
+    }
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
     }
     clock.restore();
   });
@@ -278,7 +285,7 @@ describe('GET /bot/now-playing', () => {
       })
     );
 
-    fs.writeFileSync(mockDataFile, JSON.stringify({"bot_enabled": false}));
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": false}));
 
     let expectedResponse = {
       "error": "bot_enabled is false"
