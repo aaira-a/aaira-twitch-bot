@@ -413,7 +413,7 @@ describe('GET /bot/now-playing', () => {
     // 5. Save new valid access token into credentials file
     // 6. Call Spotify /currently-playing endpoint with new access token
     // 7. Spotify returns invalid currently-playing data
-    // 9. /bot/now-playing endpoint returns 503 error to the caller
+    // 8. /bot/now-playing endpoint returns 503 error to the caller
 
     return request(app)
       .get('/bot/now-playing')
@@ -427,7 +427,7 @@ describe('GET /bot/now-playing', () => {
     })
   });
 
-  it('should call Spotify API using access token from credentials file', () => {
+  it('should return currently playing song from Spotify', () => {
 
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
 
@@ -515,7 +515,7 @@ describe('GET /bot/now-playing', () => {
     // 5. Save new valid access token into credentials file
     // 6. Call Spotify /currently-playing endpoint with new access token
     // 7. Spotify returns valid currently-playing data
-    // 9. /bot/now-playing endpoint returns song data to caller
+    // 8. /bot/now-playing endpoint returns song data to caller
 
     return request(app)
       .get('/bot/now-playing')
@@ -737,7 +737,6 @@ describe('GET /bot/get-player-queue', () => {
   const mockToggleFile = path.join(basePath, 'toggle_data.json');
   const mockCredFile = path.join(basePath, 'spotify_credentials.json');
 
-  let clock = null;
 
   beforeEach(() => {
     if (fs.existsSync(mockToggleFile)) {
@@ -838,9 +837,7 @@ describe('GET /bot/get-player-queue', () => {
       })
   }); 
 
-
-
-  it('should return player queue from Spotify', () => {
+  it('should return 400 if unable to refresh token', () => {
 
     fs.writeFileSync(mockCredFile, JSON.stringify(
       {
@@ -853,28 +850,150 @@ describe('GET /bot/get-player-queue', () => {
 
     fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
 
-  let expectedResponse = {
-    "currently_playing": {
-      "artist": "artist 1 name",
-      "duration_ms": 60000,
-      "name": "currently playing track name",
-      "id": "currently playing track ID"
-    },
-    "queue": [
+    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
+
+    const initialCall = nock("https://api.spotify.com")
+      .get('/v1/me/player/queue')
+      .reply(401, mockTokenExpiredSpotifyResponse)
+
+    const tokenRefreshReqPayload = {
+      "grant_type": "refresh_token",
+      "access_token": "EXPIRED_TOKEN1",
+      "refresh_token": "REFRESH_TOKEN1"
+    }
+
+    const tokenRefreshResPayload = {
+      "access_token": "NEW_VALID_TOKEN1",
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "scope": "user-read-playback-state user-read-currently-playing"
+    }
+
+    const tokenRefreshCall = nock("https://accounts.spotify.com")
+      .post('/api/token')
+      .query(new URLSearchParams(tokenRefreshReqPayload))
+      .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+      .matchHeader('Authorization', `Basic ${base64_client_id_and_secret}`)
+      .reply(401, tokenRefreshResPayload)
+
+    let expectedResponse = {"error": "Unable to refresh token"}
+
+    return request(app)
+      .get('/bot/get-player-queue')
+      .then((response) => {
+        expect(response.status).to.eql(400)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+
+        let credFileContent = JSON.parse(fs.readFileSync(mockCredFile, 'utf8'));
+        expect(credFileContent["SPOTIFY_ACCESS_TOKEN"]).to.eql("EXPIRED_TOKEN1")
+    })
+
+  });
+
+  it('should return 503 if unable to retrieve queue data after refreshing token', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify(
       {
-        "artist": "queue item 1 artist name",
-        "duration_ms": 120000,
-        "name": "queue item 1 track name",
-        "id": "queue item 1 track ID"
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
+
+    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
+
+    const initialCall = nock("https://api.spotify.com")
+      .get('/v1/me/player/queue')
+      .reply(401, mockTokenExpiredSpotifyResponse)
+
+    const tokenRefreshReqPayload = {
+      "grant_type": "refresh_token",
+      "access_token": "EXPIRED_TOKEN1",
+      "refresh_token": "REFRESH_TOKEN1"
+    }
+
+    const tokenRefreshResPayload = {
+      "access_token": "NEW_VALID_TOKEN1",
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "scope": "user-read-playback-state user-read-currently-playing"
+    }
+
+    const tokenRefreshCall = nock("https://accounts.spotify.com")
+      .post('/api/token')
+      .query(new URLSearchParams(tokenRefreshReqPayload))
+      .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+      .matchHeader('Authorization', `Basic ${base64_client_id_and_secret}`)
+      .reply(200, tokenRefreshResPayload)
+
+    const invalidSecondSpotifyCall = nock("https://api.spotify.com")
+        .get('/v1/me/player/queue')
+        .reply(401, mockTokenExpiredSpotifyResponse)
+
+    let expectedResponse = {"error": "Unable to request player queue after second attempt"}
+
+    // Test flow:
+    // 1. Call /bot/get-player-queue endpoint using access token from credentials file
+    // 2. Spotify returns 401 because access token is expired
+    // 3. Call Spotify refresh token endpoint
+    // 4. Spotify returns new valid access token
+    // 5. Save new valid access token into credentials file
+    // 6. Call Spotify /queue endpoint with new access token
+    // 7. Spotify returns invalid currently-playing data
+    // 8. /bot/get-player-queue endpoint returns 503 error to the caller
+
+    return request(app)
+      .get('/bot/get-player-queue')
+      .then((response) => {
+        expect(response.status).to.eql(503)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+
+        let credFileContent = JSON.parse(fs.readFileSync(mockCredFile, 'utf8'));
+        expect(credFileContent["SPOTIFY_ACCESS_TOKEN"]).to.eql("NEW_VALID_TOKEN1")
+    })
+  });
+
+
+  it('should return condensed player queue from Spotify', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
+
+    let expectedResponse = {
+      "currently_playing": {
+        "artist": "artist 1 name",
+        "duration_ms": 60000,
+        "name": "currently playing track name",
+        "id": "currently playing track ID"
       },
-      {
-        "artist": "queue item 2 artist name",
-        "duration_ms": 180000,
-        "name": "queue item 2 track name",
-        "id": "queue item 2 track ID"
-      }
-    ]
-  };
+      "queue": [
+        {
+          "artist": "queue item 1 artist name",
+          "duration_ms": 120000,
+          "name": "queue item 1 track name",
+          "id": "queue item 1 track ID"
+        },
+        {
+          "artist": "queue item 2 artist name",
+          "duration_ms": 180000,
+          "name": "queue item 2 track name",
+          "id": "queue item 2 track ID"
+        }
+      ]
+    };
 
     const scope = nock("https://api.spotify.com")
         .get('/v1/me/player/queue')
@@ -960,6 +1079,128 @@ describe('POST /bot/add-song', () => {
         expect(response.body).to.eql(expectedResponse);
       })
   }); 
+
+  it('should return 400 if unable to refresh token', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
+
+    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
+
+    const initialCall = nock("https://api.spotify.com")
+      .post('/v1/me/player/queue?uri=spotify:track:1OOtq8tRnDM8kG2gqUPjAj')
+      .reply(401, mockTokenExpiredSpotifyResponse)
+
+    const tokenRefreshReqPayload = {
+      "grant_type": "refresh_token",
+      "access_token": "EXPIRED_TOKEN1",
+      "refresh_token": "REFRESH_TOKEN1"
+    }
+
+    const tokenRefreshResPayload = {
+      "access_token": "NEW_VALID_TOKEN1",
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "scope": "user-read-playback-state user-read-currently-playing"
+    }
+
+    const tokenRefreshCall = nock("https://accounts.spotify.com")
+      .post('/api/token')
+      .query(new URLSearchParams(tokenRefreshReqPayload))
+      .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+      .matchHeader('Authorization', `Basic ${base64_client_id_and_secret}`)
+      .reply(401, tokenRefreshResPayload)
+
+    let expectedResponse = {"error": "Unable to refresh token"}
+
+    return request(app)
+      .post('/bot/add-song?song=https://open.spotify.com/track/1OOtq8tRnDM8kG2gqUPjAj')
+      .then((response) => {
+        expect(response.status).to.eql(400)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+
+        let credFileContent = JSON.parse(fs.readFileSync(mockCredFile, 'utf8'));
+        expect(credFileContent["SPOTIFY_ACCESS_TOKEN"]).to.eql("EXPIRED_TOKEN1")
+    })
+
+  });
+
+  it('should return 503 if unable to add song after refreshing token', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
+
+    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
+
+    const initialCall = nock("https://api.spotify.com")
+      .post('/v1/me/player/queue?uri=spotify:track:1OOtq8tRnDM8kG2gqUPjAj')
+      .reply(401, mockTokenExpiredSpotifyResponse)
+
+    const tokenRefreshReqPayload = {
+      "grant_type": "refresh_token",
+      "access_token": "EXPIRED_TOKEN1",
+      "refresh_token": "REFRESH_TOKEN1"
+    }
+
+    const tokenRefreshResPayload = {
+      "access_token": "NEW_VALID_TOKEN1",
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "scope": "user-read-playback-state user-read-currently-playing"
+    }
+
+    const tokenRefreshCall = nock("https://accounts.spotify.com")
+      .post('/api/token')
+      .query(new URLSearchParams(tokenRefreshReqPayload))
+      .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+      .matchHeader('Authorization', `Basic ${base64_client_id_and_secret}`)
+      .reply(200, tokenRefreshResPayload)
+
+    const invalidSecondSpotifyCall = nock("https://api.spotify.com")
+        .post('/v1/me/player/queue?uri=spotify:track:1OOtq8tRnDM8kG2gqUPjAj')
+        .reply(401, mockTokenExpiredSpotifyResponse)
+
+    let expectedResponse = {"error": "Unable to add song to queue after second attempt"}
+
+    // Test flow:
+    // 1. Call /bot/add-song endpoint using access token from credentials file
+    // 2. Spotify returns 401 because access token is expired
+    // 3. Call Spotify refresh token endpoint
+    // 4. Spotify returns new valid access token
+    // 5. Save new valid access token into credentials file
+    // 6. Call Spotify /queue endpoint with new access token
+    // 7. Spotify returns invalid response
+    // 8. /bot/add-song endpoint returns 503 error to the caller
+
+    return request(app)
+      .post('/bot/add-song?song=https://open.spotify.com/track/1OOtq8tRnDM8kG2gqUPjAj')
+      .then((response) => {
+        expect(response.status).to.eql(503)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+
+        let credFileContent = JSON.parse(fs.readFileSync(mockCredFile, 'utf8'));
+        expect(credFileContent["SPOTIFY_ACCESS_TOKEN"]).to.eql("NEW_VALID_TOKEN1")
+    })
+  });
+
 
 
   it('should add the track to Spotify queue', () => {

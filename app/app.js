@@ -166,9 +166,8 @@ app.post("/bot/add-song", async (req, res) => {
       return res.status(428).json({"error": "bot_enabled is false"});
     }
 
-    else {
-      await addSongMainLogic(req, res);
-    }
+  await addSongMainLogic(req, res);
+
   }
 
 });
@@ -179,6 +178,7 @@ async function addSongMainLogic (req, res) {
 
   const callSpotifyResult = await callSpotifyAddSong(input);
   if (callSpotifyResult.status == "Unauthorized") {
+
     const tokenRefreshResult = await callSpotifyTokenRefresh();
     if (tokenRefreshResult.status == "Failed") {
       return res.status(400).json({"error": "Unable to refresh token"});
@@ -217,9 +217,8 @@ app.get("/bot/get-player-queue", async (req, res) => {
       return res.status(428).json({"error": "bot_enabled is false"});
     }
 
-    else {
-      await getQueueMainLogic(req, res);
-    }
+  await getQueueMainLogic(req, res);
+
   }
 
 });
@@ -228,6 +227,7 @@ app.get("/bot/get-player-queue", async (req, res) => {
 async function getQueueMainLogic (req, res) {
   const callSpotifyResult = await callSpotifyGetQueue();
   if (callSpotifyResult.status == "Unauthorized") {
+
     const tokenRefreshResult = await callSpotifyTokenRefresh();
     if (tokenRefreshResult.status == "Failed") {
       return res.status(400).json({"error": "Unable to refresh token"});
