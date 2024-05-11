@@ -320,7 +320,6 @@ describe('GET /bot/now-playing', () => {
         "SPOTIFY_CLIENT_SECRET": "def"
       })
     );
-
     const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     const initialCall = nock("https://api.spotify.com")
@@ -372,7 +371,6 @@ describe('GET /bot/now-playing', () => {
         "SPOTIFY_CLIENT_SECRET": "def"
       })
     );
-
     const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     const initialCall = nock("https://api.spotify.com")
@@ -467,7 +465,6 @@ describe('GET /bot/now-playing', () => {
         "SPOTIFY_CLIENT_SECRET": "def"
       })
     );
-
     const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     const initialCall = nock("https://api.spotify.com")
@@ -847,10 +844,9 @@ describe('GET /bot/get-player-queue', () => {
         "SPOTIFY_CLIENT_SECRET": "def"
       })
     );
+    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
-
-    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     const initialCall = nock("https://api.spotify.com")
       .get('/v1/me/player/queue')
@@ -901,10 +897,9 @@ describe('GET /bot/get-player-queue', () => {
         "SPOTIFY_CLIENT_SECRET": "def"
       })
     );
+    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
-
-    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     const initialCall = nock("https://api.spotify.com")
       .get('/v1/me/player/queue')
@@ -1018,7 +1013,6 @@ describe('GET /bot/get-player-queue', () => {
         "SPOTIFY_CLIENT_SECRET": "def"
       })
     );
-
     const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
@@ -1178,10 +1172,9 @@ describe('POST /bot/add-song', () => {
         "SPOTIFY_CLIENT_SECRET": "def"
       })
     );
+    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
-
-    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     const initialCall = nock("https://api.spotify.com")
       .post('/v1/me/player/queue?uri=spotify:track:1OOtq8tRnDM8kG2gqUPjAj')
@@ -1232,10 +1225,9 @@ describe('POST /bot/add-song', () => {
         "SPOTIFY_CLIENT_SECRET": "def"
       })
     );
+    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
-
-    const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     const initialCall = nock("https://api.spotify.com")
       .post('/v1/me/player/queue?uri=spotify:track:1OOtq8tRnDM8kG2gqUPjAj')
@@ -1330,7 +1322,6 @@ describe('POST /bot/add-song', () => {
         "SPOTIFY_CLIENT_SECRET": "def"
       })
     );
-
     const base64_client_id_and_secret = Buffer.from("abc:def").toString("base64");
 
     fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
