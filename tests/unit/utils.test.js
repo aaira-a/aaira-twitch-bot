@@ -96,6 +96,15 @@ describe('extractTrackId', () => {
     expect(result).to.eql(output);
   });
 
+  it('should return track ID from Spotify external URL format with share ID', () => {
+
+    let input = "https://open.spotify.com/track/7BD50ATrF3Vab5FQy7vtK8?si=afc63723be6f4094";
+    let output = "7BD50ATrF3Vab5FQy7vtK8";
+
+    const result = utils.extractTrackId(input);
+    expect(result).to.eql(output);
+  });
+
 });
 
 

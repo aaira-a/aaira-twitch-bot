@@ -219,13 +219,22 @@ async function addSongMainLogic (req, res) {
       }
       else {
        // return res.status(200).json(callSpotifyResult3.data)
-       return res.status(200).json({"result": "song added"})
+       const trackId = callSpotifyResult3.data.trackId;
+       return res.status(200).json(
+         {
+           "result": "Song added", "trackId": trackId
+         });
       }
 
   }
   else {
     // return res.status(200).json(callSpotifyResult.data)
-    return res.status(200).json({"result": "song added"})
+    const trackId = callSpotifyResult.data.trackId;
+    return res.status(200).json(
+      {
+        "result": "Song added",
+        "trackId": trackId
+      });
   }
 };
 
@@ -336,8 +345,8 @@ function formatOutput(res, code, data, format) {
 async function callSpotifyAddSong(input) {
   const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
 
-  let requestParameter = utilFunctions.extractTrackId(input);
-  requestParameter = utilFunctions.constructAddSongUri(requestParameter);
+  let trackId = utilFunctions.extractTrackId(input);
+  let requestParameter = utilFunctions.constructAddSongUri(trackId);
   
   axios.interceptors.response.use((response) => {
       // Any status code that lie within the range of 2xx cause this function to trigger
@@ -369,7 +378,7 @@ async function callSpotifyAddSong(input) {
         }
       } else {
           // let dataToReturn = utilFunctions.extractQueueData(response.data);
-          functionResponse = {"status": "Succesful", "data": {"no": "data"}}
+          functionResponse = {"status": "Succesful", "data": {"trackId": trackId}}
       }
       return functionResponse;
     })

@@ -66,11 +66,13 @@ client.on('message', async (channel, tags, message, self) => {
   }
 
   if(message.toLowerCase().includes('!add')) {
-    const re = /!add (\S+)/;
+    const re = /!add (.+)/;
     const r = message.match(re);
 
     const result = await sendAddSongRequest(r[1]);
-    client.say(channel, `Added song request by @${tags.username}: ${JSON.stringify(result)}`)
+
+    // TODO: request track data before posting to channel
+    client.say(channel, `Added song request by @${tags.username}: trackId: ${result.data}`)
   } 
 
   if(message.toLowerCase().includes('!best')) {
@@ -170,7 +172,7 @@ async function sendAddSongRequest(input) {
     url: 'http://127.0.0.1:3007/bot/add-song?song=' + input,
   })
     .then(function (response) {
-      const functionResponse = {"status": "Succesful", "data": response.data}
+      const functionResponse = {"status": "Succesful", "data": response.data.trackId}
       
       return functionResponse;
     })

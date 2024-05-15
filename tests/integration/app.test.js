@@ -1295,7 +1295,8 @@ describe('POST /bot/add-song', () => {
     fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
 
     let expectedResponse = {
-      "result": "song added"
+      "result": "Song added",
+      "trackId": "1OOtq8tRnDM8kG2gqUPjAj"
     };
 
     const scope = nock("https://api.spotify.com")
@@ -1355,7 +1356,8 @@ describe('POST /bot/add-song', () => {
         .reply(204)
 
     let expectedResponse = {
-      "result": "song added"
+      "result": "Song added",
+      "trackId": "1OOtq8tRnDM8kG2gqUPjAj"
     };
 
     // Test flow:
