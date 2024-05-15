@@ -336,7 +336,7 @@ describe('GET /bot/now-playing', () => {
       "access_token": "NEW_VALID_TOKEN1",
       "token_type": "Bearer",
       "expires_in": 3600,
-      "scope": "user-read-playback-state user-read-currently-playing"
+      "scope": "user-read-playback-state user-read-currently-playing user-modify-playback-state"
     }
 
     const tokenRefreshCall = nock("https://accounts.spotify.com")
@@ -387,7 +387,7 @@ describe('GET /bot/now-playing', () => {
       "access_token": "NEW_VALID_TOKEN1",
       "token_type": "Bearer",
       "expires_in": 3600,
-      "scope": "user-read-playback-state user-read-currently-playing"
+      "scope": "user-read-playback-state user-read-currently-playing user-modify-playback-state"
     }
 
     const tokenRefreshCall = nock("https://accounts.spotify.com")
@@ -481,7 +481,7 @@ describe('GET /bot/now-playing', () => {
       "access_token": "NEW_VALID_TOKEN1",
       "token_type": "Bearer",
       "expires_in": 3600,
-      "scope": "user-read-playback-state user-read-currently-playing"
+      "scope": "user-read-playback-state user-read-currently-playing user-modify-playback-state"
     }
 
     const tokenRefreshCall = nock("https://accounts.spotify.com")
@@ -862,7 +862,7 @@ describe('GET /bot/get-player-queue', () => {
       "access_token": "NEW_VALID_TOKEN1",
       "token_type": "Bearer",
       "expires_in": 3600,
-      "scope": "user-read-playback-state user-read-currently-playing"
+      "scope": "user-read-playback-state user-read-currently-playing user-modify-playback-state"
     }
 
     const tokenRefreshCall = nock("https://accounts.spotify.com")
@@ -915,7 +915,7 @@ describe('GET /bot/get-player-queue', () => {
       "access_token": "NEW_VALID_TOKEN1",
       "token_type": "Bearer",
       "expires_in": 3600,
-      "scope": "user-read-playback-state user-read-currently-playing"
+      "scope": "user-read-playback-state user-read-currently-playing user-modify-playback-state"
     }
 
     const tokenRefreshCall = nock("https://accounts.spotify.com")
@@ -1031,7 +1031,7 @@ describe('GET /bot/get-player-queue', () => {
       "access_token": "NEW_VALID_TOKEN1",
       "token_type": "Bearer",
       "expires_in": 3600,
-      "scope": "user-read-playback-state user-read-currently-playing"
+      "scope": "user-read-playback-state user-read-currently-playing user-modify-playback-state"
     }
 
     const tokenRefreshCall = nock("https://accounts.spotify.com")
@@ -1190,7 +1190,7 @@ describe('POST /bot/add-song', () => {
       "access_token": "NEW_VALID_TOKEN1",
       "token_type": "Bearer",
       "expires_in": 3600,
-      "scope": "user-read-playback-state user-read-currently-playing"
+      "scope": "user-read-playback-state user-read-currently-playing user-modify-playback-state"
     }
 
     const tokenRefreshCall = nock("https://accounts.spotify.com")
@@ -1243,7 +1243,7 @@ describe('POST /bot/add-song', () => {
       "access_token": "NEW_VALID_TOKEN1",
       "token_type": "Bearer",
       "expires_in": 3600,
-      "scope": "user-read-playback-state user-read-currently-playing"
+      "scope": "user-read-playback-state user-read-currently-playing user-modify-playback-state"
     }
 
     const tokenRefreshCall = nock("https://accounts.spotify.com")
@@ -1341,7 +1341,7 @@ describe('POST /bot/add-song', () => {
       "access_token": "NEW_VALID_TOKEN1",
       "token_type": "Bearer",
       "expires_in": 3600,
-      "scope": "user-read-playback-state user-read-currently-playing"
+      "scope": "user-read-playback-state user-read-currently-playing user-modify-playback-state"
     }
 
     const tokenRefreshCall = nock("https://accounts.spotify.com")
