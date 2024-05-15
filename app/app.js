@@ -160,8 +160,10 @@ app.get("/bot/now-playing-link", (req, res) => {
 
     if (fileContent.hasOwnProperty("songLink")) {
       songLink = fileContent["songLink"];
+      artistName = fileContent["artistName"];
+      itemName = fileContent["itemName"];
 
-      let formattedText = `Song link: ${songLink}`;
+      let formattedText = `Song link for [${artistName}] - [${itemName}]: ${songLink}`;
 
       res.set("Content-Type", "text/plain");
       return res.status(200).send(formattedText);

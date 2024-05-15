@@ -691,7 +691,7 @@ describe('GET /bot/now-playing-link', () => {
     fs.writeFileSync(mockCredFile, JSON.stringify({"SPOTIFY_ACCESS_TOKEN": "DUMMYTOKEN1"}));
     fs.writeFileSync(mockDataFile, JSON.stringify(dataFileContent));
 
-    let expectedResponse = "Song link: https://open.spotify.com/track/xxx"
+    let expectedResponse = "Song link for [singer 1] - [track 1]: https://open.spotify.com/track/xxx"
 
     return request(app)
       .get('/bot/now-playing-link')
