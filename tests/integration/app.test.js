@@ -1385,6 +1385,127 @@ describe('POST /bot/add-song', () => {
 });
 
 
+describe('GET /bot/get-track-data', () => {
+
+  const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+  const mockToggleFile = path.join(basePath, 'toggle_data.json');
+  const mockCredFile = path.join(basePath, 'spotify_credentials.json');
+
+
+  beforeEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+  });
+
+  afterEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+  });
+
+  let mockValidSpotifyResponse = { 
+    "artists": [
+      {
+        "name": "artist 1 name",
+      }
+    ],
+    "external_urls": {
+      "spotify": "https://open.spotify.com/track/xxx"
+    },
+    "duration_ms": 200000,
+    "name": "track 1",
+    "id": "dummy-track-id-1",
+    "extra": "this should not be returned in response"
+  };
+
+
+  let mockTokenExpiredSpotifyResponse = {
+    "error": {
+      "status": 401,
+      "message": "The access token expired"
+    }
+  }
+
+
+  it('should return 501 if credentials file does not exist', () => {
+    return request(app)
+      .get('/bot/get-track-data')
+      .then((response) => {
+        expect(response.status).to.eql(501)
+        expect(response.headers['content-type']).to.include('application/json')
+        expect(response.body).to.eql({"error": "Credentials file does not exist"});
+    })
+  });
+
+  it('should return 428 if the bot is disabled', () => {
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": false}));
+
+    let expectedResponse = {
+      "error": "bot_enabled is false"
+    }
+
+    return request(app)
+      .get('/bot/get-track-data')
+      .then((response) => {
+        expect(response.status).to.eql(428)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })
+  }); 
+
+  it('should return track data from Spotify', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
+
+    let expectedResponse = {
+      "artistName": "artist 1 name",
+      "itemName": "track 1",
+      "songLink": "https://open.spotify.com/track/xxx",
+      "trackId": "dummy-track-id-1",
+      "duration_ms": 200000
+    };
+
+    const scope = nock("https://api.spotify.com")
+        .get('/v1/tracks/dummy-track-id-1')
+        .reply(200, mockValidSpotifyResponse)
+
+    return request(app)
+      .get('/bot/get-track-data?trackId=dummy-track-id-1')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })    
+  });
+
+});
+
+
 describe('GET /bot/countdown', () => {
 
   let clock = null;

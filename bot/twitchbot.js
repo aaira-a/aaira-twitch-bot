@@ -71,8 +71,10 @@ client.on('message', async (channel, tags, message, self) => {
 
     const result = await sendAddSongRequest(r[1]);
 
-    // TODO: request track data before posting to channel
-    client.say(channel, `Added song request by @${tags.username}: trackId: ${result.data}`)
+    const trackData = await getSpotifyTrackData(result.data);
+
+    client.say(channel, 
+      `Added song request by @${tags.username}: [${trackData.data.artistName}] - [${trackData.data.itemName}]`)
   } 
 
   if(message.toLowerCase().includes('!best')) {
@@ -173,6 +175,20 @@ async function sendAddSongRequest(input) {
   })
     .then(function (response) {
       const functionResponse = {"status": "Succesful", "data": response.data.trackId}
+      
+      return functionResponse;
+    })
+
+}
+
+async function getSpotifyTrackData(input) {
+
+  return axios({
+    method: 'get',
+    url: 'http://127.0.0.1:3007/bot/get-track-data?trackId=' + input,
+  })
+    .then(function (response) {
+      const functionResponse = {"status": "Succesful", "data": response.data}
       
       return functionResponse;
     })

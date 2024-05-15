@@ -106,6 +106,29 @@ app.get("/bot/set/toggle/:state?", (req, res) => {
   res.status(400).send();
 });
 
+app.get("/bot/get-track-data", async (req, res) => {
+
+  const input = req.query.trackId;
+
+  let response = {};
+
+  if (!fs.existsSync(credFilePath)) {
+    return res.status(501).json({"error": "Credentials file does not exist"});
+  }
+
+  if (fs.existsSync(toggleFilePath)) {
+    let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
+
+    if (fileContent["bot_enabled"] == false) {
+      return res.status(428).json({"error": "bot_enabled is false"});
+    }
+  
+  const callSpotifyResult = await callSpotifyGetTrackData(input);
+  return res.status(200).json(callSpotifyResult.data);
+
+  }
+
+});
 
 app.get("/bot/now-playing", async (req, res) => {
   let response = {};
@@ -218,7 +241,6 @@ async function addSongMainLogic (req, res) {
           {"error": "Unable to add song to queue after second attempt"});
       }
       else {
-       // return res.status(200).json(callSpotifyResult3.data)
        const trackId = callSpotifyResult3.data.trackId;
        return res.status(200).json(
          {
@@ -228,7 +250,6 @@ async function addSongMainLogic (req, res) {
 
   }
   else {
-    // return res.status(200).json(callSpotifyResult.data)
     const trackId = callSpotifyResult.data.trackId;
     return res.status(200).json(
       {
@@ -463,6 +484,48 @@ async function callSpotifyCurrentlyPlaying() {
             if (err) { console.log(err) }
           });
           functionResponse = {"status": "Succesful", "data": dataToSave}
+      }
+      return functionResponse;
+    })
+}
+
+async function callSpotifyGetTrackData(trackId) {
+  const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
+  
+  axios.interceptors.response.use((response) => {
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      return response;
+    }, (error) => {
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      if (error.response.status == 401) {
+        return Promise.resolve(error);
+      }
+      return Promise.reject(error);
+    });
+
+  let functionResponse = {"status": "Unresolved"};
+
+  return axios({
+    method: 'get',
+    url: 'https://api.spotify.com/v1/tracks/' + trackId,
+    headers: {'Authorization': `Bearer ${credFileContent["SPOTIFY_ACCESS_TOKEN"]}`}
+  })
+    .then(function (response) {
+      if (response.hasOwnProperty('response')) {
+        if (response.response.status == 401) {
+          functionResponse = {"status": "Unauthorized"}
+        }
+      } else {
+          let dataToReturn = {
+            "artistName": response.data.artists[0].name,
+            "itemName": response.data.name,
+            "songLink": response.data.external_urls.spotify,
+            "trackId": response.data.id,
+            "duration_ms": response.data.duration_ms
+          };
+          functionResponse = {"status": "Succesful", "data": dataToReturn}
       }
       return functionResponse;
     })
