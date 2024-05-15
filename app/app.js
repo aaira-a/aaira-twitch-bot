@@ -40,7 +40,7 @@ app.get("/bot/countdown", (req, res) => {
     formattedDuration = humanizeDuration(duration, { units: ["d", "h", "m", "s"] });
   }
 
-  let formattedText = `Reminder: The d-day is around ${formattedDuration}`;
+  let formattedText = `Reminder: The d-day is about ${formattedDuration}`;
 
   res.set("Content-Type", "text/plain");
   return res.status(200).send(formattedText);  

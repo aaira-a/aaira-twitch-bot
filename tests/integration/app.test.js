@@ -1402,7 +1402,7 @@ describe('GET /bot/countdown', () => {
 
     const theFuture = 1751299199000;
     const toGo = '455 days, 14 hours, 36 minutes, 14 seconds';
-    let expectedResponse = `Reminder: The d-day is around ${toGo}`;
+    let expectedResponse = `Reminder: The d-day is about ${toGo}`;
 
     return request(app)
       .get('/bot/countdown')
@@ -1417,7 +1417,7 @@ describe('GET /bot/countdown', () => {
 
     const theFuture = 1751299199000;
     const toGo = '1 year, 2 months, 4 weeks, 1 day, 11 hours, 36 minutes, 14 seconds';
-    let expectedResponse = `Reminder: The d-day is around ${toGo}`;
+    let expectedResponse = `Reminder: The d-day is about ${toGo}`;
 
     return request(app)
       .get('/bot/countdown?unit=full')
