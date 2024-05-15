@@ -1382,3 +1382,51 @@ describe('POST /bot/add-song', () => {
 
 });
 
+
+describe('GET /bot/countdown', () => {
+
+  let clock = null;
+
+  before(() => {
+    clock = sinon.useFakeTimers({
+      now: 1711934625000
+    });
+  });
+
+  after(() => {
+    clock.restore();
+  });
+
+
+  it('should return the countdown in days and hours human readable form', () => {
+
+    const theFuture = 1751299199000;
+    const toGo = '455 days, 14 hours, 36 minutes, 14 seconds';
+    let expectedResponse = `Reminder: The d-day is around ${toGo}`;
+
+    return request(app)
+      .get('/bot/countdown')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('text/plain');
+        expect(response.text).to.eql(expectedResponse);
+      })        
+  });
+
+  it('should return the countdown in full human readable form', () => {
+
+    const theFuture = 1751299199000;
+    const toGo = '1 year, 2 months, 4 weeks, 1 day, 11 hours, 36 minutes, 14 seconds';
+    let expectedResponse = `Reminder: The d-day is around ${toGo}`;
+
+    return request(app)
+      .get('/bot/countdown?unit=full')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('text/plain');
+        expect(response.text).to.eql(expectedResponse);
+      })        
+  });
+
+});
+

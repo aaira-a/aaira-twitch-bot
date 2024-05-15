@@ -22,6 +22,31 @@ app.get("/bot/hello", (req, res) => {
   })
 });
 
+app.get("/bot/countdown", (req, res) => {
+  const unit = req.query.unit;
+
+  const theFuture = 1751299199000;
+  const now = Date.now();
+
+  const duration = (theFuture - now);
+
+  let formattedDuration = "";
+
+  if (unit == "full") {
+    formattedDuration = humanizeDuration(duration);
+  }
+
+  else {
+    formattedDuration = humanizeDuration(duration, { units: ["d", "h", "m", "s"] });
+  }
+
+  let formattedText = `Reminder: The d-day is around ${formattedDuration}`;
+
+  res.set("Content-Type", "text/plain");
+  return res.status(200).send(formattedText);  
+
+});
+
 app.get("/bot/toggle", (req, res) => {
   let response = {"status": "undefined"};
 
