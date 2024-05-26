@@ -130,6 +130,30 @@ app.get("/bot/get-track-data", async (req, res) => {
 
 });
 
+app.get("/bot/search-song", async (req, res) => {
+
+  const input = req.query.query;
+
+  let response = {};
+
+  if (!fs.existsSync(credFilePath)) {
+    return res.status(501).json({"error": "Credentials file does not exist"});
+  }
+
+  if (fs.existsSync(toggleFilePath)) {
+    let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
+
+    if (fileContent["bot_enabled"] == false) {
+      return res.status(428).json({"error": "bot_enabled is false"});
+    }
+  
+  const callSpotifyResult = await callSpotifySearchTrack(input);
+  return res.status(200).json(callSpotifyResult.data);
+
+  }
+
+});
+
 app.get("/bot/now-playing", async (req, res) => {
   let response = {};
 
@@ -530,6 +554,50 @@ async function callSpotifyGetTrackData(trackId) {
       return functionResponse;
     })
 }
+
+
+async function callSpotifySearchTrack(searchInput) {
+  const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
+  
+  axios.interceptors.response.use((response) => {
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      return response;
+    }, (error) => {
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      if (error.response.status == 401) {
+        return Promise.resolve(error);
+      }
+      return Promise.reject(error);
+    });
+
+  let functionResponse = {"status": "Unresolved"};
+
+  return axios({
+    method: 'get',
+    url: 'https://api.spotify.com/v1/search?q=' + searchInput + '&type=track&limit=1',
+    headers: {'Authorization': `Bearer ${credFileContent["SPOTIFY_ACCESS_TOKEN"]}`}
+  })
+    .then(function (response) {
+      if (response.hasOwnProperty('response')) {
+        if (response.response.status == 401) {
+          functionResponse = {"status": "Unauthorized"}
+        }
+      } else {
+          let dataToReturn = {
+            "artistName": response.data.tracks.items[0].artists[0].name,
+            "itemName": response.data.tracks.items[0].name,
+            "songLink": response.data.tracks.items[0].external_urls.spotify,
+            "trackId": response.data.tracks.items[0].id,
+            "duration_ms": response.data.tracks.items[0].duration_ms
+          };
+          functionResponse = {"status": "Succesful", "data": dataToReturn}
+      }
+      return functionResponse;
+    })
+}
+
 
 async function callSpotifyTokenRefresh() {
   const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
