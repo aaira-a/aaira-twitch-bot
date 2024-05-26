@@ -130,6 +130,32 @@ app.get("/bot/get-track-data", async (req, res) => {
 
 });
 
+
+app.get("/bot/get-request-type", (req, res) => {
+
+  const input = req.query.query;
+
+
+  if (!fs.existsSync(credFilePath)) {
+    return res.status(501).json({"error": "Credentials file does not exist"});
+  }
+
+  if (fs.existsSync(toggleFilePath)) {
+    let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
+
+    if (fileContent["bot_enabled"] == false) {
+      return res.status(428).json({"error": "bot_enabled is false"});
+    }
+
+    let requestType = utilFunctions.detectSongRequestFormat(input);
+    res.set("Content-Type", "text/plain");
+    return res.status(200).send(requestType);
+
+  }
+
+});
+
+
 app.get("/bot/search-song", async (req, res) => {
 
   const input = req.query.query;

@@ -38,5 +38,24 @@ module.exports = {
 
   constructAddSongUri: function(input) {
     return "spotify:track:" + input;
+  },
+
+
+  detectSongRequestFormat: function(input) {
+
+    if ((input == undefined) || (input == "")) {
+      return "EMPTY";
+    }
+
+    const re = /https:\/\/open.spotify.com\/track\/(\w*)\/?/;
+    const r = input.match(re);
+
+    if (r) {
+      return "URI";
+    }
+    else {
+      return "STRING";
+    }
   }
+
 }

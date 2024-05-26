@@ -120,3 +120,66 @@ describe('constructAddSongUri', () => {
   });
 
 });
+
+
+describe('detectSongRequestFormat', () => {
+
+  it('should return EMPTY output for empty string input', () => {
+    let input = "";
+    let output = "EMPTY";
+
+    const result = utils.detectSongRequestFormat(input);
+    expect(result).to.eql(output);
+  });
+
+  it('should return EMPTY output for undefined input', () => {
+    let input;
+    let output = "EMPTY";
+
+    const result = utils.detectSongRequestFormat(input);
+    expect(result).to.eql(output);
+  });
+
+  it('should return URI output for uri input', () => {
+    let input = "https://open.spotify.com/track/7BD50ATrF3Vab5FQy7vtK8";
+    let output = "URI";
+
+    const result = utils.detectSongRequestFormat(input);
+    expect(result).to.eql(output);
+  });
+
+  it('should return URI output for uri input with share ID', () => {
+    let input = "https://open.spotify.com/track/7BD50ATrF3Vab5FQy7vtK8?si=shareIdAbC0123";
+    let output = "URI";
+
+    const result = utils.detectSongRequestFormat(input);
+    expect(result).to.eql(output);
+  });
+
+
+  it('should return STRING output for uri input with unidentified pattern 1', () => {
+    let input = "artist 1 - track 2";
+    let output = "STRING";
+
+    const result = utils.detectSongRequestFormat(input);
+    expect(result).to.eql(output);
+  });
+
+  it('should return STRING output for uri input with unidentified pattern 2', () => {
+    let input = "papejela";
+    let output = "STRING";
+
+    const result = utils.detectSongRequestFormat(input);
+    expect(result).to.eql(output);
+  });
+
+  it('should return STRING output for uri input with unidentified pattern 3', () => {
+    let input = "abc:123:qwe";
+    let output = "STRING";
+
+    const result = utils.detectSongRequestFormat(input);
+    expect(result).to.eql(output);
+  });
+
+});
+

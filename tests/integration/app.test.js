@@ -1093,6 +1093,93 @@ describe('GET /bot/get-player-queue', () => {
 });
 
 
+describe('GET /bot/get-request-type', () => {
+
+  const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+  const mockToggleFile = path.join(basePath, 'toggle_data.json');
+  const mockCredFile = path.join(basePath, 'spotify_credentials.json');
+
+
+  beforeEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+  });
+
+  afterEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+  });
+
+
+
+  it('should return 501 if credentials file does not exist', () => {
+    return request(app)
+      .get('/bot/get-request-type')
+      .then((response) => {
+        expect(response.status).to.eql(501)
+        expect(response.headers['content-type']).to.include('application/json')
+        expect(response.body).to.eql({"error": "Credentials file does not exist"});
+    })
+  });
+
+  it('should return 428 if the bot is disabled', () => {
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": false}));
+
+    let expectedResponse = {
+      "error": "bot_enabled is false"
+    }
+
+    return request(app)
+      .get('/bot/get-request-type')
+      .then((response) => {
+        expect(response.status).to.eql(428)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })
+  }); 
+
+  it('should return request type for URI format', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
+
+    return request(app)
+      .get('/bot/get-request-type?query=randomstring')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('text/plain');
+        expect(response.text).to.eql("STRING");
+      })
+  });
+
+});
+
+
 describe('POST /bot/add-song', () => {
 
   const basePath = path.join(__dirname, '..', '..', 'app', 'data');
