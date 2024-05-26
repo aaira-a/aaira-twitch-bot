@@ -69,9 +69,23 @@ client.on('message', async (channel, tags, message, self) => {
     const re = /!add (.+)/;
     const r = message.match(re);
 
-    const result = await sendAddSongRequest(r[1]);
+    let trackData;
 
-    const trackData = await getSpotifyTrackData(result.data);
+    const requestType = await getSongTypeRequest(r[1]);
+
+    if (requestType.data == 'URI') {
+      console.log('going through the URI path')
+      const result = await sendAddSongRequest(r[1]);
+      trackData = await getSpotifyTrackData(result.data);
+      console.log(trackData)
+    }
+
+    if (requestType.data == 'STRING') {
+      console.log('going through the STRING path')
+      const searchResult = await searchSpotifySong(r[1]);
+      const result = await sendAddSongRequest(searchResult.data.songLink);
+      trackData = await getSpotifyTrackData(result.data);
+    } 
 
     client.say(channel, 
       `Added song request by @${tags.username}: [${trackData.data.artistName}] - [${trackData.data.itemName}]`)
@@ -194,6 +208,35 @@ async function getSpotifyTrackData(input) {
     })
 
 }
+
+async function getSongTypeRequest(input) {
+
+  return axios({
+    method: 'get',
+    url: 'http://127.0.0.1:3007/bot/get-request-type?query=' + input,
+  })
+    .then(function (response) {
+      const functionResponse = {"status": "Succesful", "data": response.data}
+      
+      return functionResponse;
+    })
+
+}
+
+async function searchSpotifySong(input) {
+
+  return axios({
+    method: 'get',
+    url: 'http://127.0.0.1:3007/bot/search-song?query=' + input,
+  })
+    .then(function (response) {
+      const functionResponse = {"status": "Succesful", "data": response.data}
+      
+      return functionResponse;
+    })
+
+}
+
 
 setInterval(async ()=> {
   console.log('Every 15 seconds');
