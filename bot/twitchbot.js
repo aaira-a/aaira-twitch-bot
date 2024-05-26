@@ -88,7 +88,10 @@ client.on('message', async (channel, tags, message, self) => {
     } 
 
     client.say(channel, 
-      `Added song request by @${tags.username}: [${trackData.data.artistName}] - [${trackData.data.itemName}]`)
+      `Added song request by ` +
+      `@${tags.username}: [${trackData.data.artistName}] - ` +
+      `[${trackData.data.itemName}] - [${shortEnglishHumanizer(trackData.data.duration_ms)}]`
+    )
   } 
 
   if(message.toLowerCase().includes('!best')) {
