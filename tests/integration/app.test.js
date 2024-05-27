@@ -61,24 +61,34 @@ describe('GET /bot/toggle', () => {
   });
 
   it('should return bot enabled status if data file contains bot_enabled: true property', () => {
-    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
+    fs.writeFileSync(mockToggleFile, JSON.stringify(
+      {
+        "bot_enabled": true,
+        "request_enabled": true
+      }
+    ));
 
     return request(app)
       .get('/bot/toggle')
       .then((response) => {
-        expect(response.body).to.eql({"status": "enabled"});
+        expect(response.body).to.eql({"bot_enabled": true, "request_enabled": true});
         expect(response.headers['content-type']).to.include('application/json');
       })
   });
 
   it('should return bot disabled status if data file contains bot_enabled: false property', () => {
 
-    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": false}));
+    fs.writeFileSync(mockToggleFile, JSON.stringify(
+      {
+        "bot_enabled": false,
+        "request_enabled": false
+      }
+    ));
 
     return request(app)
       .get('/bot/toggle')
       .then((response) => {
-        expect(response.body).to.eql({"status": "disabled"});
+        expect(response.body).to.eql({"bot_enabled": false, "request_enabled": false});
         expect(response.headers['content-type']).to.include('application/json');
       })
   });
@@ -187,6 +197,112 @@ describe('GET /bot/set/toggle/:state', () => {
         expect(response.body).to.eql({"bot_enabled": false});
         let fileContent = JSON.parse(fs.readFileSync(mockToggleFile, 'utf8'));
         expect(fileContent["bot_enabled"]).to.eql(false)
+      })    
+  });
+
+});
+
+describe('GET /bot/set/request-toggle/:state', () => {
+
+  const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+  const mockToggleFile = path.join(basePath, 'toggle_data.json');
+  
+  beforeEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+  });
+
+  afterEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+  });
+
+
+  it('should return 400 status for no state', () => {
+    return request(app)
+      .get('/bot/set/request-toggle')
+      .then((response) => {
+        expect(response.status).to.eql(400)
+      })
+  });
+
+  it('should return 200 status for invalid state', () => {
+    return request(app)
+      .get('/bot/set/request-toggle/unknown')
+      .then((response) => {
+        expect(response.status).to.eql(400)
+      })
+  });
+
+  it('should return 200 status for enable state', () => {
+    return request(app)
+      .get('/bot/set/request-toggle/enable')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+      })
+  });
+
+  it('should write request_enabled true to data file for enable state if file exists', () =>{
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"request_enabled": false}));
+
+    return request(app)
+      .get('/bot/set/request-toggle/enable')
+      .then((response) => {
+        expect(response.status).to.eql(200);
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql({"request_enabled": true});
+        let fileContent = JSON.parse(fs.readFileSync(mockToggleFile, 'utf8'));
+        expect(fileContent["request_enabled"]).to.eql(true)
+      })    
+  });
+
+  it('should write request_enabled true to data file for enable state if file doesnt exist', () =>{
+    return request(app)
+      .get('/bot/set/request-toggle/enable')
+      .then((response) => {
+        expect(response.status).to.eql(200);
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql({"request_enabled": true});
+        let fileContent = JSON.parse(fs.readFileSync(mockToggleFile, 'utf8'));
+        expect(fileContent["request_enabled"]).to.eql(true)
+      })    
+  });
+
+  it('should return 200 status for disable state', () => {
+    return request(app)
+      .get('/bot/set/request-toggle/disable')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+      })
+  });
+
+  it('should write request_enabled false to data file for disable state if file exists', () =>{
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"request_enabled": true}));
+
+    return request(app)
+      .get('/bot/set/request-toggle/disable')
+      .then((response) => {
+        expect(response.status).to.eql(200);
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql({"request_enabled": false});
+        let fileContent = JSON.parse(fs.readFileSync(mockToggleFile, 'utf8'));
+        expect(fileContent["request_enabled"]).to.eql(false)
+      })    
+  });
+
+  it('should write request_enabled true to data file for disable state if file doesnt exist', () =>{
+    return request(app)
+      .get('/bot/set/request-toggle/disable')
+      .then((response) => {
+        expect(response.status).to.eql(200);
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql({"request_enabled": false});
+        let fileContent = JSON.parse(fs.readFileSync(mockToggleFile, 'utf8'));
+        expect(fileContent["request_enabled"]).to.eql(false)
       })    
   });
 

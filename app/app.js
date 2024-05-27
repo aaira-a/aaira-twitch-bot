@@ -53,19 +53,14 @@ app.get("/bot/toggle", (req, res) => {
   if (fs.existsSync(toggleFilePath)) {
     let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
     if (fileContent.hasOwnProperty("bot_enabled")) {
-      if (fileContent["bot_enabled"] == true) {
-        response["status"] = "enabled";
-      }
-      else if (fileContent["bot_enabled"] == false ) {
-        response["status"] = "disabled";
-      }
+      response = fileContent;
     }
     else {
-      response["status"] = "disabled";
+      response["bot_enabled"] = false;
     }
   }
   else {
-    response["status"] = "disabled";
+    response["bot_enabled"] = false;
   }
 
   res.status(200).json(response);
@@ -100,6 +95,40 @@ app.get("/bot/set/toggle/:state?", (req, res) => {
       fs.writeFileSync(toggleFilePath, JSON.stringify({"bot_enabled": false}));
     }
     response["bot_enabled"] = false;
+    res.status(200).json(response);
+  }
+
+  res.status(400).send();
+});
+
+app.get("/bot/set/request-toggle/:state?", (req, res) => {
+  const validStates = ["enable", "disable"];
+
+  let response = {"request_enabled": undefined};
+
+  if (req.params.state == "enable") {
+    if (fs.existsSync(toggleFilePath)) {
+      let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
+      fileContent["request_enabled"] = true;
+      fs.writeFileSync(toggleFilePath, JSON.stringify(fileContent));
+    }
+    else {
+      fs.writeFileSync(toggleFilePath, JSON.stringify({"request_enabled": true}));
+    }
+    response["request_enabled"] = true;
+    res.status(200).json(response);
+  }
+
+  if (req.params.state == "disable") {
+    if (fs.existsSync(toggleFilePath)) {
+      let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
+      fileContent["request_enabled"] = false;
+      fs.writeFileSync(toggleFilePath, JSON.stringify(fileContent));
+    }
+    else {
+      fs.writeFileSync(toggleFilePath, JSON.stringify({"request_enabled": false}));
+    }
+    response["request_enabled"] = false;
     res.status(200).json(response);
   }
 
