@@ -76,6 +76,11 @@ client.on('message', async (channel, tags, message, self) => {
     if (requestType.data == 'URI') {
       console.log('going through the URI path')
       const result = await sendAddSongRequest(r[1]);
+
+      if (result.status != 200) {
+        client.say(channel, `Song request by @${tags.username} failed`)
+      }
+
       trackData = await getSpotifyTrackData(result.data);
       console.log(trackData)
     }
@@ -84,6 +89,11 @@ client.on('message', async (channel, tags, message, self) => {
       console.log('going through the STRING path')
       const searchResult = await searchSpotifySong(r[1]);
       const result = await sendAddSongRequest(searchResult.data.songLink);
+
+      if (result.status != 200) {
+        client.say(channel, `Song request by @${tags.username} failed`)
+      }
+
       trackData = await getSpotifyTrackData(result.data);
     } 
 
@@ -191,7 +201,11 @@ async function sendAddSongRequest(input) {
     url: 'http://127.0.0.1:3007/bot/add-song?song=' + input,
   })
     .then(function (response) {
-      const functionResponse = {"status": "Succesful", "data": response.data.trackId}
+      const functionResponse = {
+        "status": "Succesful",
+        "data": response.data.trackId,
+        "code": response.status
+      }
       
       return functionResponse;
     })
