@@ -75,24 +75,16 @@ client.on('message', async (channel, tags, message, self) => {
 
     if (requestType.data == 'URI') {
       console.log('going through the URI path')
+
       const result = await sendAddSongRequest(r[1]);
-
-      if (result.status != 200) {
-        client.say(channel, `Song request by @${tags.username} failed`)
-      }
-
       trackData = await getSpotifyTrackData(result.data);
-      console.log(trackData)
     }
 
     if (requestType.data == 'STRING') {
       console.log('going through the STRING path')
+
       const searchResult = await searchSpotifySong(r[1]);
       const result = await sendAddSongRequest(searchResult.data.songLink);
-
-      if (result.status != 200) {
-        client.say(channel, `Song request by @${tags.username} failed`)
-      }
 
       trackData = await getSpotifyTrackData(result.data);
     } 
@@ -187,7 +179,7 @@ async function getToggleData() {
     url: 'http://127.0.0.1:3007/bot/toggle',
   })
     .then(function (response) {
-      const functionResponse = {"status": "Succesful", "data": response.data.status}
+      const functionResponse = {"status": "Succesful", "data": response.data}
       
       return functionResponse;
     })
@@ -258,9 +250,9 @@ async function searchSpotifySong(input) {
 setInterval(async ()=> {
   console.log('Every 15 seconds');
 
-  const botToggleStatus = await getToggleData();
+  const botToggleData = await getToggleData();
 
-  if(botToggleStatus["data"] == "enabled") {
+  if(botToggleData["data"]["bot_enabled"] == true) {
     emitNowPlayingTrack(client, '#aaira0');
   }
 
