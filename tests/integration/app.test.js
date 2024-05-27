@@ -1865,6 +1865,99 @@ describe('GET /bot/search-song', () => {
 });
 
 
+describe('GET /bot/skip', () => {
+
+  const basePath = path.join(__dirname, '..', '..', 'app', 'data');
+  const mockToggleFile = path.join(basePath, 'toggle_data.json');
+  const mockCredFile = path.join(basePath, 'spotify_credentials.json');
+
+
+  beforeEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+  });
+
+  afterEach(() => {
+    if (fs.existsSync(mockToggleFile)) {
+      fs.unlinkSync(mockToggleFile);
+    }
+    if (fs.existsSync(mockCredFile)) {
+      fs.unlinkSync(mockCredFile);
+    }
+  });
+
+
+  it('should return 501 if credentials file does not exist', () => {
+    return request(app)
+      .get('/bot/skip')
+      .then((response) => {
+        expect(response.status).to.eql(501)
+        expect(response.headers['content-type']).to.include('application/json')
+        expect(response.body).to.eql({"error": "Credentials file does not exist"});
+    })
+  });
+
+  it('should return 428 if the bot is disabled', () => {
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": false}));
+
+    let expectedResponse = {
+      "error": "bot_enabled is false"
+    }
+
+    return request(app)
+      .get('/bot/skip')
+      .then((response) => {
+        expect(response.status).to.eql(428)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })
+  }); 
+
+  it('should skip track in Spotify', () => {
+
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify({"bot_enabled": true}));
+
+
+    const scope = nock("https://api.spotify.com")
+        .post('/v1/me/player/next')
+        .reply(204)
+
+    let expectedResponse = "Skipped song";
+
+    return request(app)
+      .get('/bot/skip')
+      .then((response) => {
+        expect(response.status).to.eql(200)
+        expect(response.headers['content-type']).to.include('text/plain');
+        expect(response.text).to.eql(expectedResponse);
+      })    
+  });
+
+});
+
+
 describe('GET /bot/countdown', () => {
 
   let clock = null;

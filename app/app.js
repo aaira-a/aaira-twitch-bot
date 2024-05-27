@@ -135,6 +135,30 @@ app.get("/bot/set/request-toggle/:state?", (req, res) => {
   res.status(400).send();
 });
 
+app.get("/bot/skip", async (req, res) => {
+
+  let response = {};
+
+  if (!fs.existsSync(credFilePath)) {
+    return res.status(501).json({"error": "Credentials file does not exist"});
+  }
+
+  if (fs.existsSync(toggleFilePath)) {
+    let fileContent = JSON.parse(fs.readFileSync(toggleFilePath, 'utf8'));
+
+    if (fileContent["bot_enabled"] == false) {
+      return res.status(428).json({"error": "bot_enabled is false"});
+    }
+  
+  const callSpotifyResult = await callSpotifySkipTrack();
+
+  res.set("Content-Type", "text/plain");
+  return res.status(200).send("Skipped song");
+
+  }
+
+});
+
 app.get("/bot/get-track-data", async (req, res) => {
 
   const input = req.query.trackId;
@@ -614,6 +638,40 @@ async function callSpotifyGetTrackData(trackId) {
     })
 }
 
+async function callSpotifySkipTrack() {
+  const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
+  
+  axios.interceptors.response.use((response) => {
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      return response;
+    }, (error) => {
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      if (error.response.status == 401) {
+        return Promise.resolve(error);
+      }
+      return Promise.reject(error);
+    });
+
+  let functionResponse = {"status": "Unresolved"};
+
+  return axios({
+    method: 'post',
+    url: 'https://api.spotify.com/v1/me/player/next',
+    headers: {'Authorization': `Bearer ${credFileContent["SPOTIFY_ACCESS_TOKEN"]}`}
+  })
+    .then(function (response) {
+      if (response.hasOwnProperty('response')) {
+        if (response.response.status == 401) {
+          functionResponse = {"status": "Unauthorized"}
+        }
+      } else {
+          functionResponse = {"status": "Succesful", "data": "NODATA"}
+      }
+      return functionResponse;
+    })
+}
 
 async function callSpotifySearchTrack(searchInput) {
   const credFileContent = JSON.parse(fs.readFileSync(credFilePath, 'utf8'));
