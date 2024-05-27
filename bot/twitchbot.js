@@ -49,23 +49,23 @@ client.on('message', async (channel, tags, message, self) => {
   // Ignore echoed messages.
   if(self) return;
 
-  if(message.toLowerCase().includes('!heya')) {
+  if(message.toLowerCase().startsWith('!heya')) {
       client.say(channel, `@${tags.username}, heya!`);
   }
 
-  if(message.toLowerCase().includes('!baby')) {
+  if(message.toLowerCase().startsWith('!baby')) {
       client.say(channel, `aaira0Love Hi baby @${tags.username}! aaira0Love`);
   }
 
-  if(message.toLowerCase().includes('!lurk')) {
+  if(message.toLowerCase().startsWith('!lurk')) {
       client.say(channel, `Thanks for lurking @${tags.username} aaira0Pat`);
   }
 
-  if(message.toLowerCase().includes('!tags')) {
+  if(message.toLowerCase().startsWith('!tags')) {
       console.log(tags);
   }
 
-  if(message.toLowerCase().includes('!add')) {
+  if(message.toLowerCase().startsWith('!add')) {
     const re = /!add (.+)/;
     const r = message.match(re);
 
@@ -96,7 +96,7 @@ client.on('message', async (channel, tags, message, self) => {
     )
   } 
 
-  if(message.toLowerCase().includes('!best')) {
+  if(message.toLowerCase().startsWith('!best')) {
 
     const re = /!best @(\S+)/;
     const r = message.toLowerCase().match(re);
