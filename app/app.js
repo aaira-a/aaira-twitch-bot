@@ -295,6 +295,10 @@ app.post("/bot/add-song", async (req, res) => {
       return res.status(428).json({"error": "bot_enabled is false"});
     }
 
+    if (fileContent["request_enabled"] == false) {
+      return res.status(428).json({"error": "request_enabled is false"});
+    }
+
   await addSongMainLogic(req, res);
 
   }

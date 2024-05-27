@@ -1365,6 +1365,35 @@ describe('POST /bot/add-song', () => {
       })
   }); 
 
+  it('should return 428 if the song request is disabled', () => {
+    fs.writeFileSync(mockCredFile, JSON.stringify(
+      {
+        "SPOTIFY_ACCESS_TOKEN": "EXPIRED_TOKEN1",
+        "SPOTIFY_REFRESH_TOKEN": "REFRESH_TOKEN1",
+        "SPOTIFY_CLIENT_ID": "abc",
+        "SPOTIFY_CLIENT_SECRET": "def"
+      })
+    );
+
+    fs.writeFileSync(mockToggleFile, JSON.stringify(
+      {
+        "bot_enabled": true, "request_enabled": false
+      }
+    ));
+
+    let expectedResponse = {
+      "error": "request_enabled is false"
+    }
+
+    return request(app)
+      .post('/bot/add-song')
+      .then((response) => {
+        expect(response.status).to.eql(428)
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.eql(expectedResponse);
+      })
+  }); 
+
   it('should return 400 if unable to refresh token', () => {
 
     fs.writeFileSync(mockCredFile, JSON.stringify(
