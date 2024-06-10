@@ -70,30 +70,58 @@ client.on('message', async (channel, tags, message, self) => {
     const r = message.match(re);
 
     let trackData;
+    let successfulText = `Added song request by @${tags.username}: `;
+    let failedText = `Failed to add song request by @${tags.username}: `;
+    let finalText;
+    let result;
 
-    const requestType = await getSongTypeRequest(r[1]);
 
-    if (requestType.data == 'URI') {
-      console.log('going through the URI path')
+    const botToggleData = await getToggleData();
 
-      const result = await sendAddSongRequest(r[1]);
-      trackData = await getSpotifyTrackData(result.data);
+    if (botToggleData["data"]["bot_enabled"] != true) {
+      finalText = failedText + ` bot is disabled`;
     }
 
-    if (requestType.data == 'STRING') {
-      console.log('going through the STRING path')
+    else if (botToggleData["data"]["request_enabled"] != true) {
+      finalText = failedText + ` song request is disabled`;
+    }
 
-      const searchResult = await searchSpotifySong(r[1]);
-      const result = await sendAddSongRequest(searchResult.data.songLink);
+    else {
+      const requestType = await getSongTypeRequest(r[1]);
 
-      trackData = await getSpotifyTrackData(result.data);
-    } 
+      if (requestType.data == 'URI') {
+        console.log('going through the URI path')
 
-    client.say(channel, 
-      `Added song request by ` +
-      `@${tags.username}: [${trackData.data.artistName}] - ` +
-      `[${trackData.data.itemName}] - [${shortEnglishHumanizer(trackData.data.duration_ms)}]`
-    )
+        result = await sendAddSongRequest(r[1]);
+
+        if (result.code == 200) {
+          trackData = await getSpotifyTrackData(result.data);
+        }
+      }
+
+      if (requestType.data == 'STRING') {
+        console.log('going through the STRING path')
+
+        const searchResult = await searchSpotifySong(r[1]);
+        result = await sendAddSongRequest(searchResult.data.songLink);
+
+        if (result.code == 200) {
+          trackData = await getSpotifyTrackData(result.data);
+        }
+        
+      } 
+
+      if (result.code == 200) {
+        finalText = `${successfulText}` +
+        `[${trackData.data.artistName}] - ` +
+        `[${trackData.data.itemName}] - [${shortEnglishHumanizer(trackData.data.duration_ms)}]`
+      }
+      else {
+        finalText = failedText + `${result.error}`;
+      }
+    }
+
+    client.say(channel, finalText);
   } 
 
   if(message.toLowerCase().startsWith('!best')) {
@@ -174,6 +202,19 @@ async function getSpotifyData() {
 
 async function getToggleData() {
 
+  axios.interceptors.response.use((response) => {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  }, (error) => {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    if (error.response.status != 200) {
+      return Promise.resolve(error);
+    }    
+    return Promise.reject(error);
+  });
+
   return axios({
     method: 'get',
     url: 'http://127.0.0.1:3007/bot/toggle',
@@ -188,17 +229,42 @@ async function getToggleData() {
 
 async function sendAddSongRequest(input) {
 
+  axios.interceptors.response.use((response) => {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  }, (error) => {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    if (error.response.status != 200) {
+      return Promise.resolve(error);
+    }    
+    return Promise.reject(error);
+  });
+
   return axios({
     method: 'post',
     url: 'http://127.0.0.1:3007/bot/add-song?song=' + input,
   })
     .then(function (response) {
-      const functionResponse = {
-        "status": "Succesful",
-        "data": response.data.trackId,
-        "code": response.status
+
+      let functionResponse;
+
+      if (response.status != 200) {
+        functionResponse = {
+          "status": "Failed",
+          "data": "NODATA",
+          "code": response.status,
+          "error": response.response.data.error
+        }
       }
-      
+      else {
+        functionResponse = {
+          "status": "Succesful",
+          "data": response.data.trackId,
+          "code": response.status
+        }
+      }
       return functionResponse;
     })
 
@@ -206,12 +272,38 @@ async function sendAddSongRequest(input) {
 
 async function getSpotifyTrackData(input) {
 
+  axios.interceptors.response.use((response) => {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  }, (error) => {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    if (error.response.status != 200) {
+      return Promise.resolve(error);
+    }    
+    return Promise.reject(error);
+  });
+
+
   return axios({
     method: 'get',
     url: 'http://127.0.0.1:3007/bot/get-track-data?trackId=' + input,
   })
     .then(function (response) {
-      const functionResponse = {"status": "Succesful", "data": response.data}
+      let functionResponse;
+
+      if (response.status != 200) {
+        functionResponse = {
+          "status": "Failed",
+          "data": "NODATA",
+          "code": response.status,
+          "error": response.response.data.error
+        }
+      }
+      else {
+        functionResponse = {"status": "Succesful", "data": response.data}
+      }
       
       return functionResponse;
     })
@@ -220,13 +312,38 @@ async function getSpotifyTrackData(input) {
 
 async function getSongTypeRequest(input) {
 
+  axios.interceptors.response.use((response) => {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  }, (error) => {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    if (error.response.status != 200) {
+      return Promise.resolve(error);
+    }    
+    return Promise.reject(error);
+  });
+
   return axios({
     method: 'get',
     url: 'http://127.0.0.1:3007/bot/get-request-type?query=' + input,
   })
     .then(function (response) {
-      const functionResponse = {"status": "Succesful", "data": response.data}
+      let functionResponse;
       
+      if (response.status != 200) {
+        functionResponse = {
+          "Status": "Failed",
+          "data": "NODATA",
+          "code": response.status,
+          "error": response.response.data.error
+        }
+      }
+      else {
+        functionResponse = {"status": "Succesful", "data": response.data}
+      }
+
       return functionResponse;
     })
 
@@ -234,12 +351,37 @@ async function getSongTypeRequest(input) {
 
 async function searchSpotifySong(input) {
 
+  axios.interceptors.response.use((response) => {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  }, (error) => {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    if (error.response.status != 200) {
+      return Promise.resolve(error);
+    }    
+    return Promise.reject(error);
+  });
+
   return axios({
     method: 'get',
     url: 'http://127.0.0.1:3007/bot/search-song?query=' + input,
   })
     .then(function (response) {
-      const functionResponse = {"status": "Succesful", "data": response.data}
+      let functionResponse;
+
+      if (response.status != 200) {
+        functionResponse = {
+          "status": "Failed",
+          "data": "NODATA",
+          "code": response.status,
+          "error": response.response.data.error
+        }
+      }
+      else {
+        functionResponse = {"status": "Succesful", "data": response.data}
+      }
       
       return functionResponse;
     })
