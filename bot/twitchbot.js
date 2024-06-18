@@ -66,7 +66,7 @@ client.on('message', async (channel, tags, message, self) => {
   }
 
   if(message.toLowerCase().startsWith('!add')) {
-    const re = /!add (.+)/;
+    const re = /![Aa][Dd][Dd] (.+)/;
     const r = message.match(re);
 
     let trackData;
