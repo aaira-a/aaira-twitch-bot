@@ -11,6 +11,7 @@ const __dirname = path.dirname(__filename);
 const DATA_FOLDER_NAME = 'data';
 
 const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_data.json');
+const dataFileTemplatePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_data_template.json');
 
 const credFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_credentials.json');
 const clientData = JSON.parse(await fs.readFile(credFilePath, 'utf-8'));
@@ -140,6 +141,18 @@ client.on('message', async (channel, tags, message, self) => {
 
 
 async function emitNowPlayingTrack(_client, _channel) {
+
+  try {
+    const stats = await fs.stat(dataFilePath);
+    
+    if (stats.size == 0) {
+      await fs.copyFile(dataFileTemplatePath, dataFilePath);
+    }
+  } 
+  catch {
+    await fs.copyFile(dataFileTemplatePath, dataFilePath);
+  }
+
   const fileContent = JSON.parse(await fs.readFile(dataFilePath, 'utf-8'));
 
   const previousTrackId = fileContent["trackId"];
