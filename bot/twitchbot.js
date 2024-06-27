@@ -13,6 +13,9 @@ const DATA_FOLDER_NAME = 'data';
 const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_data.json');
 const dataFileTemplatePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_data_template.json');
 
+const attFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'att_data.json');
+const attFileTemplatePath = path.join(__dirname, DATA_FOLDER_NAME, 'att_data_template.json');
+
 const credFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_credentials.json');
 const clientData = JSON.parse(await fs.readFile(credFilePath, 'utf-8'));
 const clientId = clientData["TWITCH_CLIENT_ID"];
@@ -45,6 +48,49 @@ const client = new tmi.Client({
   channels: ['aaira0']
 });
 client.connect().catch(console.error);
+
+
+client.on('redeem', async (channel, username, rewardType, tags, message) => {
+    if (rewardType == 'b12bc6f7-c6a2-4518-8637-a5fa47a29f53') {
+      console.log('rewardType: ' + rewardType);
+      console.log('username: ' + username);
+      console.log('message: ' + message);
+
+      try {
+        const stats = await fs.stat(attFilePath);
+        
+        if (stats.size == 0) {
+          await fs.copyFile(attFileTemplatePath, attFilePath);
+        }
+      } 
+      catch {
+        await fs.copyFile(attFileTemplatePath, attFilePath);
+      }
+
+      // open file
+      const fileContent = JSON.parse(await fs.readFile(attFilePath, 'utf-8'));
+
+      // initialize count to 1 for new user redemption
+      let count = 1;
+
+      // check if user data exists
+      if (fileContent.hasOwnProperty(username)) {
+        // increment count of existing user
+        count = fileContent[username] + 1;
+      }
+
+      // use user's incremented count, or the default 1
+      fileContent[username] = count;
+
+      // write to file
+      fs.writeFile(attFilePath, JSON.stringify(fileContent), (err) => {
+        if (err) { console.log(err) }
+      });
+
+      // output to channel
+      client.say(channel, `${username} has hadir-ed ${count} times aaira0Thumbs`);
+    };
+});
 
 client.on('message', async (channel, tags, message, self) => {
   // Ignore echoed messages.
