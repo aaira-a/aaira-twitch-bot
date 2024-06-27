@@ -112,6 +112,18 @@ client.on('message', async (channel, tags, message, self) => {
       console.log(tags);
   }
 
+  if(message.toLowerCase().startsWith('!hadir')) {
+      const fileContent = JSON.parse(await fs.readFile(attFilePath, 'utf-8'));
+ 
+      let count = 0;
+
+      if (fileContent.hasOwnProperty(tags.username)) {
+        count = fileContent[tags.username];
+      }
+
+      client.say(channel, `@${tags.username} has hadir-ed ${count} times aaira0Thumbs`);
+  }
+
   if(message.toLowerCase().startsWith('!add')) {
     const re = /![Aa][Dd][Dd] (.+)/;
     const r = message.match(re);
