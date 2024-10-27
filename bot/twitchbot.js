@@ -216,6 +216,33 @@ client.on('message', async (channel, tags, message, self) => {
     let aiResponse = await askAI(question) ;
     client.say(channel, `AI: @${tags.username} ${aiResponse}`);
   }
+
+  if(message.toLowerCase().startsWith('!annoying')) {
+    const re = /!annoying (.+)/;
+    const question = message.match(re);
+
+    let aiResponse = await askAI(question, 'annoying') ;
+    client.say(channel, `AI: @${tags.username} ${aiResponse}`);
+  }
+
+  if(message.toLowerCase().startsWith('!kid')) {
+    const re = /!kid (.+)/;
+    const question = message.match(re);
+
+    let aiResponse = await askAI(question, 'kid') ;
+    client.say(channel, `AI: @${tags.username} ${aiResponse}`);
+  }
+
+  if(message.toLowerCase().startsWith('!negative')) {
+    const re = /!negative (.+)/;
+    const question = message.match(re);
+
+    let aiResponse = await askAI(question, 'negative') ;
+    client.say(channel, `AI: @${tags.username} ${aiResponse}`);
+  }
+
+
+
 });
 
 
@@ -266,9 +293,18 @@ const shortEnglishHumanizer = humanizeDuration.humanizer({
 });
 
 
-async function askAI(question) {
-  // Your response should be understandable enough for kids around 5 years old
-  const questionText = `Your response should be less than 475 characters. Please respond as concise as possible. Question is: ${question}?`;
+async function askAI(question, modifier) {
+  const basicQuestionText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
+  const postQuestionText = `Question is: ${question}?`;
+
+  const modifierMap = {
+    "annoying": "Please respond in most annoying tone possible. ",
+    "kid": "Your response should be understandable enough for kids around 5 years old. ",
+    "negative": "Please respond in a negative or pessimist way. ",
+    "default": " "
+  };
+
+ let finalQuestionText = basicQuestionText + modifierMap[modifier] + postQuestionText;
 
   return axios({
     method: 'post',
@@ -281,7 +317,7 @@ async function askAI(question) {
         {
           "parts": [
             {
-              "text": questionText
+              "text": finalQuestionText
             }
           ]
         }
