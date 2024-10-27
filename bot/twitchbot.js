@@ -1,10 +1,13 @@
 import { RefreshingAuthProvider } from '@twurple/auth';
 import axios from 'axios';
 import humanizeDuration from "humanize-duration";
+import 'dotenv/config';
 
 import { promises as fs } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -205,6 +208,14 @@ client.on('message', async (channel, tags, message, self) => {
       client.say(channel, `@${tags.username} YOU ARE THE BEST!`);
     }
   }
+
+  if(message.toLowerCase().startsWith('!ask')) {
+    const re = /!ask (.+)/;
+    const question = message.match(re);
+
+    let aiResponse = await askAI(question) ;
+    client.say(channel, `AI: @${tags.username} ${aiResponse}`);
+  }
 });
 
 
@@ -254,6 +265,46 @@ const shortEnglishHumanizer = humanizeDuration.humanizer({
   },
 });
 
+
+async function askAI(question) {
+  // Your response should be understandable enough for kids around 5 years old
+  const questionText = `Your response should be less than 475 characters. Please respond as concise as possible. Question is: ${question}?`;
+
+  return axios({
+    method: 'post',
+    url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_KEY}`,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": questionText
+            }
+          ]
+        }
+      ]
+    }
+  }).then(function (response) {
+    let validResponse = false;
+    let aiResponse = '';
+    let functionResponse = "Unable to get response from AI";
+
+    let candidates = response.data.candidates[0]
+      if (candidates.hasOwnProperty("content")) {
+        aiResponse = candidates.content.parts[0].text;
+        validResponse = true;
+      }
+    
+    if (validResponse == true) {
+      functionResponse = aiResponse;
+    }
+
+    return functionResponse;
+  })
+}
 
 async function getSpotifyData() {
 
