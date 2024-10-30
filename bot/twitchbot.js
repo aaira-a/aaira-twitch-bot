@@ -11,12 +11,12 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const DATA_FOLDER_NAME = 'data';
+
 dotenv.config(
   {
-    path: path.join(__dirname, '.env')
+    path: path.join(__dirname, DATA_FOLDER_NAME, '.env')
   });
-
-const DATA_FOLDER_NAME = 'data';
 
 const dataFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_data.json');
 const dataFileTemplatePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_data_template.json');
