@@ -216,7 +216,8 @@ client.on('message', async (channel, tags, message, self) => {
 
   if(message.toLowerCase().startsWith('!ask')) {
     const re = /!ask (.+)/;
-    const question = message.match(re);
+    const r = message.match(re);
+    const question = r[1];
 
     let aiResponse = await askAI(question) ;
     client.say(channel, `AI: @${tags.username} ${aiResponse}`);
@@ -224,7 +225,8 @@ client.on('message', async (channel, tags, message, self) => {
 
   if(message.toLowerCase().startsWith('!annoying')) {
     const re = /!annoying (.+)/;
-    const question = message.match(re);
+    const r = message.match(re);
+    const question = r[1];
 
     let aiResponse = await askAI(question, 'annoying') ;
     client.say(channel, `AI: @${tags.username} ${aiResponse}`);
@@ -232,7 +234,8 @@ client.on('message', async (channel, tags, message, self) => {
 
   if(message.toLowerCase().startsWith('!kid')) {
     const re = /!kid (.+)/;
-    const question = message.match(re);
+    const r = message.match(re);
+    const question = r[1];
 
     let aiResponse = await askAI(question, 'kid') ;
     client.say(channel, `AI: @${tags.username} ${aiResponse}`);
@@ -240,7 +243,8 @@ client.on('message', async (channel, tags, message, self) => {
 
   if(message.toLowerCase().startsWith('!negative')) {
     const re = /!negative (.+)/;
-    const question = message.match(re);
+    const r = message.match(re);
+    const question = r[1];
 
     let aiResponse = await askAI(question, 'negative') ;
     client.say(channel, `AI: @${tags.username} ${aiResponse}`);
