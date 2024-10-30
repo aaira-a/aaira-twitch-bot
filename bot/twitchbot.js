@@ -1,7 +1,7 @@
 import { RefreshingAuthProvider } from '@twurple/auth';
 import axios from 'axios';
 import humanizeDuration from "humanize-duration";
-import 'dotenv/config';
+import dotenv from 'dotenv';
 
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -10,6 +10,11 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+dotenv.config(
+  {
+    path: path.join(__dirname, '.env')
+  });
 
 const DATA_FOLDER_NAME = 'data';
 
