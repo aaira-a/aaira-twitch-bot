@@ -214,6 +214,24 @@ client.on('message', async (channel, tags, message, self) => {
     }
   }
 
+  if(message.toLowerCase().startsWith('!perp')) {
+    const re = /!perp (.+)/;
+    const r = message.match(re);
+    const question = r[1];
+
+    let aiResponse = await askPerp(question) ;
+    client.say(channel, `Perplexity.AI: @${tags.username} ${aiResponse}`);
+  }
+
+  if(message.toLowerCase().startsWith('!gpt')) {
+    const re = /!gpt (.+)/;
+    const r = message.match(re);
+    const question = r[1];
+
+    let aiResponse = await askGPT(question) ;
+    client.say(channel, `GPT: @${tags.username} ${aiResponse}`);
+  }
+
   if(message.toLowerCase().startsWith('!ask')) {
     const re = /!ask (.+)/;
     const r = message.match(re);
@@ -350,6 +368,133 @@ async function askAI(question, modifier) {
     return functionResponse;
   })
 }
+
+async function askGPT(question, modifier) {
+  const basicQuestionText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
+  const postQuestionText = `Question is: ${question}?`;
+
+  const modifierMap = {
+    "annoying": "Please respond in most annoying tone possible. ",
+    "kid": "Your response should be understandable enough for kids around 5 years old. ",
+    "negative": "Please respond in a negative or pessimist way. ",
+    "default": " "
+  };
+
+  // no modifier yet for GPT
+  // let finalQuestionText = basicQuestionText + modifierMap[modifier] + postQuestionText;
+  let finalQuestionText = basicQuestionText + modifierMap["default"] + postQuestionText;
+
+  console.log(finalQuestionText);
+
+  return axios({
+    method: 'post',
+    url: 'https://api.openai.com/v1/chat/completions',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.OPENAI_KEY}`
+    },
+    data: {
+      "model": "gpt-4o-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": finalQuestionText
+        }
+      ],
+      "temperature": 0.7
+    }
+  }).then(function (response) {
+    let validResponse = false;
+    let aiResponse = '';
+    let functionResponse = "Unable to get response from AI";
+
+    let choice = response.data.choices[0];
+      if (choice.hasOwnProperty("message") 
+          && choice.message.hasOwnProperty("content"))
+        {
+          aiResponse = choice.message.content;
+          validResponse = true;
+        }
+    
+    if (validResponse == true) {
+      functionResponse = aiResponse;
+    }
+
+    return functionResponse;
+  })
+}
+
+async function askPerp(question, modifier) {
+  const basicQuestionText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
+  const postQuestionText = `Question is: ${question}?`;
+
+  const modifierMap = {
+    "annoying": "Please respond in most annoying tone possible. ",
+    "kid": "Your response should be understandable enough for kids around 5 years old. ",
+    "negative": "Please respond in a negative or pessimist way. ",
+    "default": " "
+  };
+
+  // no modifier yet for Perplexity AI
+  // let finalQuestionText = basicQuestionText + modifierMap[modifier] + postQuestionText;
+  let finalQuestionText = basicQuestionText + modifierMap["default"] + postQuestionText;
+
+  console.log(finalQuestionText);
+
+  return axios({
+    method: 'post',
+    url: 'https://api.perplexity.ai/chat/completions',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.PERPLEXITY_KEY}`
+    },
+    data: {
+      "model": "llama-3.1-sonar-small-128k-online",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Be precise and concise. Limit the response to 475 characters"
+        },
+        {
+          "role": "user",
+          "content": finalQuestionText
+        }
+      ],
+      "temperature": 0.2,
+      "top_p": 0.9,
+      "return_citations": true,
+      "search_domain_filter": [
+        "perplexity.ai"
+      ],
+      "return_images": false,
+      "return_related_questions": false,
+      "search_recency_filter": "month",
+      "top_k": 0,
+      "stream": false,
+      "presence_penalty": 0,
+      "frequency_penalty": 1
+    }
+  }).then(function (response) {
+    let validResponse = false;
+    let aiResponse = '';
+    let functionResponse = "Unable to get response from AI";
+
+    let choice = response.data.choices[0];
+      if (choice.hasOwnProperty("message") 
+          && choice.message.hasOwnProperty("content"))
+        {
+          aiResponse = choice.message.content;
+          validResponse = true;
+        }
+    
+    if (validResponse == true) {
+      functionResponse = aiResponse;
+    }
+
+    return functionResponse;
+  })
+}
+
 
 async function getSpotifyData() {
 
