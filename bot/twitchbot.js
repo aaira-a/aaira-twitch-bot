@@ -24,6 +24,9 @@ const dataFileTemplatePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_data
 const attFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'att_data.json');
 const attFileTemplatePath = path.join(__dirname, DATA_FOLDER_NAME, 'att_data_template.json');
 
+const firstFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'first_data.json');
+const firstFileTemplatePath = path.join(__dirname, DATA_FOLDER_NAME, 'first_data_template.json');
+
 const credFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'twitch_credentials.json');
 const clientData = JSON.parse(await fs.readFile(credFilePath, 'utf-8'));
 const clientId = clientData["TWITCH_CLIENT_ID"];
@@ -57,7 +60,7 @@ const client = new tmi.Client({
 });
 client.connect().catch(console.error);
 
-
+// hadir redeems
 client.on('redeem', async (channel, username, rewardType, tags, message) => {
     if (rewardType == 'b12bc6f7-c6a2-4518-8637-a5fa47a29f53') {
       console.log('rewardType: ' + rewardType);
@@ -97,6 +100,49 @@ client.on('redeem', async (channel, username, rewardType, tags, message) => {
 
       // output to channel
       client.say(channel, `${username} has hadir-ed ${count} times aaira0Thumbs`);
+    };
+});
+
+// first redeems
+client.on('redeem', async (channel, username, rewardType, tags, message) => {
+    if (rewardType == 'a244ee05-9f89-4d74-b8f4-0656655a942b') {
+      console.log('rewardType: ' + rewardType);
+      console.log('username: ' + username);
+      console.log('message: ' + message);
+
+      try {
+        const stats = await fs.stat(firstFilePath);
+        
+        if (stats.size == 0) {
+          await fs.copyFile(firstFileTemplatePath, firstFilePath);
+        }
+      } 
+      catch {
+        await fs.copyFile(firstFileTemplatePath, firstFilePath);
+      }
+
+      // open file
+      const fileContent = JSON.parse(await fs.readFile(firstFilePath, 'utf-8'));
+
+      // initialize count to 1 for new user redemption
+      let count = 1;
+
+      // check if user data exists
+      if (fileContent.hasOwnProperty(username)) {
+        // increment count of existing user
+        count = fileContent[username] + 1;
+      }
+
+      // use user's incremented count, or the default 1
+      fileContent[username] = count;
+
+      // write to file
+      fs.writeFile(firstFilePath, JSON.stringify(fileContent), (err) => {
+        if (err) { console.log(err) }
+      });
+
+      // output to channel
+      client.say(channel, `${username} was the first ${count} times aaira0Thumbs`);
     };
 });
 
@@ -140,6 +186,28 @@ client.on('message', async (channel, tags, message, self) => {
       }
 
       client.say(channel, `@${username} has hadir-ed ${count} times aaira0Thumbs`);
+  }
+
+  if(message.toLowerCase().startsWith('!first')) {
+
+      const re = /!first @(\S+)/;
+      const r = message.toLowerCase().match(re);
+
+      let username = tags.username;
+
+      if(r) {
+        username = r[1].toLowerCase();
+      }
+
+      const fileContent = JSON.parse(await fs.readFile(firstFilePath, 'utf-8'));
+ 
+      let count = 0;
+
+      if (fileContent.hasOwnProperty(username)) {
+        count = fileContent[username];
+      }
+
+      client.say(channel, `@${username} was the first ${count} times aaira0Thumbs`);
   }
 
   if(message.toLowerCase().startsWith('!add')) {
