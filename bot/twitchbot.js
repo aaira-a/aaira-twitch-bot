@@ -282,6 +282,15 @@ client.on('message', async (channel, tags, message, self) => {
     }
   }
 
+  if(message.toLowerCase().startsWith('!qwen')) {
+    const re = /!qwen (.+)/;
+    const r = message.match(re);
+    const question = r[1];
+
+    let aiResponse = await askQwen(question) ;
+    client.say(channel, `Qwen: @${tags.username} ${aiResponse}`);
+  }
+
   if(message.toLowerCase().startsWith('!perp')) {
     const re = /!perp (.+)/;
     const r = message.match(re);
@@ -541,6 +550,60 @@ async function askPerp(question, modifier) {
       "stream": false,
       "presence_penalty": 0,
       "frequency_penalty": 1
+    }
+  }).then(function (response) {
+    let validResponse = false;
+    let aiResponse = '';
+    let functionResponse = "Unable to get response from AI";
+
+    let choice = response.data.choices[0];
+      if (choice.hasOwnProperty("message") 
+          && choice.message.hasOwnProperty("content"))
+        {
+          aiResponse = choice.message.content;
+          validResponse = true;
+        }
+    
+    if (validResponse == true) {
+      functionResponse = aiResponse;
+    }
+
+    return functionResponse;
+  })
+}
+
+async function askQwen(question, modifier) {
+  const basicQuestionText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
+  const postQuestionText = `Question is: ${question}?`;
+
+  const modifierMap = {
+    "annoying": "Please respond in most annoying tone possible. ",
+    "kid": "Your response should be understandable enough for kids around 5 years old. ",
+    "negative": "Please respond in a negative or pessimist way. ",
+    "default": " "
+  };
+
+  // no modifier yet for Qwen
+  // let finalQuestionText = basicQuestionText + modifierMap[modifier] + postQuestionText;
+  let finalQuestionText = basicQuestionText + modifierMap["default"] + postQuestionText;
+
+  console.log(finalQuestionText);
+
+  return axios({
+    method: 'post',
+    url: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.QWEN_KEY}`
+    },
+    data: {
+      "model": "qwen-plus",
+      "messages": [
+        {
+          "role": "user",
+          "content": finalQuestionText
+        }
+      ]
     }
   }).then(function (response) {
     let validResponse = false;
