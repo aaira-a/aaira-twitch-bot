@@ -318,6 +318,15 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `GPT: @${tags.username} ${aiResponse}`);
   }
 
+  if(message.toLowerCase().startsWith('!gpt2')) {
+    const re = /!gpt2 (.+)/;
+    const r = message.match(re);
+    const question = r[1];
+
+    let aiResponse = await askGPT2(question) ;
+    client.say(channel, `GPT-web: @${tags.username} ${aiResponse}`);
+  }
+
   if(message.toLowerCase().startsWith('!ask')) {
     const re = /!ask (.+)/;
     const r = message.match(re);
@@ -499,6 +508,51 @@ async function askGPT(question, modifier) {
           && choice.message.hasOwnProperty("content"))
         {
           aiResponse = choice.message.content;
+          validResponse = true;
+        }
+    
+    if (validResponse == true) {
+      functionResponse = aiResponse;
+    }
+
+    return functionResponse;
+  })
+}
+
+async function askGPT2(question, modifier) {
+  const systemText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
+
+  console.log(question);
+
+  return axios({
+    method: 'post',
+    url: 'https://api.openai.com/v1/responses',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.OPENAI_KEY}`
+    },
+    data: {
+      "model": "gpt-4o-mini",
+      "tools": [
+        {
+          "type": "web_search_preview"
+        }
+      ],
+      "instructions": systemText,
+      "input": question,
+    }
+  }).then(function (response) {
+    let validResponse = false;
+    let aiResponse = '';
+    let functionResponse = "Unable to get response from AI";
+
+    let output = response.data.output;
+
+    let filtered = output.filter(a => a.role == "assistant");
+
+      if (filtered[0].content[0].hasOwnProperty("text"))
+        {
+          aiResponse = filtered[0].content[0].text;
           validResponse = true;
         }
     
