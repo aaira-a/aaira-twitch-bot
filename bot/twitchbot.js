@@ -282,6 +282,15 @@ client.on('message', async (channel, tags, message, self) => {
     }
   }
 
+  if(message.toLowerCase().startsWith('!deep')) {
+    const re = /!deep (.+)/;
+    const r = message.match(re);
+    const question = r[1];
+
+    let aiResponse = await askDeep(question) ;
+    client.say(channel, `DeepSeek: @${tags.username} ${aiResponse}`);
+  }
+
   if(message.toLowerCase().startsWith('!qwen')) {
     const re = /!qwen (.+)/;
     const r = message.match(re);
@@ -626,6 +635,53 @@ async function askQwen(question, modifier) {
   })
 }
 
+
+async function askDeep(question, modifier) {
+  const systemText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
+
+
+  console.log(question);
+
+  return axios({
+    method: 'post',
+    url: 'https://api.deepseek.com/chat/completions',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.DEEPSEEK_KEY}`
+    },
+    data: {
+      "model": "deepseek-chat",
+      "messages": [
+        {
+          "role": "system",
+          "content": systemText
+        },
+        {
+          "role": "user",
+          "content": question
+        }
+      ]
+    }
+  }).then(function (response) {
+    let validResponse = false;
+    let aiResponse = '';
+    let functionResponse = "Unable to get response from AI";
+
+    let choice = response.data.choices[0];
+      if (choice.hasOwnProperty("message") 
+          && choice.message.hasOwnProperty("content"))
+        {
+          aiResponse = choice.message.content;
+          validResponse = true;
+        }
+    
+    if (validResponse == true) {
+      functionResponse = aiResponse;
+    }
+
+    return functionResponse;
+  })
+}
 
 async function getSpotifyData() {
 
