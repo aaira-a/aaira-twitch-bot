@@ -318,8 +318,8 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `GPT: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!gpt2')) {
-    const re = /!gpt2 (.+)/;
+  if(message.toLowerCase().startsWith('!gpweb')) {
+    const re = /!gpweb (.+)/;
     const r = message.match(re);
     const question = r[1];
 
