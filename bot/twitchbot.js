@@ -309,7 +309,7 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `Perplexity.AI: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!gpt')) {
+  if(message.toLowerCase().startsWith('!gpt ')) {
     const re = /!gpt (.+)/;
     const r = message.match(re);
     const question = r[1];
@@ -318,8 +318,8 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `GPT: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!gpweb')) {
-    const re = /!gpweb (.+)/;
+  if(message.toLowerCase().startsWith('!gpt2')) {
+    const re = /!gpt2 (.+)/;
     const r = message.match(re);
     const question = r[1];
 
