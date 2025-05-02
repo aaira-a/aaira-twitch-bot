@@ -1,27 +1,33 @@
 [
   {
     "name": "gemini",
+    "command": "!ask",
     "free": true,
     "enabled": true
   },
   {
     "name": "gpt",
+    "command": "!gpt",
     "enabled": false
   },
   {
     "name": "gpt2",
+    "command": "!gpt2",
     "enabled": false
   },
   {
     "name": "perp",
+    "command": "!perp",
     "enabled": false
   },
   {
     "name": "deep",
+    "command": "!deep",
     "enabled": false
   },
   {
     "name": "qwen",
+    "command": "!qwen",
     "enabled": false
   }
 ]
