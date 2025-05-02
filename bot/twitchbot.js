@@ -283,6 +283,18 @@ client.on('message', async (channel, tags, message, self) => {
     }
   }
 
+  if(message.toLowerCase().startsWith('!ai')) {
+    const fileContent = JSON.parse(await fs.readFile(llmFilePath, 'utf-8'));
+
+    let text = 'List of AI bots:';
+
+    fileContent.forEach(item => {
+      text += ` [${item.command}, enabled: ${item.enabled}]`;
+    });
+
+    client.say(channel, text);
+  }
+
   if(message.toLowerCase().startsWith('!check')) {
     const re = /!check (.+)/;
     const r = message.match(re);
