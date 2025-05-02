@@ -464,20 +464,11 @@ async function askAI(question, modifier) {
   })
 }
 
-async function askGPT(question, modifier) {
+async function askGPT(question) {
   const basicQuestionText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
   const postQuestionText = `Question is: ${question}?`;
 
-  const modifierMap = {
-    "annoying": "Please respond in most annoying tone possible. ",
-    "kid": "Your response should be understandable enough for kids around 5 years old. ",
-    "negative": "Please respond in a negative or pessimist way. ",
-    "default": " "
-  };
-
-  // no modifier yet for GPT
-  // let finalQuestionText = basicQuestionText + modifierMap[modifier] + postQuestionText;
-  let finalQuestionText = basicQuestionText + modifierMap["default"] + postQuestionText;
+  let finalQuestionText = basicQuestionText + postQuestionText;
 
   console.log(finalQuestionText);
 
@@ -519,10 +510,8 @@ async function askGPT(question, modifier) {
   })
 }
 
-async function askGPT2(question, modifier) {
+async function askGPT2(question) {
   const systemText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
-
-  console.log(question);
 
   return axios({
     method: 'post',
@@ -564,20 +553,11 @@ async function askGPT2(question, modifier) {
   })
 }
 
-async function askPerp(question, modifier) {
+async function askPerp(question) {
   const basicQuestionText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
   const postQuestionText = `Question is: ${question}?`;
 
-  const modifierMap = {
-    "annoying": "Please respond in most annoying tone possible. ",
-    "kid": "Your response should be understandable enough for kids around 5 years old. ",
-    "negative": "Please respond in a negative or pessimist way. ",
-    "default": " "
-  };
-
-  // no modifier yet for Perplexity AI
-  // let finalQuestionText = basicQuestionText + modifierMap[modifier] + postQuestionText;
-  let finalQuestionText = basicQuestionText + modifierMap["default"] + postQuestionText;
+  let finalQuestionText = basicQuestionText + postQuestionText;
 
   console.log(finalQuestionText);
 
@@ -635,20 +615,11 @@ async function askPerp(question, modifier) {
   })
 }
 
-async function askQwen(question, modifier) {
+async function askQwen(question) {
   const basicQuestionText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
   const postQuestionText = `Question is: ${question}?`;
 
-  const modifierMap = {
-    "annoying": "Please respond in most annoying tone possible. ",
-    "kid": "Your response should be understandable enough for kids around 5 years old. ",
-    "negative": "Please respond in a negative or pessimist way. ",
-    "default": " "
-  };
-
-  // no modifier yet for Qwen
-  // let finalQuestionText = basicQuestionText + modifierMap[modifier] + postQuestionText;
-  let finalQuestionText = basicQuestionText + modifierMap["default"] + postQuestionText;
+  let finalQuestionText = basicQuestionText + postQuestionText;
 
   console.log(finalQuestionText);
 
@@ -690,11 +661,8 @@ async function askQwen(question, modifier) {
 }
 
 
-async function askDeep(question, modifier) {
+async function askDeep(question) {
   const systemText = `Your response should be less than 475 characters. Please respond as concise as possible. `;
-
-
-  console.log(question);
 
   return axios({
     method: 'post',
