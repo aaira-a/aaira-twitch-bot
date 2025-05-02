@@ -32,6 +32,7 @@ const clientData = JSON.parse(await fs.readFile(credFilePath, 'utf-8'));
 const clientId = clientData["TWITCH_CLIENT_ID"];
 const clientSecret = clientData["TWITCH_CLIENT_SECRET"];
 
+const llmFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'llm.json');
 
 const tokenDataPath = path.join(__dirname, DATA_FOLDER_NAME, 'tokens.926502276.json');
 const tokenData = JSON.parse(await fs.readFile(tokenDataPath, 'utf-8'));
@@ -282,7 +283,27 @@ client.on('message', async (channel, tags, message, self) => {
     }
   }
 
-  if(message.toLowerCase().startsWith('!deep')) {
+  if(message.toLowerCase().startsWith('!check')) {
+    const re = /!check (.+)/;
+    const r = message.match(re);
+    const llmName = r[1];
+
+    const enabledText = (await getLlmToggle(llmName) == true) ? 'enabled' : 'disabled';
+
+    client.say(channel, `LLM bot ${llmName} is ${enabledText}`);
+  }
+
+  if((message.toLowerCase().startsWith('!llm')) && tags.username == 'aaira0') {
+    const re = /!llm (.+)/;
+    const r = message.match(re);
+    const toggleOption = r[1];
+
+    const toggleResult = await toggleLlm(toggleOption);
+
+    client.say(channel, `${toggleResult}`);
+  }
+
+  if((message.toLowerCase().startsWith('!deep')) && (await getLlmToggle('deep') == true)) {
     const re = /!deep (.+)/;
     const r = message.match(re);
     const question = r[1];
@@ -291,7 +312,7 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `DeepSeek: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!qwen')) {
+  if((message.toLowerCase().startsWith('!qwen')) && (await getLlmToggle('qwen') == true)) {
     const re = /!qwen (.+)/;
     const r = message.match(re);
     const question = r[1];
@@ -300,7 +321,7 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `Qwen: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!perp')) {
+  if((message.toLowerCase().startsWith('!perp')) && (await getLlmToggle('perp') == true)) {
     const re = /!perp (.+)/;
     const r = message.match(re);
     const question = r[1];
@@ -309,7 +330,7 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `Perplexity.AI: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!gpt ')) {
+  if((message.toLowerCase().startsWith('!gpt ')) && (await getLlmToggle('gpt') == true)) {
     const re = /!gpt (.+)/;
     const r = message.match(re);
     const question = r[1];
@@ -318,7 +339,7 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `GPT: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!gpt2')) {
+  if((message.toLowerCase().startsWith('!gpt2')) && (await getLlmToggle('gpt2') == true)) {
     const re = /!gpt2 (.+)/;
     const r = message.match(re);
     const question = r[1];
@@ -327,7 +348,7 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `GPT-web: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!ask')) {
+  if((message.toLowerCase().startsWith('!ask')) && (await getLlmToggle('gemini') == true)) {
     const re = /!ask (.+)/;
     const r = message.match(re);
     const question = r[1];
@@ -336,7 +357,7 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `AI: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!annoying')) {
+  if((message.toLowerCase().startsWith('!annoying')) && (await getLlmToggle('gemini') == true)) {
     const re = /!annoying (.+)/;
     const r = message.match(re);
     const question = r[1];
@@ -345,7 +366,7 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `AI: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!kid')) {
+  if((message.toLowerCase().startsWith('!kid')) && (await getLlmToggle('gemini') == true)) {
     const re = /!kid (.+)/;
     const r = message.match(re);
     const question = r[1];
@@ -354,7 +375,7 @@ client.on('message', async (channel, tags, message, self) => {
     client.say(channel, `AI: @${tags.username} ${aiResponse}`);
   }
 
-  if(message.toLowerCase().startsWith('!negative')) {
+  if((message.toLowerCase().startsWith('!negative')) && (await getLlmToggle('gemini') == true)) {
     const re = /!negative (.+)/;
     const r = message.match(re);
     const question = r[1];
@@ -362,8 +383,6 @@ client.on('message', async (channel, tags, message, self) => {
     let aiResponse = await askAI(question, 'negative') ;
     client.say(channel, `AI: @${tags.username} ${aiResponse}`);
   }
-
-
 
 });
 
@@ -919,6 +938,52 @@ async function searchSpotifySong(input) {
 
 }
 
+async function getLlmToggle(llmName) {
+  // open file
+  const fileContent = JSON.parse(await fs.readFile(llmFilePath, 'utf-8'));
+
+  // check if LLM data exists
+  const match = fileContent.filter(item => item.name == llmName);
+
+  return match[0].enabled;
+}
+
+async function toggleLlm(option) {
+  // open file
+  const fileContent = JSON.parse(await fs.readFile(llmFilePath, 'utf-8'));
+
+  let resultText = '';
+
+  if ((option == 'none') || (option == 'off')) {
+    fileContent.forEach(item => { item.enabled = false });
+    resultText = 'All LLM bots have been turned off';
+  }
+
+  if ((option == 'all') || (option == 'on')) {
+    fileContent.forEach(item => { item.enabled = true });
+    resultText = 'All LLM bots have been turned on';
+  }
+
+  if (option == 'free') {
+    fileContent.forEach(item => {
+      if ((item.hasOwnProperty('free') && item.free == true)) {
+        item.enabled = true;
+      }
+      else {
+        item.enabled = false;
+      }
+    });
+    resultText = 'Free LLM bots have been turned on';
+  }  
+
+  // write to file
+  await fs.writeFile(llmFilePath, JSON.stringify(fileContent), (err) => {
+    if (err) { console.log(err) }
+  });
+
+  return resultText;
+
+}
 
 setInterval(async ()=> {
   console.log('Every 15 seconds');

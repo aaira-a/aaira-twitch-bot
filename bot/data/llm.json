@@ -1,0 +1,27 @@
+[
+  {
+    "name": "gemini",
+    "free": true,
+    "enabled": true
+  },
+  {
+    "name": "gpt",
+    "enabled": false
+  },
+  {
+    "name": "gpt2",
+    "enabled": false
+  },
+  {
+    "name": "perp",
+    "enabled": false
+  },
+  {
+    "name": "deep",
+    "enabled": false
+  },
+  {
+    "name": "qwen",
+    "enabled": false
+  }
+]
