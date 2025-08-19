@@ -614,9 +614,6 @@ async function askPerp(question) {
       "temperature": 0.2,
       "top_p": 0.9,
       "return_citations": true,
-      "search_domain_filter": [
-        "perplexity.ai"
-      ],
       "return_images": false,
       "return_related_questions": false,
       "search_recency_filter": "month",
