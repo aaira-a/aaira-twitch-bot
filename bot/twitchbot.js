@@ -461,7 +461,7 @@ async function askAI(question, modifier) {
 
   return axios({
     method: 'post',
-    url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_KEY}`,
+    url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_KEY}`,
     headers: {
       'Content-Type': 'application/json'
     },
@@ -511,14 +511,13 @@ async function askGPT(question) {
       'Authorization': `Bearer ${process.env.OPENAI_KEY}`
     },
     data: {
-      "model": "gpt-4o-mini",
+      "model": "gpt-5-nano",
       "messages": [
         {
           "role": "user",
           "content": finalQuestionText
         }
-      ],
-      "temperature": 0.7
+      ]
     }
   }).then(function (response) {
     let validResponse = false;
@@ -552,7 +551,7 @@ async function askGPT2(question) {
       'Authorization': `Bearer ${process.env.OPENAI_KEY}`
     },
     data: {
-      "model": "gpt-4o-mini",
+      "model": "gpt-5-nano",
       "tools": [
         {
           "type": "web_search_preview"
