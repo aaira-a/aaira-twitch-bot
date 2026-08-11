@@ -1,0 +1,1457 @@
+[
+  {
+    "name": "Ariselu",
+    "origin": "India",
+    "description": "A dessert made with flour, soaked rice, and molten jaggery, fried with oil, and topped with sesame or poppy seeds."
+  },
+  {
+    "name": "Banana fritter",
+    "origin": "India and Southeast Asia",
+    "description": "A fritter made by deep-frying battered banana or plantain in hot oil."
+  },
+  {
+    "name": "Badusha",
+    "origin": "South India",
+    "description": "A South Indian food similar to glazed donuts, also called balushahi."
+  },
+  {
+    "name": "Bitterballen",
+    "origin": "Netherlands",
+    "description": "Round croquettes filled with a thick beef or veal ragout seasoned with parsley, salt, and pepper."
+  },
+  {
+    "name": "Bonda",
+    "origin": "South India",
+    "description": "Various sweet and spicy versions exist in different regions."
+  },
+  {
+    "name": "Burmese fritters",
+    "origin": "Myanmar",
+    "description": "Traditional fritters consisting of battered and fried vegetables or seafood, typically served with a sweet and sour tamarind-based sauce."
+  },
+  {
+    "name": "Churros",
+    "origin": "Spain",
+    "description": "Sometimes referred to as a Spanish doughnut, it's a fried-dough pastry, predominantly choux, based snack."
+  },
+  {
+    "name": "Cokodok",
+    "origin": "Malaysia, Brunei and Singapore",
+    "description": "A traditional Malaysian fritter snack that is made with flour and banana."
+  },
+  {
+    "name": "Croquette",
+    "origin": "Spain",
+    "description": "A small breaded and fried roll, typically filled with mashed potato or minced meat mixed with béchamel sauce."
+  },
+  {
+    "name": "Curry puff",
+    "origin": "Southeast Asia",
+    "description": "A turnover with a pastry shell that contains a filling of potatoes or sardines, onions, curry powder and spices."
+  },
+  {
+    "name": "Doughnut",
+    "origin": "Netherlands and United States",
+    "description": "A fried dough snack popular in most parts of the world."
+  },
+  {
+    "name": "Falafel",
+    "origin": "Arabian Peninsula",
+    "description": "A deep-fried ball or patty-shaped fritter of Arab origin, featuring in Middle Eastern cuisine, particularly Egyptian and Levantine cuisines, and made from broad beans, ground chickpeas, or both."
+  },
+  {
+    "name": "Gulab Jamun",
+    "origin": "India",
+    "description": "A dessert made with milk, cheese solids and flour."
+  },
+  {
+    "name": "Gulha",
+    "origin": "South Asia",
+    "description": "A popular snack in Maldives."
+  },
+  {
+    "name": "Ham chim peng",
+    "origin": "Guangdong, China",
+    "description": "A Chinese fried bread 咸煎饼 that is similar to the doughnut in texture, its batter includes five spice powder."
+  },
+  {
+    "name": "Khanom buang",
+    "origin": "Thailand",
+    "description": "A type of crispy pancake sold by street vendors in Thailand."
+  },
+  {
+    "name": "Koeksister",
+    "origin": "South Africa",
+    "description": "A deep fried braided dough drenched in lemony syrup."
+  },
+  {
+    "name": "Kuzhalappam",
+    "origin": "Kerala, India",
+    "description": "A rice flour cannoli popular among the Christians in Kerala."
+  },
+  {
+    "name": "Malassada",
+    "origin": "Azores",
+    "description": "A type of doughnut, made of flattened rounds of yeasted dough, coated with sugar and cinnamon or accompanied with molasses."
+  },
+  {
+    "name": "Onion rings",
+    "origin": "United States",
+    "description": "Slice of onion rings dipped in batter and deep fried."
+  },
+  {
+    "name": "Pakora",
+    "origin": "India",
+    "description": "A fritter found across South Asia"
+  },
+  {
+    "name": "Parippu Vada",
+    "origin": "Kerala, India",
+    "description": "Traditional dal fritters"
+  },
+  {
+    "name": "Sopaipilla",
+    "origin": "Spain",
+    "description": "A deep-fried dessert made with leavened wheat dough and shortening."
+  },
+  {
+    "name": "Spring roll",
+    "origin": "China",
+    "description": "Fried rolls with a typically vegetarian filling, wrapped inside a cylindrical pastry."
+  },
+  {
+    "name": "Tele-bhaja (chop)",
+    "origin": "India, Bangladesh",
+    "description": "A type of fritter made with vegetables and besan."
+  },
+  {
+    "name": "Tempura",
+    "origin": "Portugal and Japan",
+    "description": "Vegetables or seafood that are fried with a batter mixed minimally in cold water and served with a grated daikon sauce."
+  },
+  {
+    "name": "Unniyappam, Kuzhiyappam",
+    "origin": "Kerala, India",
+    "description": "A traditional rice/flour based, deep-fried fritters in round shape."
+  },
+  {
+    "name": "Uzhunnu Vada",
+    "origin": "South India",
+    "description": "Popular in South Indian states like Kerala, Tamil Nadu, and Karnataka."
+  },
+  {
+    "name": "Youtiao",
+    "origin": "China",
+    "description": "A kind of bread stick that is deep fried, eaten as a snack or as an accompaniment to soy milk or porridge in Asian cultures."
+  },
+  {
+    "name": "Zeppole",
+    "origin": "Italy",
+    "description": "A deep-fried dough ball filled with custard, cream, or any kind of sweet fillings."
+  },
+  {
+    "name": "Alle Belle",
+    "origin": "Goa, India",
+    "description": "This is a delicate coconut and jaggery pancake."
+  },
+  {
+    "name": "Apam balik",
+    "origin": "Fujian, China",
+    "description": "It is a folded pancake made from a batter of flour, eggs, sugar, baking powder, coconut milk and water with a peanut filling."
+  },
+  {
+    "name": "Crêpe",
+    "origin": "France",
+    "description": "A type of very thin pancake, usually made from wheat flour (crêpes de Froment) or buckwheat flour (galettes)."
+  },
+  {
+    "name": "Karantika",
+    "origin": "Algeria",
+    "description": "An iconic street food that consists of a chickpea batter topped with beaten eggs and baked."
+  },
+  {
+    "name": "Pancakes",
+    "origin": "Ancient Greece and Rome",
+    "description": "Flat, soda-leavened semi-sweet cake made with egg and flour."
+  },
+  {
+    "name": "Poffertjes",
+    "origin": "Netherlands",
+    "description": "A traditional Dutch pancake-like dessert, consisting of yeast-leavened batter fried on a cast-iron skillet."
+  },
+  {
+    "name": "Roti canai or Roti prata",
+    "origin": "Malaysia",
+    "description": "An Indian flatbread dish, typically served with a helping of dhal curry."
+  },
+  {
+    "name": "Scallion pancake",
+    "origin": "Taiwan",
+    "description": "An unleavened flatbread folded with oil and minced scallions."
+  },
+  {
+    "name": "Thosai",
+    "origin": "South India",
+    "description": "A thin pancake, made from a batter of fermented pulses and rice flour, cooked on a flat griddle."
+  },
+  {
+    "name": "Waffle",
+    "origin": "Belgium",
+    "description": "A batter-based or dough-based cake cooked in a waffle iron patterned to give a characteristic size, shape and surface impression."
+  },
+  {
+    "name": "Ada",
+    "origin": "Kerala, India",
+    "description": "A traditional Keralan delicacy, consisting of rice parcels encased in a dough made of rice flour, with sweet fillings, steamed in banana leaf and served as an evening snack or as part of breakfast."
+  },
+  {
+    "name": "Baozi",
+    "origin": "China",
+    "description": "Baozi is made from dough that is steamed, not baked."
+  },
+  {
+    "name": "Chwee kueh",
+    "origin": "Singapore",
+    "description": "Plain and simple rice cakes, topped with preserved radishes."
+  },
+  {
+    "name": "Jajan pasar",
+    "origin": "Java, Indonesia",
+    "description": "The term Jajan pasar refers to the sale of traditional Javanese cakes in Javanese markets."
+  },
+  {
+    "name": "Khandvi",
+    "origin": "Gujarat, India",
+    "description": "A collective term used for a type of snacks in Gujarati cuisine, from the Indian state of Gujarat."
+  },
+  {
+    "name": "Kueh",
+    "origin": "South/Southeast Asia",
+    "description": "Colorful bite sized, pudding-like snacks with a starchy texture."
+  },
+  {
+    "name": "Kutsinta",
+    "origin": "Philippines",
+    "description": "A rice cake made with tapioca, or rice flour, brown sugar and lye with orange coloring from annatto extract, typically topped with grated coconut."
+  },
+  {
+    "name": "Mochi",
+    "origin": "Japan",
+    "description": "Rice cakes made of short-grained glutinous rice, water, sugar and cornstarch."
+  },
+  {
+    "name": "Mushi-pan (蒸しパン)",
+    "origin": "Japan",
+    "description": "Muffin-like cakes made with flour, baking powder, eggs, milk, sugar, oil and then steamed."
+  },
+  {
+    "name": "Nian gao",
+    "origin": "China",
+    "description": "Translated as \"year cake\", it is a sticky sweet snack, made from glutinous rice flour, brown sugar and water."
+  },
+  {
+    "name": "Putu piring",
+    "origin": "Singapore",
+    "description": "Small pillow-y round snacks made of rice flour with a filling of either grounded peanut or palm sugar with shredded coconut."
+  },
+  {
+    "name": "Rice noodle roll",
+    "origin": "China",
+    "description": "White rolls trimmed from steamed sheets of rice or tapioca flour, are seasoned with a dash of soy sauce and dressed with shallots, scallions and sesame seeds."
+  },
+  {
+    "name": "Soon kueh",
+    "origin": "Chaozhou, China",
+    "description": "A steamed dumpling that is filled with yam bean, bamboo shoots and small dried shrimps, wrapped in a white skin made of rice/tapioca flour."
+  },
+  {
+    "name": "Tteokbokki",
+    "origin": "South Korea",
+    "description": "These are small, cylindrical rice cakes coated in a spicy sauce."
+  },
+  {
+    "name": "Turnip cake",
+    "origin": "China",
+    "description": "A snack made of various ingredients such as turnip, rice flour, dried mushroom, dried shrimp or scallop."
+  },
+  {
+    "name": "Aam papad",
+    "origin": "India",
+    "description": "A dessert snack made with mango pulp and sugar."
+  },
+  {
+    "name": "Bonbon",
+    "origin": "France",
+    "description": "A small chocolate confection, usually filled with liqueur or other sweet alcoholic ingredients."
+  },
+  {
+    "name": "Brittle",
+    "origin": "United States",
+    "description": "A type of confection consisting of flat broken pieces of hard sugar candy embedded with nuts such as pecans, almonds, or peanuts."
+  },
+  {
+    "name": "Bubblegum",
+    "origin": "United States",
+    "description": "A type of chewing gum, designed to be inflated out of the mouth as a bubble."
+  },
+  {
+    "name": "Candy",
+    "origin": "Various",
+    "description": "A broad category of sweets including candy canes, gummies, jelly beans, licorice, lollipops, rock candy, and taffy."
+  },
+  {
+    "name": "Candied winter melon",
+    "origin": "China",
+    "description": "The ash gourd is recognized for its medical properties in Ayurvedic medicine and spiritual practices in Yoga."
+  },
+  {
+    "name": "Chocolate",
+    "origin": "Central America",
+    "description": "Chocolate has been used as a drink for nearly all of its history, and has become one of the most popular food types and flavors in the world."
+  },
+  {
+    "name": "Chocolate bar",
+    "origin": "England",
+    "description": "A confection in bar form comprising some or all of the following components: chocolate liquor, cocoa butter, sugar, milk."
+  },
+  {
+    "name": "Chocolate rugelach",
+    "origin": "Jewish communities, Poland",
+    "description": "Prepared with a cream cheese dough and a filling consisting of chocolate, jam (or jelly) and cinnamon."
+  },
+  {
+    "name": "Chocolate truffle",
+    "origin": "France",
+    "description": "A chocolate confection with a ganache center, usually coated in chocolate, cocoa powder, icing sugar, or chopped nuts."
+  },
+  {
+    "name": "Custard",
+    "origin": "France",
+    "description": "The custard (creme) is made from sweetened milk, cheese or cream cooked with egg or egg yolk."
+  },
+  {
+    "name": "Dalgona",
+    "origin": "South Korea",
+    "description": "A caramelized lollipop from the 1960s, popularized in the Squid Game."
+  },
+  {
+    "name": "Doce de leite",
+    "origin": "Latin America",
+    "description": "A confection made by slowly heating sugar and milk over several hours to create a substance that derives its taste from the Maillard reaction."
+  },
+  {
+    "name": "Dragon's beard candy",
+    "origin": "China",
+    "description": "A traditional Chinese confectionary made by kneading and folding a dough mixture of sugar, (traditionally) maltose syrup, peanuts, sesame seeds and other ingredients."
+  },
+  {
+    "name": "Fudge",
+    "origin": "United States",
+    "description": "A rich sweet made by heating sugar, butter, and milk, then beating the mixture as it cools to create a smooth texture."
+  },
+  {
+    "name": "Jell-O",
+    "origin": "United States",
+    "description": "A pudding made from gelatin, popularized since the 18th century."
+  },
+  {
+    "name": "Geplak",
+    "origin": "Indonesia",
+    "description": "Made from equal parts coarsely grated coconut and sugar, in equal amounts, often colored brightly."
+  },
+  {
+    "name": "Grass jelly",
+    "origin": "China",
+    "description": "A jelly-like dessert made by boiling Mesona chinensis with potassium carbonate and starch, then cooling the liquid until set."
+  },
+  {
+    "name": "Kaju katli",
+    "origin": "South India",
+    "description": "This is a South Indian dessert made with cashew nuts and sugar."
+  },
+  {
+    "name": "Laddu",
+    "origin": "India",
+    "description": "A spherical sweet made of sugar syrup, jaggery and other ingredients such as fruits and nuts, sesame seeds and honey."
+  },
+  {
+    "name": "Marshmallow",
+    "origin": "Egypt",
+    "description": "In its modern form, typically consists of sugar and/or corn syrup, water, and gelatin, whipped to a spongy consistency and coated with corn starch."
+  },
+  {
+    "name": "Marzipan",
+    "origin": "Spain and Germany",
+    "description": "Consisting primarily of sugar or honey and almond meal, sometimes augmented with almond oil or extract."
+  },
+  {
+    "name": "Mousse au chocolat",
+    "origin": "France",
+    "description": "A dessert with a light and airy texture made of chocolate, gelatin, egg white, whipped cream, pureed fruit and added flavoring."
+  },
+  {
+    "name": "Nougat",
+    "origin": "Turkey and Syria",
+    "description": "A confection made from sugar or honey, roasted nuts, and whipped egg whites, sometimes with candied fruit."
+  },
+  {
+    "name": "Panforte",
+    "origin": "Italy",
+    "description": "A traditional Italian dessert containing fruits and nuts, and resembles fruitcake or Lebkuchen."
+  },
+  {
+    "name": "Pastila",
+    "origin": "Kolomna, Russia",
+    "description": "A traditional fruit confectionary made from sour apples or mashed northern berries."
+  },
+  {
+    "name": "Pavlova",
+    "origin": "New Zealand",
+    "description": "A fluffy, meringue-based confection named after the renowned ballerina Anna Pavlova."
+  },
+  {
+    "name": "Preserved candied fruit",
+    "origin": "China",
+    "description": "Originally intended as treats for the imperial court and a means to keep summer and autumn fruits into winter."
+  },
+  {
+    "name": "Pudding",
+    "origin": "England",
+    "description": "Most often refers to a dessert, but can also be a savory dish."
+  },
+  {
+    "name": "Rice krispie treats",
+    "origin": "United States",
+    "description": "A sweet dessert or snack made from Rice Krispies, melted butter or margarine, and melted marshmallows."
+  },
+  {
+    "name": "Sandesh",
+    "origin": "Bangladesh",
+    "description": "A popular Bengali sweet made with milk and sugar."
+  },
+  {
+    "name": "S'mores",
+    "origin": "United States",
+    "description": "A traditional nighttime campfire treat popular in the United States and Canada consisting of a roasted marshmallow and a layer of chocolate sandwiched between two pieces of graham cracker."
+  },
+  {
+    "name": "Tanghulu",
+    "origin": "China",
+    "description": "Stewers of candied haw coated in a red sweet and sour syrup."
+  },
+  {
+    "name": "Toffee",
+    "origin": "England",
+    "description": "Made by caramelizing sugar or molasses (creating inverted sugar) along with butter, and occasionally flour."
+  },
+  {
+    "name": "Turkish delight",
+    "origin": "Turkey",
+    "description": "A family of confections based on a gel of starch and sugar."
+  },
+  {
+    "name": "Wagashi",
+    "origin": "Japan",
+    "description": "A traditional confectionary, made from mochi, azuki beans, fruit and seasonal plant-based materials, often intricately carved into artistic shapes, popularized from the Edo period."
+  },
+  {
+    "name": "Alfajores",
+    "origin": "Argentina",
+    "description": "Shortbread cookies with all sorts of sweet fillings such as thick caramel dulce de leche."
+  },
+  {
+    "name": "Almond cookie",
+    "origin": "Macau",
+    "description": "A Chinese cookie 杏仁餅 that is made with grounded mung beans."
+  },
+  {
+    "name": "Appenzeller Biberli",
+    "origin": "Switzerland",
+    "description": "A gingerbread specialty that contains almond paste or marzipan with notes of honey, lemon zest, and sugar."
+  },
+  {
+    "name": "Arrowroot",
+    "origin": "England",
+    "description": "Arrowroot used to be very popular in British cuisine, and Napoleon supposedly said the reason for the British love of arrowroot was to support the commerce of their colonies."
+  },
+  {
+    "name": "Chebakia",
+    "origin": "Morocco",
+    "description": "A sesame cookie that is fried and covered with honey."
+  },
+  {
+    "name": "Chocolate chip cookie",
+    "origin": "United States",
+    "description": "A drop cookie that features chocolate chips as its distinguishing ingredient."
+  },
+  {
+    "name": "Cookie",
+    "origin": "Scotland",
+    "description": "In the United States, Canada and Australia a cookie is a small, flat, baked treat, usually containing fat, flour, eggs and sugar."
+  },
+  {
+    "name": "Ginger snaps",
+    "origin": "Europe",
+    "description": "A globally popular cookie based snack food, flavored with ginger."
+  },
+  {
+    "name": "Macaron",
+    "origin": "France",
+    "description": "A sweet meringue-based sandwich cookie made with egg white, icing sugar, granulated sugar, almond meal, and often food coloring."
+  },
+  {
+    "name": "Oatmeal cookie",
+    "origin": "United States",
+    "description": "Cookies prepared with oatmeal."
+  },
+  {
+    "name": "Peanut butter cookie",
+    "origin": "United States",
+    "description": "A type of cookie that is distinguished by having peanut butter as a principal ingredient."
+  },
+  {
+    "name": "Rosette",
+    "origin": "Turkey",
+    "description": "Thin, cookie-like fritters made with iron molds that are found in many cultures."
+  },
+  {
+    "name": "Sandwich cookie",
+    "origin": "United States",
+    "description": "A type of cookie made from two thin cookies or medium cookies with a filling between them."
+  },
+  {
+    "name": "Shortbread",
+    "origin": "Scotland",
+    "description": "A traditional cookie that contains a high butter content made without any leavening agent."
+  },
+  {
+    "name": "Speculoos",
+    "origin": "Belgium",
+    "description": "Crispy spiced cookies linked to Saint Nicholas Day."
+  },
+  {
+    "name": "Stroopwafels",
+    "origin": "Holland",
+    "description": "A thin, round waffle cookie made from two layers of sweet baked dough, held together by caramel filling."
+  },
+  {
+    "name": "Yakgwa",
+    "origin": "South Korea",
+    "description": "A traditional cookie made of brown sugar, syrup, honey, flour and cooking oil with flavors such as sesame, orange peel and ginger."
+  },
+  {
+    "name": "Baumkuchen",
+    "origin": "Germany",
+    "description": "A spit cake made by layering dough or batter onto a tapered cylindrical rotation spit."
+  },
+  {
+    "name": "Castella",
+    "origin": "Japan",
+    "description": "A kind of honey sponge cake, popular in Japan, said to have originated from Portuguese merchants in the 16th century."
+  },
+  {
+    "name": "Gansito",
+    "origin": "Mexico",
+    "description": "A Mexican snack cake that is filled with both strawberry jelly and a creamy filling."
+  },
+  {
+    "name": "Jaffa Cakes",
+    "origin": "Scotland",
+    "description": "Cakes introduced by McVitie and Price in 1927 and named after Jaffa oranges, now produced by many manufacturers."
+  },
+  {
+    "name": "Kueh lapis",
+    "origin": "Indonesia",
+    "description": "Also known as \"thousand layer cake\", it is made by ladling butter onto successive layers until the batter is used up."
+  },
+  {
+    "name": "Lamingtons",
+    "origin": "Australia",
+    "description": "A chocolate filled sponge cake covered in coconut flakes."
+  },
+  {
+    "name": "Madeleine",
+    "origin": "France",
+    "description": "Small baked sponge cakes with a slightly crispy exterior."
+  },
+  {
+    "name": "Pandan cake",
+    "origin": "Singapore",
+    "description": "A light fluffy sponge cake flavored with pandan extract, it is a fusion of European cake-making with local ingredients."
+  },
+  {
+    "name": "Snack cake",
+    "origin": "Various",
+    "description": "A baked dessert confectionery made with cake and icing."
+  },
+  {
+    "name": "Twinkie",
+    "origin": "United States",
+    "description": "An iconic American sponge cake with an archetypal banana cream filling that was invented in 1930."
+  },
+  {
+    "name": "Cheesecake",
+    "origin": "Europe",
+    "description": "A dessert made with soft fresh cheese, eggs, and sugar."
+  },
+  {
+    "name": "Croissant",
+    "origin": "Austria",
+    "description": "A crescent shaped pastry with a buttery and flaky texture."
+  },
+  {
+    "name": "Egg Tart",
+    "origin": "Portugal and France",
+    "description": "Baked pastry consisting of an outer shell filled with egg custard."
+  },
+  {
+    "name": "Gai Zai Peng",
+    "origin": "Guangzhou, China",
+    "description": "A kind of doughy pastry made from lard, rice wine, peanuts, maltose, eggs, edible seeds, fermented beancurd, five spice powder and flour."
+  },
+  {
+    "name": "Knafeh",
+    "origin": "Egypt",
+    "description": "A middle-eastern cake made with fine noodle pastry, cheese or cream filling and drenched with a sugar syrup known as attar."
+  },
+  {
+    "name": "Mooncake",
+    "origin": "China",
+    "description": "A round festive pastry with a mushy crust and thick rich filling made from lotus seed, red bean paste and other ingredients."
+  },
+  {
+    "name": "Palmier",
+    "origin": "France",
+    "description": "Made from puff pastry using a laminated dough without the use of yeast."
+  },
+  {
+    "name": "Pastry",
+    "origin": "Europe",
+    "description": "Baked food made with a dough of flour, water, and shortening that may be savory or sweetened."
+  },
+  {
+    "name": "Pie",
+    "origin": "Various",
+    "description": "A baked dish made of pastry dough casing that carries a filling of sweet or savory ingredients."
+  },
+  {
+    "name": "Pineapple cake",
+    "origin": "Taiwan",
+    "description": "A sweet traditional Taiwanese pastry containing butter, flour, egg, milk powder, sugar, and pineapple jam or slices."
+  },
+  {
+    "name": "Scones",
+    "origin": "United Kingdom",
+    "description": "A scone is a British baked good, made with wheat or oatmeal with baking powder as a leavening agent."
+  },
+  {
+    "name": "Spanakopita",
+    "origin": "Greece",
+    "description": "A pie that comprises chopped spinach, feta cheese, onions or scallions, eggs, and seasoning."
+  },
+  {
+    "name": "Suncake",
+    "origin": "Taiwan",
+    "description": "A popular Taiwanese dessert with maltose fillings originally from the city of Taichung, Taiwan."
+  },
+  {
+    "name": "Taiyaki",
+    "origin": "Japan",
+    "description": "A Japanese baked pastry in the shape of a fish with sweetened azuki beans or other savory fillings."
+  },
+  {
+    "name": "Tambun biscuit",
+    "origin": "Penang, Malaysia",
+    "description": "A pastry with a sweet crust and salty filling."
+  },
+  {
+    "name": "Tiramisu",
+    "origin": "Italy",
+    "description": "A layered and coffee flavored dessert, made of ladyfingers (savoiardi), egg yolks, sugar, coffee, mascarpone and cocoa powder."
+  },
+  {
+    "name": "Toaster pastry",
+    "origin": "United States",
+    "description": "A type of bakers' confection, thin rectangles often made of rice bran, molasses, flour, syrup, and shortening."
+  },
+  {
+    "name": "Air Mata Kucing",
+    "origin": "Malaysia",
+    "description": "A herbal drink made with monk fruit, dried longan, winter melon and rock sugar."
+  },
+  {
+    "name": "Amazake",
+    "origin": "Japan",
+    "description": "A traditional sweet, low- or non-alcohol (depending on recipes) Japanese drink made from fermented rice."
+  },
+  {
+    "name": "Atole",
+    "origin": "Mexico",
+    "description": "A traditional hot corn- and masa-based beverage of Mexican origin."
+  },
+  {
+    "name": "Bandung",
+    "origin": "Indonesia",
+    "description": "A drink made with rose water, condensed milk and soda water."
+  },
+  {
+    "name": "Beer",
+    "origin": "Mesopotamia",
+    "description": "One of the oldest alcoholic drinks in the world."
+  },
+  {
+    "name": "Bubble tea",
+    "origin": "Taichung, Taiwan",
+    "description": "A tea-based drink."
+  },
+  {
+    "name": "Buttermilk",
+    "origin": "India and Nepal",
+    "description": "A fermented dairy drink derived traditionally from the liquid left behind after churning butter out of cultured cream."
+  },
+  {
+    "name": "Chocolate",
+    "origin": "England",
+    "description": "Hot chocolate, also known as hot cocoa or drinking chocolate, is a heated drink consisting of shaved or melted chocolate or cocoa powder, heated milk or water, and usually a sweetener."
+  },
+  {
+    "name": "Cider",
+    "origin": "England",
+    "description": "An alcoholic beverage made from the fermented juice of apples."
+  },
+  {
+    "name": "Coffee",
+    "origin": "Ethiopia, South Arabia",
+    "description": "A beverage prepared from the dried seeds of Coffea species."
+  },
+  {
+    "name": "Cola",
+    "origin": "United States",
+    "description": "A carbonated drink flavored with vanilla, cinnamon, citrus oils and other ingredients."
+  },
+  {
+    "name": "Colada morada",
+    "origin": "Ecuador",
+    "description": "A purple and thick drink derived from local tropical fruits, spices and corn flour."
+  },
+  {
+    "name": "Egg Coffee",
+    "origin": "Vietnam",
+    "description": "A popular drink prepared with egg yolks, sugar, condensed milk and robusta coffee, served throughout Vietnam."
+  },
+  {
+    "name": "Eggnog",
+    "origin": "England",
+    "description": "A festive drink made with milk, cream, sugar, and eggs, often flavored with spices and brandy or rum."
+  },
+  {
+    "name": "Energy drinks",
+    "origin": "Thailand",
+    "description": "A type of drink containing stimulant compounds, usually caffeine, marketed as providing mental and physical stimulation."
+  },
+  {
+    "name": "Horchata",
+    "origin": "Mexico",
+    "description": "A grain or seed based beverage that sometimes contains animal milk."
+  },
+  {
+    "name": "Juice",
+    "origin": "Various",
+    "description": "A beverage derived from the forced extraction of liquids from fruit and vegetables, using a juicer."
+  },
+  {
+    "name": "Kefir",
+    "origin": "Russia",
+    "description": "A fermented milk drink similar to a thin yogurt or ayran that is made from kefir grains."
+  },
+  {
+    "name": "Lassi",
+    "origin": "India",
+    "description": "This drink is made with yoghurt, water, spice."
+  },
+  {
+    "name": "Matcha",
+    "origin": "Japan and China",
+    "description": "Macha is made from finely grounded powder of specially grown and processed green tea leaves in China."
+  },
+  {
+    "name": "Milk",
+    "origin": "Various",
+    "description": "Milk is an agricultural product from dairy farms."
+  },
+  {
+    "name": "Root beer",
+    "origin": "United States",
+    "description": "A soft drink traditionally made using the root bark of the Sassafras tree Sassafras albidum or the vine of Smilax ornata (also known as Sarsaparilla) as the primary flavor."
+  },
+  {
+    "name": "Sikhye",
+    "origin": "South Korea",
+    "description": "A traditional sweet Korean rice beverage, usually served as a dessert."
+  },
+  {
+    "name": "Soft drinks",
+    "origin": "Various",
+    "description": "Any water-based flavored drink, usually but not necessarily carbonated, and typically include added sweetener."
+  },
+  {
+    "name": "Soy milk",
+    "origin": "China",
+    "description": "A plant-based milk drink produced by soaking and grinding soybeans, boiling the mixture, and filtering out remaining particulates."
+  },
+  {
+    "name": "Smoothie",
+    "origin": "Various",
+    "description": "A smoothie is made by puréeing ingredients in a blender."
+  },
+  {
+    "name": "Sports drinks",
+    "origin": "Various",
+    "description": "Functional beverages whose stated purpose is to help athletes replace water, electrolytes, and energy before, during and especially after training or competition."
+  },
+  {
+    "name": "Tamagozake",
+    "origin": "Japan",
+    "description": "A Japanese drink consisting of heated sake, sugar and a raw egg."
+  },
+  {
+    "name": "Tea",
+    "origin": "China",
+    "description": "Tea is made by steeping a sachet of harvested plant materials in hot water."
+  },
+  {
+    "name": "Tejuino",
+    "origin": "Jalisco, Mexico",
+    "description": "A cold beverage made from fermented corn."
+  },
+  {
+    "name": "Frozen custard",
+    "origin": "Coney Island, New York, United States",
+    "description": "A cold dessert similar to ice cream, but made with eggs in addition to cream and sugar."
+  },
+  {
+    "name": "Ice cream",
+    "origin": "China",
+    "description": "A frozen dessert usually made from dairy products, such as milk and cream, and often combined with fruits or other ingredients and flavors."
+  },
+  {
+    "name": "Ice pop",
+    "origin": "San Francisco, United States",
+    "description": "A water-based frozen snack that is made by freezing flavored liquid (such as fruit juice) around a stick."
+  },
+  {
+    "name": "Iced desserts",
+    "origin": "Various",
+    "description": "A large family of ice-based desserts made from fine ice shavings and sweet condiments or syrup."
+  },
+  {
+    "name": "Milkshake",
+    "origin": "United States",
+    "description": "A sweet, cold beverage which is usually made from milk, ice cream or iced milk, and flavorings or sweeteners such as fruit syrup or chocolate sauce."
+  },
+  {
+    "name": "Sundae",
+    "origin": "United States",
+    "description": "Ice cream topped with syrup or sauce and extras such as whipped cream, sprinkles, nuts, or fruit."
+  },
+  {
+    "name": "Bean on Toast",
+    "origin": "England",
+    "description": "A staple food made with white bread and baked beans."
+  },
+  {
+    "name": "Bisque",
+    "origin": "France",
+    "description": "A smooth, creamy, highly seasoned soup of French origin, classically based on a strained broth (coulis)."
+  },
+  {
+    "name": "Canapé",
+    "origin": "France",
+    "description": "Small slices of toast or crostini, with a savory topping such as cheese, shrimp, pâté or anchovies."
+  },
+  {
+    "name": "Charcuterie",
+    "origin": "France",
+    "description": "Dishes of cured meats, cheeses, crackers, and other small snacks, usually presented on a board."
+  },
+  {
+    "name": "Chawanmushi",
+    "origin": "Japan",
+    "description": "An egg custard dish in Japanese cuisine."
+  },
+  {
+    "name": "Crudités",
+    "origin": "France",
+    "description": "Colorful pieces of raw, or barely cooked, vegetables of a variety of flavors and textures arranged together as an appetizer."
+  },
+  {
+    "name": "Dim Sum",
+    "origin": "China",
+    "description": "A range of small Cantonese dishes that are typically consumed collectively as brunch or singularly as a snack."
+  },
+  {
+    "name": "Dolma",
+    "origin": "Balkans, Middle East and Caucasus",
+    "description": "A traditional dish of Armenian cuisine - minced meat wrapped in grape leaves."
+  },
+  {
+    "name": "Dumplings",
+    "origin": "China",
+    "description": "A broad category of dishes that contain cooked dough with a filling."
+  },
+  {
+    "name": "Esquites",
+    "origin": "Mexico",
+    "description": "A popular street food made with matured corn kernels, epazote, and salt and consumed as a snack on-the-go."
+  },
+  {
+    "name": "French fries",
+    "origin": "Belgium and United States",
+    "description": "Potatoes are cut into strips and deep fried."
+  },
+  {
+    "name": "Fried cassava",
+    "origin": "Indonesia",
+    "description": "Cassava is a tropical crop that is cooked and eaten in Africa and Southeast Asia."
+  },
+  {
+    "name": "Fried plantain",
+    "origin": "Ghana, Nigeria and Ivory Coast",
+    "description": "The plantains are peeled, sliced or diced, seasoned with spices, and fried until the sugar caramelizes."
+  },
+  {
+    "name": "Gimbap",
+    "origin": "Korea",
+    "description": "A Korean dish made from cooked rice, vegetables, fish, and meat rolled in dried sheets of seaweed and served in bite-sized slices."
+  },
+  {
+    "name": "Gua-bao",
+    "origin": "Taiwan",
+    "description": "Consists of a slice of stewed meat and other condiments sandwiched between flat steamed bread."
+  },
+  {
+    "name": "Mango Sticky Rice",
+    "origin": "Thailand",
+    "description": "A traditional Southeast Asian and South Asian dessert, khao niao mamuang is made with glutinous rice, fresh mango and coconut milk."
+  },
+  {
+    "name": "Meze",
+    "origin": "Ottoman Empire",
+    "description": "An assortment of small dishes served as appetizers in countries of the former Ottoman Empire."
+  },
+  {
+    "name": "Miang kham",
+    "origin": "Thailand and Laos",
+    "description": "A traditional snack made of shallots, bird's eye chili peppers, ginger, garlic, nuts and small dried shrimps, said to be introduced to the Siamese court by the Princess Dara Rasmi."
+  },
+  {
+    "name": "Onigiri",
+    "origin": "Japan",
+    "description": "Triangular or cylindrical shapes of rice, often wrapped in nori with various types of fillings such as pickled ume (umeboshi)."
+  },
+  {
+    "name": "Popiah",
+    "origin": "Fujian/Chaoshan, China",
+    "description": "A Fujianese/Teochew-style spring roll with a thin, paper-like crepe, filled with an assortment of fresh, shredded, and cooked ingredients such as turnips, carrots, eggs and peanuts."
+  },
+  {
+    "name": "Roasted chestnut",
+    "origin": "East Asia, Europe and New York City",
+    "description": "A popular autumn and winter street food in East Asia, Europe, and New York City."
+  },
+  {
+    "name": "Roasted sweet potato",
+    "origin": "East Asia",
+    "description": "A popular winter street food in East Asia."
+  },
+  {
+    "name": "Rojak",
+    "origin": "Java, Indonesia",
+    "description": "A salad consisting of fruits, vegetables, fritters and tofu puffs served with a spicy dressing made from ground chili, palm sugar and peanuts."
+  },
+  {
+    "name": "Sauerkraut",
+    "origin": "Rome",
+    "description": "Finely cut raw cabbage that has been fermented by lactic acid bacteria."
+  },
+  {
+    "name": "Smørrebrød",
+    "origin": "Denmark",
+    "description": "A type of hors d'oeuvre served in Danish style on buttered bread."
+  },
+  {
+    "name": "Sushi",
+    "origin": "Japan",
+    "description": "A dish, prepared with short-grained rice, mixed with vinegar (鮨飯, sushi-meshi), usually with some sugar and salt, and a variety of ingredients (ねた), such as seafood (often raw) and vegetables."
+  },
+  {
+    "name": "Tahu goreng",
+    "origin": "Indonesia",
+    "description": "A generic name for a variety of dishes that feature fried tofu in Indonesia, Malaysia and Singapore."
+  },
+  {
+    "name": "Tapas",
+    "origin": "Spain",
+    "description": "A hot or cold appetizer or snack-sized dishes in Spanish cuisine, served in tapas bars."
+  },
+  {
+    "name": "Xian dou jiang",
+    "origin": "Taiwan",
+    "description": "A type of soup made with soy milk, small dried shrimps, sichuan mustard, sesame oil and green onion."
+  },
+  {
+    "name": "Zakuski",
+    "origin": "Eastern Europe",
+    "description": "An assortment of cold hors d'oeuvres, entrées and snacks in food culture in Slavic-speaking countries."
+  },
+  {
+    "name": "Zongzi",
+    "origin": "China",
+    "description": "A seasonal food from ancient times, eaten during the Duanwu festival."
+  },
+  {
+    "name": "Bar",
+    "origin": "Various",
+    "description": "A category of food bars containing sweet and savory ingredients."
+  },
+  {
+    "name": "Energy bar",
+    "origin": "United States",
+    "description": "Food bars containing cereals and other high energy ingredients, sometimes containing high amounts of protein."
+  },
+  {
+    "name": "Flapjack",
+    "origin": "England",
+    "description": "A sweet tray-baked oat bar made from rolled oats, butter, brown sugar and golden syrup."
+  },
+  {
+    "name": "Granola bar",
+    "origin": "England",
+    "description": "Granola bars were invented by Stanley Mason and have become popular as a snack, similar to the traditional flapjack oat bar or muesli bar familiar in the Commonwealth countries."
+  },
+  {
+    "name": "Bagel",
+    "origin": "Poland",
+    "description": "A bread product, traditionally shaped by hand into the form of a ring from yeasted wheat dough, roughly hand-sized, which is first boiled for a short time in water and then baked."
+  },
+  {
+    "name": "Baking powder biscuit",
+    "origin": "United States",
+    "description": "A variety of baked bread with a firm exterior and soft crumbly interior, made with baking powder as a leavening agent (rather than yeast), flour, salt, shortening or butter and milk or buttermilk."
+  },
+  {
+    "name": "Bread",
+    "origin": "Egypt and Europe",
+    "description": "A food made of flour, water, and yeast mixed together and baked."
+  },
+  {
+    "name": "Bread Pudding",
+    "origin": "United Kingdom",
+    "description": "A pudding made with bread, milk, and egg."
+  },
+  {
+    "name": "Brioche",
+    "origin": "France",
+    "description": "Bread that is enriched with milk, eggs and butter, and known for its soft and fluffy texture."
+  },
+  {
+    "name": "Croutons",
+    "origin": "France",
+    "description": "Toasted or fried bread that are normally cubed and seasoned, are used to add texture and flavor to salads, soups and stews."
+  },
+  {
+    "name": "Fairy bread",
+    "origin": "Australia",
+    "description": "Sliced white bread spread with butter or margarine and covered with tiny beads of sugar, served at children parties."
+  },
+  {
+    "name": "Flatbread",
+    "origin": "Mesopotamia and Egypt",
+    "description": "Bread made with flour; water, milk, yogurt (or similar), and salt, and then thoroughly rolled into a flattened dough."
+  },
+  {
+    "name": "Focaccia",
+    "origin": "Italy",
+    "description": "A flat leavened oven-baked Italian bread."
+  },
+  {
+    "name": "French toast",
+    "origin": "Rome",
+    "description": "Bread slices are soaked or dipped in a mixture of eggs, milk or cream and flavoring, then fried in butter or olive oil until browned or cooked through."
+  },
+  {
+    "name": "Fried bake",
+    "origin": "Caribbean",
+    "description": "A type of bread usually eaten with saltfish."
+  },
+  {
+    "name": "Fruit bun",
+    "origin": "Commonwealth",
+    "description": "A type of sweet roll made with fruit, fruit peel, spices and sometimes nuts."
+  },
+  {
+    "name": "Fruit sandwich",
+    "origin": "Japan",
+    "description": "A kind of sandwich that consists of seasonal fruits and whipped cream with milk bread, popular in Japan."
+  },
+  {
+    "name": "Houska",
+    "origin": "Czech Republic",
+    "description": "Literally translated as \"knitted bread\", this is a traditional bread roll baked and consumed in the Czech Republic."
+  },
+  {
+    "name": "Kepta duona",
+    "origin": "Lithuania",
+    "description": "A simple snack of rye bread, sliced, pan-fried and rubbed with garlic."
+  },
+  {
+    "name": "Knäckebröd",
+    "origin": "Sweden",
+    "description": "A flat and dry type of bread, containing mostly rye flour."
+  },
+  {
+    "name": "Lavash",
+    "origin": "Armenia",
+    "description": "Traditional staple food of Armenian cuisine - soft thin bread."
+  },
+  {
+    "name": "Naan",
+    "origin": "Mesopotamia",
+    "description": "A leavened flatbread that is commonly eaten in the Indian subcontinent and has a chewy texture."
+  },
+  {
+    "name": "Open sandwich",
+    "origin": "Various",
+    "description": "One slice of bread with one or more toppings."
+  },
+  {
+    "name": "Pão de queijo",
+    "origin": "Brazil",
+    "description": "Literally translated as cheese bread, pão de queijo originated from the culinary inventions of African slaves."
+  },
+  {
+    "name": "Pirozhki",
+    "origin": "Russia",
+    "description": "Baked or fried yeast-leavened boat-shaped buns with a variety of fillings."
+  },
+  {
+    "name": "Pita bread",
+    "origin": "Middle East",
+    "description": "Yeast-leavened round flatbread baked from wheat flour, common in the Mediterranean, Levant, and neighboring areas."
+  },
+  {
+    "name": "Pizza",
+    "origin": "Naples, Italy",
+    "description": "Flat bread with meat, vegetable and/or cheese toppings."
+  },
+  {
+    "name": "Plyushka",
+    "origin": "Russia",
+    "description": "Bread made into various shapes with sugar or cinnamon on top."
+  },
+  {
+    "name": "Pretzel, soft",
+    "origin": "German and Italian communities, United States",
+    "description": "Traditional bakery products that are characterized by their unique texture resembling a chewy bread."
+  },
+  {
+    "name": "Sandwich",
+    "origin": "Various",
+    "description": "A snack typically consisting of two or more slices of bread with one or more fillings between them."
+  },
+  {
+    "name": "Slider",
+    "origin": "United States",
+    "description": "A snack sized version of the burger with a variety of fillings."
+  },
+  {
+    "name": "Stollen",
+    "origin": "Germany",
+    "description": "A cake-like fruit bread made with yeast, water and flour, and usually with zest added to the dough."
+  },
+  {
+    "name": "American cheese",
+    "origin": "United States",
+    "description": "A processed cheese from the U.S."
+  },
+  {
+    "name": "Cheese",
+    "origin": "Various",
+    "description": "A generic term for a diverse group of milk-based food products."
+  },
+  {
+    "name": "Cream cheese",
+    "origin": "United States",
+    "description": "A soft, usually mild-tasting fresh cheese made from milk and cream."
+  },
+  {
+    "name": "Korbáčiky",
+    "origin": "Orava, Slovakia",
+    "description": "A type of string cheese."
+  },
+  {
+    "name": "Oaxaca cheese",
+    "origin": "Mexico",
+    "description": "A semi-hard string cheese."
+  },
+  {
+    "name": "Obatzda",
+    "origin": "Bavaria",
+    "description": "A cheese delicacy."
+  },
+  {
+    "name": "Parmesan cheese",
+    "origin": "Italy",
+    "description": "A hard, granular cheese produced from cows' milk and aged at least 12 months."
+  },
+  {
+    "name": "Processed cheese",
+    "origin": "Switzerland",
+    "description": "Also called \"cheese food\"; a food product made from normal cheese and sometimes other unfermented dairy ingredients, plus emulsifiers, extra salt, food colorings, or whey."
+  },
+  {
+    "name": "String cheese",
+    "origin": "United States",
+    "description": "Snack-sized servings of low-moisture mozzarella."
+  },
+  {
+    "name": "Arare",
+    "origin": "Japan",
+    "description": "A type of bite-sized Japanese cracker made from glutinous rice and flavored with soy sauce."
+  },
+  {
+    "name": "Banana chips or Chifle",
+    "origin": "Southeast Asia and Americas respectively",
+    "description": "Deep-fried and/or dried slices of bananas/plantains."
+  },
+  {
+    "name": "Bombay mix",
+    "origin": "United Kingdom and Ireland",
+    "description": "The British and Irish name for a traditional Indian snack also known regionally as chiwda, chevda, or chanachur."
+  },
+  {
+    "name": "Cereal",
+    "origin": "United States",
+    "description": "Processed grains commonly eaten cold with milk or yogurt, sometimes with sugar and fruit, though they can also be eaten dry."
+  },
+  {
+    "name": "Cheese puff",
+    "origin": "United States",
+    "description": "A puffed corn snack, coated with a mixture of cheese or cheese-flavored powders."
+  },
+  {
+    "name": "Corn chips",
+    "origin": "United States",
+    "description": "A cornmeal snack that is fried in oil or baked."
+  },
+  {
+    "name": "Corn nuts",
+    "origin": "United States",
+    "description": "A snack food made of roasted or deep-fried corn kernels."
+  },
+  {
+    "name": "Cracker nuts",
+    "origin": "Japan",
+    "description": "A snack food produced with peanuts that are coated in a wheat flour dough and then fried or deep-fried"
+  },
+  {
+    "name": "Multi-grain snacks",
+    "origin": "United States",
+    "description": "Chips made from grains that have been fried such as Sun Chips (pictured)."
+  },
+  {
+    "name": "Murukku",
+    "origin": "India",
+    "description": "A snack made with rice flour and chickpea flour, and deep fried."
+  },
+  {
+    "name": "Nachos",
+    "origin": "Mexico",
+    "description": "Fried corn tortillas covered with melted cheddar cheese, pickled jalapeño peppers, and other toppings."
+  },
+  {
+    "name": "Pita chips",
+    "origin": "United States",
+    "description": "Pita Bread cut into wedges or chips, that are oiled, seasoned, and baked until crispy."
+  },
+  {
+    "name": "Popcorn",
+    "origin": "Mexico",
+    "description": "A snack based on a variety of corn kernel which expands and puffs up when heated."
+  },
+  {
+    "name": "Potato chips",
+    "origin": "United States",
+    "description": "A thin slice of potato (or a thin deposit of potato paste) that has been deep fried, baked, or air fried until crunchy."
+  },
+  {
+    "name": "Prawn/fish crackers",
+    "origin": "Indonesia",
+    "description": "A deep-fried snack made from starch and prawn or fish."
+  },
+  {
+    "name": "Pretzel, hard",
+    "origin": "Germany",
+    "description": "Made from dough that is commonly shaped into a knot and baked hard to withstand a long shelf life."
+  },
+  {
+    "name": "Sev mamra",
+    "origin": "India",
+    "description": "A mixture of spicy dry ingredients such as puffed rice, savory noodles and peanuts."
+  },
+  {
+    "name": "Snack mix",
+    "origin": "United States",
+    "description": "Refers to multiple types of snack items sold in supermarkets such as Chex Mix (pictured)."
+  },
+  {
+    "name": "Tortilla chips",
+    "origin": "Mexico",
+    "description": "Wedges of fried corn tortillas; originated in Mexico; first produced commercially in Los Angeles, California, United States"
+  },
+  {
+    "name": "Animal cracker",
+    "origin": "England",
+    "description": "A small cracker or cookie baked in the shape of an animal, usually an animal one might see at a zoo."
+  },
+  {
+    "name": "Bagel chips",
+    "origin": "United States",
+    "description": "Small rounds sliced from bagels which are bread rolls with a dense, chewy, doughy interior and crispy exterior."
+  },
+  {
+    "name": "Barquillos",
+    "origin": "Europe",
+    "description": "A batter of flour, eggs and other ingredients is cooked in a mold, re-shaped over heat and crisped-up upon cooling."
+  },
+  {
+    "name": "Center-filled crackers",
+    "origin": "Japan",
+    "description": "These are small cracker biscuits with a crunchy crust and a sweet, creamy interior."
+  },
+  {
+    "name": "Crackers",
+    "origin": "United States",
+    "description": "A flat, dry baked biscuit typically made with flour, possibly flavored with herbs and spices before baking."
+  },
+  {
+    "name": "Graham crackers",
+    "origin": "United States",
+    "description": "Invented in Bound Brook, New Jersey by Sylvester Graham."
+  },
+  {
+    "name": "Hardtack",
+    "origin": "England",
+    "description": "Hardtack (sometimes known colloquially as military dog biscuit) is a type of dense biscuit or cracker issued as provision or ration in the absence of perishable food."
+  },
+  {
+    "name": "Kuih cincin",
+    "origin": "Brunei and Sabah, Malaysia",
+    "description": "Made from wheat and rice flour, palm sugar, and maltose or honey."
+  },
+  {
+    "name": "Maltose crackers",
+    "origin": "Hong Kong",
+    "description": "A popular traditional food in Hong Kong, consisting of maltose syrup sandwiched between two saltine crackers."
+  },
+  {
+    "name": "Oyster cracker",
+    "origin": "United States",
+    "description": "Small, salted crackers, often served with oyster stew and clam chowder and have a flavor similar to saltine crackers."
+  },
+  {
+    "name": "Rice cracker",
+    "origin": "East Asia",
+    "description": "It is an East Asian cracker made from rice flour such as Senbei (Japan)."
+  },
+  {
+    "name": "Rusk",
+    "origin": "South Africa",
+    "description": "A hard, dry biscuit or a twice-baked bread, sometimes used as a teether for babies."
+  },
+  {
+    "name": "Soda cracker",
+    "origin": "United States",
+    "description": "A thin, usually square, cracker, made from white flour, sometimes yeast (although many are yeast free), and baking soda, with most varieties lightly sprinkled with coarse salt."
+  },
+  {
+    "name": "Wafer",
+    "origin": "Western Europe",
+    "description": "A crispy, often sweet, very thin, flat, light biscuit that originated from the ninth century of Western Europe."
+  },
+  {
+    "name": "Water biscuit",
+    "origin": "United States",
+    "description": "A type of savory cracker that are thin, hard and brittle, usually served with cheese or wine."
+  },
+  {
+    "name": "Biltong",
+    "origin": "South Africa",
+    "description": "Spiced and air-dried beef, a popular snack during rugby games"
+  },
+  {
+    "name": "Çiğ köfte",
+    "origin": "Turkey",
+    "description": "Middle Eastern raw meatball dish"
+  },
+  {
+    "name": "Corn dog",
+    "origin": "United States",
+    "description": "A hot dog skewered on a stick, dipped in corn batter and deep-fried."
+  },
+  {
+    "name": "Instant noodles",
+    "origin": "Japan",
+    "description": "A type of food consisting of noodles sold in a precooked and dried block with flavoring powder and/or seasoning oil."
+  },
+  {
+    "name": "Pasta",
+    "origin": "Italy",
+    "description": "Pictured is cavatappi with pesto."
+  },
+  {
+    "name": "Ramen",
+    "origin": "Japan",
+    "description": "Wheat noodles served in a soy- or miso-flavored meat or fish broth with toppings such as protein, seaweed, and green onions."
+  },
+  {
+    "name": "Yakisoba",
+    "origin": "Japan",
+    "description": "A stir-fried dish of soba noodles made from buckwheat flour, often found as a snack food during Japanese festivals."
+  },
+  {
+    "name": "Curry",
+    "origin": "India",
+    "description": "A sauce dish seasoned with spices, mainly associated with South Asian cuisine."
+  },
+  {
+    "name": "Hummus",
+    "origin": "Lebanon",
+    "description": "A Middle Eastern dip, spread, or savory dish made from cooked, mashed chickpeas blended with tahini, lemon juice, and garlic."
+  },
+  {
+    "name": "Instant soup",
+    "origin": "Japan",
+    "description": "Packaged soup stock that can be readily reconstituted from dry or paste ingredients (e.g. miso) into soup by adding hot water."
+  },
+  {
+    "name": "Jam",
+    "origin": "Greece",
+    "description": "Preparations of fruits whose main preserving agent is sugar and sometimes acid, often stored in glass jars and used as a condiment or spread."
+  },
+  {
+    "name": "Taro paste",
+    "origin": "Chaoshan, China",
+    "description": "Yam paste, or Orh Nee 潮式芋泥 is a classic Teochew dessert."
+  },
+  {
+    "name": "Tongsui",
+    "origin": "Lingnan, China",
+    "description": "Tongsui 糖水, literarily translated as sweet soup, are made from a grounded ingredient, which can be nuts, seeds or beans."
+  },
+  {
+    "name": "Yogurt",
+    "origin": "Turkey",
+    "description": "Yogurt is a highly viscous liquid in its original form and at room temperature."
+  }
+]

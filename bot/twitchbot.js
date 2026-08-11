@@ -34,6 +34,9 @@ const clientSecret = clientData["TWITCH_CLIENT_SECRET"];
 
 const llmFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'llm.json');
 
+const snacksFilePath = path.join(__dirname, DATA_FOLDER_NAME, 'snacks.json');
+const snacks = JSON.parse(await fs.readFile(snacksFilePath, 'utf-8'));
+
 const tokenDataPath = path.join(__dirname, DATA_FOLDER_NAME, 'tokens.926502276.json');
 const tokenData = JSON.parse(await fs.readFile(tokenDataPath, 'utf-8'));
 
@@ -101,6 +104,9 @@ client.on('redeem', async (channel, username, rewardType, tags, message) => {
 
       // output to channel
       client.say(channel, `${username} has hadir-ed ${count} times aaira0Thumbs`);
+
+      const snack = snacks[Math.floor(Math.random() * snacks.length)];
+      client.say(channel, `${username} has been given ${snack.name}, originated from ${snack.origin}. ${snack.description} TehePelo`);
     };
 });
 
